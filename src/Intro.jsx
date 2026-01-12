@@ -5,7 +5,7 @@ export default function Intro({ onEnter }) {
   const [aboutOpen, setAboutOpen] = useState(false)
 
   return (
-    <div className="intro-container">
+    <div className={`intro-container ${aboutOpen ? 'zoomed' : ''}`}>
       <div className="intro-content">
         <h1 className="name-title">Alex Paseka</h1>
         <img 
