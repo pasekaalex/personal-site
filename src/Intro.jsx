@@ -45,7 +45,7 @@ export default function Intro({ onEnter }) {
           className="chaos-button"
           onClick={() => setChaosMode(!chaosMode)}
         >
-          {chaosMode ? '⚠ DISABLE CHAOS ⚠' : '☠ CHAOS MODE ☠'}
+          {chaosMode ? '⚠ disable ⚠' : '⚡ chaos'}
         </button>
       </div>
     </div>
