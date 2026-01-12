@@ -3,9 +3,10 @@ import './Intro.css'
 
 export default function Intro({ onEnter }) {
   const [aboutOpen, setAboutOpen] = useState(false)
+  const [chaosMode, setChaosMode] = useState(false)
 
   return (
-    <div className={`intro-container ${aboutOpen ? 'zoomed' : ''}`}>
+    <div className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}>
       <div className="intro-content">
         <h1 className="name-title">Alex Paseka</h1>
         <img 
@@ -33,11 +34,18 @@ export default function Intro({ onEnter }) {
           )}
         </div>
 
-        <button 
+        <button
           className="enter-button"
           onClick={onEnter}
         >
           React Arcade →
+        </button>
+
+        <button
+          className="chaos-button"
+          onClick={() => setChaosMode(!chaosMode)}
+        >
+          {chaosMode ? '⚠ DISABLE CHAOS ⚠' : '☠ CHAOS MODE ☠'}
         </button>
       </div>
     </div>
