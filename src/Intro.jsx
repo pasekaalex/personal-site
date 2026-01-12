@@ -3,26 +3,27 @@ import './Intro.css'
 
 export default function Intro({ onEnter }) {
   const [aboutOpen, setAboutOpen] = useState(false)
+  const [projectsOpen, setProjectsOpen] = useState(false)
   const [chaosMode, setChaosMode] = useState(false)
 
   return (
     <div className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}>
       <div className="intro-content">
         <h1 className="name-title">Alex Paseka</h1>
-        <img 
-          src="/avi.jpg" 
-          alt="Alex Paseka" 
+        <img
+          src="/avi.jpg"
+          alt="Alex Paseka"
           className="profile-pic"
         />
-        
+
         <div className="about-section">
-          <button 
+          <button
             className="about-button"
             onClick={() => setAboutOpen(!aboutOpen)}
           >
             About {aboutOpen ? '▼' : '▶'}
           </button>
-          
+
           {aboutOpen && (
             <div className="about-dropdown">
               <div className="dropdown-item">
@@ -34,20 +35,35 @@ export default function Intro({ onEnter }) {
           )}
         </div>
 
-        <button
-          className="enter-button"
-          onClick={onEnter}
-        >
-          React Arcade →
-        </button>
+        <div className="projects-section">
+          <button
+            className="projects-button"
+            onClick={() => setProjectsOpen(!projectsOpen)}
+          >
+            Projects {projectsOpen ? '▼' : '▶'}
+          </button>
 
-        <button
-          className="chaos-button"
-          onClick={() => setChaosMode(!chaosMode)}
-        >
-          {chaosMode ? '⚠ disable ⚠' : '⚡ chaos'}
-        </button>
+          {projectsOpen && (
+            <div className="projects-dropdown">
+              <div className="dropdown-item">
+                <button
+                  className="project-link-button"
+                  onClick={onEnter}
+                >
+                  React Arcade →
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      <button
+        className="chaos-button"
+        onClick={() => setChaosMode(!chaosMode)}
+      >
+        {chaosMode ? '⚠ disable ⚠' : '⚡ chaos'}
+      </button>
     </div>
   )
 }
