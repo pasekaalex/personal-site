@@ -6,10 +6,17 @@ export default function Intro({ onEnter }) {
   const [projectsOpen, setProjectsOpen] = useState(false)
   const [chaosMode, setChaosMode] = useState(false)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [nameHovered, setNameHovered] = useState(false)
+  const [nameTyping, setNameTyping] = useState(false)
+  const [typedText, setTypedText] = useState('')
+  const [easterEgg, setEasterEgg] = useState(false)
+  const [ripples, setRipples] = useState([])
   const canvasRef = useRef(null)
   const particlesRef = useRef([])
   const animationFrameRef = useRef(null)
   const profileCenterRef = useRef({ x: 0, y: 0 })
+  const rippleIdRef = useRef(0)
+  const typingTimeoutRef = useRef(null)
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -37,6 +44,66 @@ export default function Intro({ onEnter }) {
         decay: Math.random() * 0.02 + 0.01
       })
     }
+  }
+
+  const handleProfileDoubleClick = () => {
+    setEasterEgg(true)
+    // Create explosion of particles
+    const rect = document.querySelector('.profile-pic')?.getBoundingClientRect()
+    if (rect) {
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      // Create burst of 50 particles
+      for (let i = 0; i < 50; i++) {
+        const angle = (Math.PI * 2 * i) / 50
+        const speed = 5 + Math.random() * 5
+        createParticles(centerX, centerY, 1)
+        // Give them radial velocity
+        const lastParticle = particlesRef.current[particlesRef.current.length - 1]
+        lastParticle.vx = Math.cos(angle) * speed
+        lastParticle.vy = Math.sin(angle) * speed
+      }
+    }
+    setTimeout(() => setEasterEgg(false), 2000)
+  }
+
+  const createRipple = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const id = rippleIdRef.current++
+    setRipples(prev => [...prev, { id, x, y }])
+    setTimeout(() => {
+      setRipples(prev => prev.filter(r => r.id !== id))
+    }, 600)
+  }
+
+  const handleNameClick = () => {
+    // Only trigger on mobile/touch devices
+    if (!('ontouchstart' in window)) return
+
+    if (nameTyping) return // Don't restart if already typing
+
+    setNameTyping(true)
+    setTypedText('')
+    const fullName = 'Alex Paseka'
+    let currentIndex = 0
+
+    const typeNextChar = () => {
+      if (currentIndex < fullName.length) {
+        setTypedText(fullName.slice(0, currentIndex + 1))
+        currentIndex++
+        typingTimeoutRef.current = setTimeout(typeNextChar, 100)
+      } else {
+        // Wait 2 seconds then reset
+        typingTimeoutRef.current = setTimeout(() => {
+          setNameTyping(false)
+          setTypedText('')
+        }, 2000)
+      }
+    }
+
+    typeNextChar()
   }
 
   useEffect(() => {
@@ -120,6 +187,15 @@ export default function Intro({ onEnter }) {
     return () => window.removeEventListener('resize', updateProfileCenter)
   }, [])
 
+  useEffect(() => {
+    // Cleanup typing timeout on unmount
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+    }
+  }, [])
+
   return (
     <div
       className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}
@@ -127,24 +203,55 @@ export default function Intro({ onEnter }) {
     >
       <canvas ref={canvasRef} className="particle-canvas" />
       <div className="intro-content">
-        <h1 className="name-title">Alex Paseka</h1>
+        <h1
+          className={`name-title ${nameHovered ? 'name-hovered' : ''} ${nameTyping ? 'name-typing' : ''}`}
+          onMouseEnter={() => setNameHovered(true)}
+          onMouseLeave={() => setNameHovered(false)}
+          onClick={handleNameClick}
+        >
+          {nameTyping ? (
+            <>
+              {typedText}
+              <span className="typing-cursor">|</span>
+            </>
+          ) : (
+            <>
+              Alex Paseka
+              {nameHovered && <span className="typing-cursor">|</span>}
+            </>
+          )}
+        </h1>
         <div className="profile-pic-container">
           <img
             src="/avi.jpg"
             alt="Alex Paseka"
-            className="profile-pic"
+            className={`profile-pic ${easterEgg ? 'easter-egg-active' : ''}`}
             style={{
               transform: `translate(${mousePos.x * 0.1}px, ${mousePos.y * 0.1}px)`
             }}
+            onDoubleClick={handleProfileDoubleClick}
           />
         </div>
 
         <div className="about-section">
           <button
             className="about-button"
-            onClick={() => setAboutOpen(!aboutOpen)}
+            onClick={(e) => {
+              createRipple(e)
+              setAboutOpen(!aboutOpen)
+            }}
           >
             About {aboutOpen ? '▼' : '▶'}
+            {ripples.map(ripple => (
+              <span
+                key={ripple.id}
+                className="ripple"
+                style={{
+                  left: ripple.x,
+                  top: ripple.y
+                }}
+              />
+            ))}
           </button>
 
           {aboutOpen && (
@@ -161,9 +268,22 @@ export default function Intro({ onEnter }) {
         <div className="projects-section">
           <button
             className="projects-button"
-            onClick={() => setProjectsOpen(!projectsOpen)}
+            onClick={(e) => {
+              createRipple(e)
+              setProjectsOpen(!projectsOpen)
+            }}
           >
             Projects {projectsOpen ? '▼' : '▶'}
+            {ripples.map(ripple => (
+              <span
+                key={ripple.id}
+                className="ripple"
+                style={{
+                  left: ripple.x,
+                  top: ripple.y
+                }}
+              />
+            ))}
           </button>
 
           {projectsOpen && (
