@@ -493,6 +493,7 @@
   z-index: 2;
   text-decoration: none;
   display: inline-block;
+  opacity: 0.8;
 }
 
 .project-link-button:hover {
@@ -500,6 +501,7 @@
   box-shadow:
     0 12px 30px rgba(0, 245, 255, 0.4),
     0 0 60px rgba(191, 0, 255, 0.3);
+  opacity: 1;
 }
 
 .project-link-button:active {
@@ -513,12 +515,14 @@
   box-shadow:
     0 8px 20px rgba(191, 0, 255, 0.4),
     0 0 40px rgba(139, 0, 255, 0.3);
+  opacity: 0.8;
 }
 
 .project-link-button.purple-button:hover {
   box-shadow:
     0 12px 30px rgba(191, 0, 255, 0.6),
     0 0 60px rgba(139, 0, 255, 0.5);
+  opacity: 1;
 }
 
 .about-dropdown {
