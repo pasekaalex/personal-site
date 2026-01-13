@@ -78,10 +78,7 @@ export default function Intro({ onEnter }) {
     }, 600)
   }
 
-  const handleNameClick = () => {
-    // Only trigger on mobile/touch devices
-    if (!('ontouchstart' in window)) return
-
+  const startTypingAnimation = () => {
     if (nameTyping) return // Don't restart if already typing
 
     setNameTyping(true)
@@ -104,6 +101,17 @@ export default function Intro({ onEnter }) {
     }
 
     typeNextChar()
+  }
+
+  const handleNameHover = () => {
+    setNameHovered(true)
+    startTypingAnimation()
+  }
+
+  const handleNameClick = () => {
+    // Only trigger on mobile/touch devices
+    if (!('ontouchstart' in window)) return
+    startTypingAnimation()
   }
 
   useEffect(() => {
@@ -205,7 +213,7 @@ export default function Intro({ onEnter }) {
       <div className="intro-content">
         <h1
           className={`name-title ${nameHovered ? 'name-hovered' : ''} ${nameTyping ? 'name-typing' : ''}`}
-          onMouseEnter={() => setNameHovered(true)}
+          onMouseEnter={handleNameHover}
           onMouseLeave={() => setNameHovered(false)}
           onClick={handleNameClick}
         >
@@ -217,7 +225,6 @@ export default function Intro({ onEnter }) {
           ) : (
             <>
               Alex Paseka
-              {nameHovered && <span className="typing-cursor">|</span>}
             </>
           )}
         </h1>
