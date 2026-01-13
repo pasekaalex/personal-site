@@ -230,6 +230,12 @@
     inset 0 0 30px rgba(255, 255, 255, 0.1);
 }
 
+.projects-dropdown .dropdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 /* Shimmer effect overlay for projects */
 .projects-dropdown::before {
   content: '';
@@ -281,6 +287,8 @@
     0 0 40px rgba(191, 0, 255, 0.2);
   position: relative;
   z-index: 2;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .project-link-button:hover {
@@ -292,6 +300,21 @@
 
 .project-link-button:active {
   transform: translateY(0) scale(1.02);
+}
+
+/* Purple variant for $Bulk */
+.project-link-button.purple-button {
+  background: linear-gradient(135deg, #bf00ff, #8b00ff);
+  color: #fff;
+  box-shadow:
+    0 8px 20px rgba(191, 0, 255, 0.4),
+    0 0 40px rgba(139, 0, 255, 0.3);
+}
+
+.project-link-button.purple-button:hover {
+  box-shadow:
+    0 12px 30px rgba(191, 0, 255, 0.6),
+    0 0 60px rgba(139, 0, 255, 0.5);
 }
 
 .about-dropdown {

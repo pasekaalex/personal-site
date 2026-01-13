@@ -52,6 +52,14 @@ export default function Intro({ onEnter }) {
                 >
                   React Arcade →
                 </button>
+                <a
+                  href="https://www.Bulked.lol"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-link-button purple-button"
+                >
+                  $Bulk →
+                </a>
               </div>
             </div>
           )}
