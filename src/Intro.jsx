@@ -5,16 +5,52 @@ export default function Intro({ onEnter }) {
   const [aboutOpen, setAboutOpen] = useState(false)
   const [projectsOpen, setProjectsOpen] = useState(false)
   const [chaosMode, setChaosMode] = useState(false)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    const x = ((e.clientX - centerX) / rect.width) * 100
+    const y = ((e.clientY - centerY) / rect.height) * 100
+    setMousePos({ x, y })
+  }
 
   return (
-    <div className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}>
+    <div
+      className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}
+      onMouseMove={handleMouseMove}
+    >
       <div className="intro-content">
         <h1 className="name-title">Alex Paseka</h1>
-        <img
-          src="/avi.jpg"
-          alt="Alex Paseka"
-          className="profile-pic"
-        />
+        <div className="profile-pic-container">
+          <div
+            className="orbit-ring ring-1"
+            style={{
+              transform: `rotateZ(${mousePos.x * 0.5}deg) rotateX(${mousePos.y * 0.3}deg)`
+            }}
+          />
+          <div
+            className="orbit-ring ring-2"
+            style={{
+              transform: `rotateZ(${-mousePos.x * 0.3}deg) rotateY(${mousePos.y * 0.5}deg)`
+            }}
+          />
+          <div
+            className="orbit-ring ring-3"
+            style={{
+              transform: `rotateZ(${mousePos.x * 0.4}deg) rotateX(${-mousePos.y * 0.4}deg)`
+            }}
+          />
+          <img
+            src="/avi.jpg"
+            alt="Alex Paseka"
+            className="profile-pic"
+            style={{
+              transform: `translate(${mousePos.x * 0.1}px, ${mousePos.y * 0.1}px)`
+            }}
+          />
+        </div>
 
         <div className="about-section">
           <button
