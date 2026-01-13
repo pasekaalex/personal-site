@@ -12,6 +12,7 @@ export default function Intro({ onEnter }) {
   const [easterEgg, setEasterEgg] = useState(false)
   const [ripples, setRipples] = useState([])
   const [musicPlaying, setMusicPlaying] = useState(false)
+  const [skillsOpen, setSkillsOpen] = useState(false)
   const canvasRef = useRef(null)
   const particlesRef = useRef([])
   const animationFrameRef = useRef(null)
@@ -19,6 +20,8 @@ export default function Intro({ onEnter }) {
   const rippleIdRef = useRef(0)
   const typingTimeoutRef = useRef(null)
   const audioRef = useRef(null)
+  const lastShakeRef = useRef(0)
+  const shakeThresholdRef = useRef(15)
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -226,6 +229,31 @@ export default function Intro({ onEnter }) {
     }
   }, [])
 
+  useEffect(() => {
+    // Shake detection for mobile
+    const handleShake = (event) => {
+      const acceleration = event.accelerationIncludingGravity
+      if (!acceleration) return
+
+      const currentTime = new Date().getTime()
+      if (currentTime - lastShakeRef.current < 1000) return // Debounce 1 second
+
+      const x = Math.abs(acceleration.x || 0)
+      const y = Math.abs(acceleration.y || 0)
+      const z = Math.abs(acceleration.z || 0)
+
+      if (x > shakeThresholdRef.current || y > shakeThresholdRef.current || z > shakeThresholdRef.current) {
+        lastShakeRef.current = currentTime
+        setChaosMode(prev => !prev)
+      }
+    }
+
+    if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', handleShake)
+      return () => window.removeEventListener('devicemotion', handleShake)
+    }
+  }, [])
+
   return (
     <div
       className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}
@@ -290,6 +318,59 @@ export default function Intro({ onEnter }) {
                 <strong>Education:</strong>
                 <p>Bachelors of Science in Computer Science</p>
                 <p>CUNY Brooklyn College</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="skills-section">
+          <button
+            className="skills-button"
+            onClick={(e) => {
+              createRipple(e)
+              setSkillsOpen(!skillsOpen)
+            }}
+          >
+            Skills {skillsOpen ? '▼' : '▶'}
+            {ripples.map(ripple => (
+              <span
+                key={ripple.id}
+                className="ripple"
+                style={{
+                  left: ripple.x,
+                  top: ripple.y
+                }}
+              />
+            ))}
+          </button>
+
+          {skillsOpen && (
+            <div className="skills-dropdown">
+              <div className="dropdown-item skills-grid">
+                <div className="skill-item">
+                  <span className="skill-icon">💎</span>
+                  <span className="skill-name">Object Oriented Programming</span>
+                </div>
+                <div className="skill-item">
+                  <span className="skill-icon">⚛️</span>
+                  <span className="skill-name">React.js</span>
+                </div>
+                <div className="skill-item">
+                  <span className="skill-icon">🌐</span>
+                  <span className="skill-name">Web Development</span>
+                </div>
+                <div className="skill-item">
+                  <span className="skill-icon">📁</span>
+                  <span className="skill-name">File Server Management</span>
+                </div>
+                <div className="skill-item">
+                  <span className="skill-icon">🐧</span>
+                  <span className="skill-name">Linux Expertise</span>
+                </div>
+                <div className="skill-item">
+                  <span className="skill-icon">🔧</span>
+                  <span className="skill-name">System Administration</span>
+                </div>
               </div>
             </div>
           )}
