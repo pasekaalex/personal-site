@@ -11,12 +11,14 @@ export default function Intro({ onEnter }) {
   const [typedText, setTypedText] = useState('')
   const [easterEgg, setEasterEgg] = useState(false)
   const [ripples, setRipples] = useState([])
+  const [musicPlaying, setMusicPlaying] = useState(false)
   const canvasRef = useRef(null)
   const particlesRef = useRef([])
   const animationFrameRef = useRef(null)
   const profileCenterRef = useRef({ x: 0, y: 0 })
   const rippleIdRef = useRef(0)
   const typingTimeoutRef = useRef(null)
+  const audioRef = useRef(null)
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -204,12 +206,33 @@ export default function Intro({ onEnter }) {
     }
   }, [])
 
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (musicPlaying) {
+        audioRef.current.pause()
+        setMusicPlaying(false)
+      } else {
+        audioRef.current.play()
+        setMusicPlaying(true)
+      }
+    }
+  }
+
+  useEffect(() => {
+    // Set up audio to loop
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3 // Set volume to 30%
+      audioRef.current.loop = true
+    }
+  }, [])
+
   return (
     <div
       className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}
       onMouseMove={handleMouseMove}
     >
       <canvas ref={canvasRef} className="particle-canvas" />
+      <audio ref={audioRef} src="/background-music.mp3" />
       <div className="intro-content">
         <h1
           className={`name-title ${nameHovered ? 'name-hovered' : ''} ${nameTyping ? 'name-typing' : ''}`}
@@ -321,6 +344,13 @@ export default function Intro({ onEnter }) {
         onClick={() => setChaosMode(!chaosMode)}
       >
         {chaosMode ? '⚠ disable ⚠' : '⚡ chaos'}
+      </button>
+
+      <button
+        className="music-button"
+        onClick={toggleMusic}
+      >
+        {musicPlaying ? '🔊' : '🔇'}
       </button>
     </div>
   )
