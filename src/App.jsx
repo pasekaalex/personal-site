@@ -7,19 +7,9 @@ import Chess from './games/Chess'
 import Tetris from './games/Tetris'
 import IsometricCity from './games/IsometricCity'
 import SpaceShooter from './games/SpaceShooter'
-import EngineBuilder from './games/EngineBuilder'
 import './App.css'
 
 const GAMES = [
-  {
-    id: 'engine-builder',
-    name: '🔧 Engine Builder',
-    description: 'Build a Honda D16Y8 VTEC engine!',
-    component: EngineBuilder,
-    color: '#ff6b00',
-    difficulty: 'Medium',
-    players: '1'
-  },
   {
     id: 'snake',
     name: '🐍 Classic Snake',
