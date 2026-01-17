@@ -400,6 +400,16 @@ export default function Intro({ onEnter }) {
           {projectsOpen && (
             <div className="projects-dropdown">
               <div className="dropdown-item">
+                <a
+                  href="/engine-builder"
+                  className="project-link-button orange-button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onEnter()
+                  }}
+                >
+                  🔧 Engine Builder →
+                </a>
                 <button
                   className="project-link-button"
                   onClick={onEnter}
