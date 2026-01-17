@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import './Intro.css'
 
-export default function Intro({ onEnter }) {
+export default function Intro() {
   const [aboutOpen, setAboutOpen] = useState(false)
   const [projectsOpen, setProjectsOpen] = useState(false)
   const [chaosMode, setChaosMode] = useState(false)
@@ -400,22 +401,18 @@ export default function Intro({ onEnter }) {
           {projectsOpen && (
             <div className="projects-dropdown">
               <div className="dropdown-item">
-                <a
-                  href="/engine-builder"
+                <Link
+                  to="/engine-builder"
                   className="project-link-button orange-button"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    onEnter()
-                  }}
                 >
                   🔧 Engine Builder →
-                </a>
-                <button
+                </Link>
+                <Link
+                  to="/arcade"
                   className="project-link-button"
-                  onClick={onEnter}
                 >
                   React Arcade →
-                </button>
+                </Link>
                 <a
                   href="https://www.Bulked.lol"
                   target="_blank"

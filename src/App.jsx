@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Intro from './Intro'
+import { Link } from 'react-router-dom'
 import Snake from './games/Snake'
 import SpaceInvaders from './games/SpaceInvaders'
 import HighwayRacer from './games/HighwayRacer'
@@ -76,7 +76,6 @@ const GAMES = [
 ]
 
 function App() {
-  const [showIntro, setShowIntro] = useState(true)
   const [selectedGame, setSelectedGame] = useState(null)
   const [stats, setStats] = useState({
     totalGames: 0,
@@ -96,15 +95,6 @@ function App() {
     }
   }, [])
 
-  const handleEnterArcade = () => {
-    setShowIntro(false)
-  }
-
-  const handleBackToIntro = () => {
-    setShowIntro(true)
-    setSelectedGame(null)
-  }
-
   const handleGameSelect = (game) => {
     setSelectedGame(game)
     // Update stats
@@ -115,11 +105,6 @@ function App() {
     }
     setStats(newStats)
     localStorage.setItem('arcadeStats', JSON.stringify(newStats))
-  }
-
-  // Show intro page first
-  if (showIntro) {
-    return <Intro onEnter={handleEnterArcade} />
   }
 
   if (selectedGame) {
@@ -152,13 +137,13 @@ function App() {
       <div className="app arcade-menu">
       <div className="arcade-container">
         <div className="arcade-header">
-          <button 
+          <Link
+            to="/"
             className="back-to-intro-button"
-            onClick={handleBackToIntro}
             title="Back to Main Menu"
           >
             ← Back to Main Menu
-          </button>
+          </Link>
           <h1 className="arcade-title">🎮 React Arcade</h1>
           <p className="arcade-subtitle">Choose a game to play!</p>
           {stats.totalGames > 0 && (

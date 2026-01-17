@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import './EngineBuilder.css'
 
 export default function EngineBuilder() {
@@ -343,7 +344,7 @@ export default function EngineBuilder() {
         </div>
       )}
 
-      <a href="/" className="home-link">← Back to Home</a>
+      <Link to="/" className="home-link">← Back to Home</Link>
     </div>
   )
 }
