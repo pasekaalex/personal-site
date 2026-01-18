@@ -250,11 +250,7 @@ export default function EngineBuilder() {
   const [stage, setStage] = useState('assembly')
   const [placedParts, setPlacedParts] = useState({})
   const [selectedPart, setSelectedPart] = useState(null)
-  const [engineTuned, setEngineTuned] = useState(false)
   const [engineRunning, setEngineRunning] = useState(false)
-  const [afr, setAfr] = useState(50)
-  const [timing, setTiming] = useState(50)
-  const [idle, setIdle] = useState(50)
   const [rpm, setRpm] = useState(0)
   const [showHint, setShowHint] = useState(true)
 
@@ -291,142 +287,731 @@ export default function EngineBuilder() {
     })
   }, [placedParts])
 
-  // Create 3D geometry for a part
+  // Create 3D geometry for a part with detailed modeling
   const createPartGeometry = (part) => {
     const [sx, sy, sz] = part.size
-    let geometry
+    const material = new THREE.MeshStandardMaterial({
+      color: part.color,
+      metalness: 0.8,
+      roughness: 0.3
+    })
 
     switch (part.geometry) {
-      case 'block':
-        geometry = new THREE.BoxGeometry(sx, sy, sz)
-        // Add cylinder bores
-        break
-      case 'head':
-        geometry = new THREE.BoxGeometry(sx, sy, sz)
-        break
-      case 'cover':
-        // Rounded valve cover
-        geometry = new THREE.BoxGeometry(sx, sy, sz)
-        break
-      case 'cylinder':
-        geometry = new THREE.CylinderGeometry(sx, sx, sz, 16)
-        geometry.rotateX(Math.PI / 2)
-        break
-      case 'torus':
-        geometry = new THREE.TorusGeometry(sx, sy, 8, 16)
-        break
-      case 'pistons':
-        geometry = new THREE.Group()
-        for (let i = 0; i < 4; i++) {
-          const piston = new THREE.CylinderGeometry(sx, sx, sy, 16)
-          const mesh = new THREE.Mesh(piston, new THREE.MeshStandardMaterial({ color: part.color }))
-          mesh.position.z = -0.45 + i * 0.3
-          geometry.add(mesh)
-        }
-        return geometry
-      case 'rods':
-        geometry = new THREE.Group()
-        for (let i = 0; i < 4; i++) {
-          const rod = new THREE.CylinderGeometry(sx, sx * 0.8, sy, 8)
-          const mesh = new THREE.Mesh(rod, new THREE.MeshStandardMaterial({ color: part.color }))
-          mesh.position.z = -0.45 + i * 0.3
-          geometry.add(mesh)
-        }
-        return geometry
-      case 'valves':
-        geometry = new THREE.Group()
-        for (let i = 0; i < 4; i++) {
-          for (let j = 0; j < 4; j++) {
-            const valve = new THREE.CylinderGeometry(sx, sx * 1.5, sy, 8)
-            const mesh = new THREE.Mesh(valve, new THREE.MeshStandardMaterial({ color: part.color }))
-            mesh.position.set(-0.15 + j * 0.1, 0, -0.35 + i * 0.25)
-            geometry.add(mesh)
-          }
-        }
-        return geometry
-      case 'springs':
-        geometry = new THREE.Group()
-        for (let i = 0; i < 4; i++) {
-          for (let j = 0; j < 4; j++) {
-            const spring = new THREE.TorusGeometry(sx, 0.015, 8, 16)
-            const mesh = new THREE.Mesh(spring, new THREE.MeshStandardMaterial({ color: part.color }))
-            mesh.rotation.x = Math.PI / 2
-            mesh.position.set(-0.15 + j * 0.1, 0, -0.35 + i * 0.25)
-            geometry.add(mesh)
-          }
-        }
-        return geometry
-      case 'plugs':
-        geometry = new THREE.Group()
-        for (let i = 0; i < 4; i++) {
-          const plug = new THREE.CylinderGeometry(sx, sx, sy, 8)
-          const mesh = new THREE.Mesh(plug, new THREE.MeshStandardMaterial({ color: part.color }))
-          mesh.position.z = -0.35 + i * 0.25
-          geometry.add(mesh)
-        }
-        return geometry
-      case 'injectors':
-        geometry = new THREE.Group()
-        for (let i = 0; i < 4; i++) {
-          const injector = new THREE.CylinderGeometry(sx, sx, sy, 8)
-          const mesh = new THREE.Mesh(injector, new THREE.MeshStandardMaterial({ color: part.color }))
-          mesh.position.z = -0.35 + i * 0.25
-          geometry.add(mesh)
-        }
-        return geometry
-      case 'manifold':
-        geometry = new THREE.Group()
-        // Main plenum
-        const plenum = new THREE.BoxGeometry(sx, sy * 0.6, sz)
-        const plenumMesh = new THREE.Mesh(plenum, new THREE.MeshStandardMaterial({ color: part.color }))
-        plenumMesh.position.y = sy * 0.2
-        geometry.add(plenumMesh)
-        // Runners
-        for (let i = 0; i < 4; i++) {
-          const runner = new THREE.CylinderGeometry(0.06, 0.06, 0.25, 8)
-          const mesh = new THREE.Mesh(runner, new THREE.MeshStandardMaterial({ color: part.color }))
-          mesh.rotation.x = Math.PI / 2
-          mesh.position.set(0, -sy * 0.15, 0.15)
-          mesh.position.x = -0.3 + i * 0.2
-          geometry.add(mesh)
-        }
-        return geometry
-      case 'exhaust':
-        geometry = new THREE.Group()
-        for (let i = 0; i < 4; i++) {
-          const pipe = new THREE.CylinderGeometry(0.06, 0.08, sz, 8)
-          const mesh = new THREE.Mesh(pipe, new THREE.MeshStandardMaterial({ color: part.color }))
-          mesh.rotation.x = Math.PI / 2
-          mesh.position.x = -0.3 + i * 0.2
-          geometry.add(mesh)
-        }
-        // Collector
-        const collector = new THREE.CylinderGeometry(0.1, 0.08, 0.3, 8)
-        const collectorMesh = new THREE.Mesh(collector, new THREE.MeshStandardMaterial({ color: part.color }))
-        collectorMesh.rotation.x = Math.PI / 2
-        collectorMesh.position.set(0.35, -0.1, 0.15)
-        geometry.add(collectorMesh)
-        return geometry
-      case 'belt':
-        // Create a belt shape
-        const beltShape = new THREE.Shape()
-        beltShape.moveTo(0, -sy/2)
-        beltShape.lineTo(0, sy/2)
-        const extrudeSettings = { depth: 0.02, bevelEnabled: false }
-        geometry = new THREE.ExtrudeGeometry(beltShape, extrudeSettings)
-        break
-      case 'pump':
-        geometry = new THREE.CylinderGeometry(sx, sx, sy, 16)
-        break
-      case 'alternator':
-        geometry = new THREE.CylinderGeometry(sx, sx, sz, 16)
-        geometry.rotateX(Math.PI / 2)
-        break
-      default:
-        geometry = new THREE.BoxGeometry(sx, sy, sz)
-    }
+      case 'block': {
+        // Engine block with cylinder bores
+        const group = new THREE.Group()
 
-    return geometry
+        // Main block body
+        const blockGeo = new THREE.BoxGeometry(sx, sy, sz)
+        const blockMesh = new THREE.Mesh(blockGeo, material)
+        group.add(blockMesh)
+
+        // Cylinder bores (4 cylinders)
+        const boreMaterial = new THREE.MeshStandardMaterial({
+          color: 0x2a2a2a,
+          metalness: 0.9,
+          roughness: 0.1
+        })
+        for (let i = 0; i < 4; i++) {
+          const bore = new THREE.CylinderGeometry(0.085, 0.085, 0.3, 24)
+          const boreMesh = new THREE.Mesh(bore, boreMaterial)
+          boreMesh.position.set(-0.27 + i * 0.18, sy * 0.3, 0)
+          group.add(boreMesh)
+        }
+
+        // Bolt holes around perimeter
+        const boltMaterial = new THREE.MeshStandardMaterial({
+          color: 0x1a1a1a,
+          metalness: 0.9,
+          roughness: 0.2
+        })
+        const boltPositions = [
+          [-sx/2 + 0.1, sy/2 - 0.1, sz/2 - 0.1],
+          [sx/2 - 0.1, sy/2 - 0.1, sz/2 - 0.1],
+          [-sx/2 + 0.1, sy/2 - 0.1, -sz/2 + 0.1],
+          [sx/2 - 0.1, sy/2 - 0.1, -sz/2 + 0.1],
+        ]
+        boltPositions.forEach(pos => {
+          const bolt = new THREE.CylinderGeometry(0.02, 0.02, 0.05, 8)
+          const boltMesh = new THREE.Mesh(bolt, boltMaterial)
+          boltMesh.position.set(...pos)
+          group.add(boltMesh)
+        })
+
+        // Cooling passages
+        const coolantGeo = new THREE.CylinderGeometry(0.04, 0.04, sy * 0.7, 12)
+        const coolantMat = new THREE.MeshStandardMaterial({
+          color: 0x3a5a7a,
+          metalness: 0.6,
+          roughness: 0.4
+        })
+        const coolantMesh = new THREE.Mesh(coolantGeo, coolantMat)
+        coolantMesh.position.set(sx/2 - 0.15, 0, 0)
+        coolantMesh.rotation.z = Math.PI / 2
+        group.add(coolantMesh)
+
+        return group
+      }
+
+      case 'head': {
+        // Cylinder head with ports
+        const group = new THREE.Group()
+
+        // Main head casting
+        const headGeo = new THREE.BoxGeometry(sx, sy, sz)
+        const headMesh = new THREE.Mesh(headGeo, material)
+        group.add(headMesh)
+
+        // Combustion chambers
+        const chamberMaterial = new THREE.MeshStandardMaterial({
+          color: 0x3a3a3a,
+          metalness: 0.85,
+          roughness: 0.2
+        })
+        for (let i = 0; i < 4; i++) {
+          const chamber = new THREE.SphereGeometry(0.09, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2)
+          const chamberMesh = new THREE.Mesh(chamber, chamberMaterial)
+          chamberMesh.position.set(-0.27 + i * 0.18, -sy/2, 0)
+          chamberMesh.rotation.x = Math.PI
+          group.add(chamberMesh)
+        }
+
+        // Valve guide towers
+        for (let i = 0; i < 4; i++) {
+          const tower = new THREE.CylinderGeometry(0.06, 0.08, sy * 0.6, 12)
+          const towerMesh = new THREE.Mesh(tower, material)
+          towerMesh.position.set(-0.27 + i * 0.18, sy * 0.15, 0.12)
+          group.add(towerMesh)
+
+          const tower2 = towerMesh.clone()
+          tower2.position.z = -0.12
+          group.add(tower2)
+        }
+
+        // Coolant passages
+        const coolantGeo = new THREE.TorusGeometry(0.35, 0.03, 8, 24)
+        const coolantMat = new THREE.MeshStandardMaterial({
+          color: 0x4a6a8a,
+          metalness: 0.7,
+          roughness: 0.3
+        })
+        const coolantMesh = new THREE.Mesh(coolantGeo, coolantMat)
+        coolantMesh.rotation.x = Math.PI / 2
+        coolantMesh.position.y = sy / 3
+        group.add(coolantMesh)
+
+        return group
+      }
+
+      case 'cover': {
+        // Valve cover with Honda styling
+        const group = new THREE.Group()
+
+        // Main cover body (slightly rounded)
+        const coverShape = new THREE.Shape()
+        const radius = 0.08
+        coverShape.moveTo(-sx/2 + radius, -sz/2)
+        coverShape.lineTo(sx/2 - radius, -sz/2)
+        coverShape.quadraticCurveTo(sx/2, -sz/2, sx/2, -sz/2 + radius)
+        coverShape.lineTo(sx/2, sz/2 - radius)
+        coverShape.quadraticCurveTo(sx/2, sz/2, sx/2 - radius, sz/2)
+        coverShape.lineTo(-sx/2 + radius, sz/2)
+        coverShape.quadraticCurveTo(-sx/2, sz/2, -sx/2, sz/2 - radius)
+        coverShape.lineTo(-sx/2, -sz/2 + radius)
+        coverShape.quadraticCurveTo(-sx/2, -sz/2, -sx/2 + radius, -sz/2)
+
+        const extrudeSettings = {
+          depth: sy,
+          bevelEnabled: true,
+          bevelThickness: 0.02,
+          bevelSize: 0.02,
+          bevelSegments: 3
+        }
+        const coverGeo = new THREE.ExtrudeGeometry(coverShape, extrudeSettings)
+        const coverMesh = new THREE.Mesh(coverGeo, material)
+        coverMesh.rotation.x = Math.PI / 2
+        coverMesh.position.y = -sy/2
+        group.add(coverMesh)
+
+        // Ribbing for strength
+        const ribMaterial = new THREE.MeshStandardMaterial({
+          color: part.color,
+          metalness: 0.85,
+          roughness: 0.25
+        })
+        for (let i = 0; i < 3; i++) {
+          const rib = new THREE.BoxGeometry(sx - 0.2, 0.03, 0.05)
+          const ribMesh = new THREE.Mesh(rib, ribMaterial)
+          ribMesh.position.set(0, sy/2 - 0.02, -sz/3 + i * sz/3)
+          group.add(ribMesh)
+        }
+
+        // Oil filler cap
+        const capGeo = new THREE.CylinderGeometry(0.08, 0.09, 0.08, 16)
+        const capMat = new THREE.MeshStandardMaterial({
+          color: 0x2a2a2a,
+          metalness: 0.9,
+          roughness: 0.1
+        })
+        const capMesh = new THREE.Mesh(capGeo, capMat)
+        capMesh.position.set(sx/3, sy/2 + 0.04, 0)
+        group.add(capMesh)
+
+        // Honda logo embossing (simple raised area)
+        const logoGeo = new THREE.BoxGeometry(0.15, 0.01, 0.08)
+        const logoMesh = new THREE.Mesh(logoGeo, ribMaterial)
+        logoMesh.position.set(-sx/4, sy/2 - 0.01, 0)
+        group.add(logoMesh)
+
+        return group
+      }
+
+      case 'pistons': {
+        // Detailed pistons with rings
+        const group = new THREE.Group()
+
+        for (let i = 0; i < 4; i++) {
+          const pistonGroup = new THREE.Group()
+
+          // Piston skirt
+          const skirtGeo = new THREE.CylinderGeometry(sx * 0.95, sx, sy * 0.7, 24)
+          const skirtMesh = new THREE.Mesh(skirtGeo, material)
+          skirtMesh.position.y = -sy * 0.15
+          pistonGroup.add(skirtMesh)
+
+          // Piston crown (dome)
+          const crownGeo = new THREE.SphereGeometry(sx, 16, 12, 0, Math.PI * 2, 0, Math.PI / 3)
+          const crownMesh = new THREE.Mesh(crownGeo, material)
+          crownMesh.position.y = sy * 0.35
+          pistonGroup.add(crownMesh)
+
+          // Piston rings
+          const ringMaterial = new THREE.MeshStandardMaterial({
+            color: 0x555555,
+            metalness: 0.95,
+            roughness: 0.05
+          })
+          for (let j = 0; j < 3; j++) {
+            const ring = new THREE.TorusGeometry(sx * 0.98, 0.008, 8, 24)
+            const ringMesh = new THREE.Mesh(ring, ringMaterial)
+            ringMesh.rotation.x = Math.PI / 2
+            ringMesh.position.y = sy * 0.15 - j * 0.03
+            pistonGroup.add(ringMesh)
+          }
+
+          // Wrist pin boss
+          const bossGeo = new THREE.CylinderGeometry(sx * 0.4, sx * 0.4, sx * 1.8, 16)
+          const bossMesh = new THREE.Mesh(bossGeo, material)
+          bossMesh.rotation.z = Math.PI / 2
+          bossMesh.position.y = -sy * 0.25
+          pistonGroup.add(bossMesh)
+
+          pistonGroup.position.z = -0.45 + i * 0.3
+          group.add(pistonGroup)
+        }
+
+        return group
+      }
+
+      case 'rods': {
+        // Detailed connecting rods
+        const group = new THREE.Group()
+
+        for (let i = 0; i < 4; i++) {
+          const rodGroup = new THREE.Group()
+
+          // Rod beam (I-beam profile)
+          const beamGeo = new THREE.BoxGeometry(sx * 2, sy, sx * 1.5)
+          const beamMesh = new THREE.Mesh(beamGeo, material)
+          rodGroup.add(beamMesh)
+
+          // Big end (crank side)
+          const bigEndGeo = new THREE.TorusGeometry(sx * 3, sx * 1.2, 12, 24)
+          const bigEndMesh = new THREE.Mesh(bigEndGeo, material)
+          bigEndMesh.rotation.x = Math.PI / 2
+          bigEndMesh.position.y = -sy/2
+          rodGroup.add(bigEndMesh)
+
+          // Small end (piston side)
+          const smallEndGeo = new THREE.TorusGeometry(sx * 2, sx, 12, 24)
+          const smallEndMesh = new THREE.Mesh(smallEndGeo, material)
+          smallEndMesh.rotation.x = Math.PI / 2
+          smallEndMesh.position.y = sy/2
+          rodGroup.add(smallEndMesh)
+
+          // Rod bolts
+          const boltMaterial = new THREE.MeshStandardMaterial({
+            color: 0x333333,
+            metalness: 0.95,
+            roughness: 0.1
+          })
+          for (let j = 0; j < 2; j++) {
+            const bolt = new THREE.CylinderGeometry(sx * 0.8, sx * 0.8, sx * 2.5, 8)
+            const boltMesh = new THREE.Mesh(bolt, boltMaterial)
+            boltMesh.position.set(j === 0 ? sx * 2.5 : -sx * 2.5, -sy/2, 0)
+            boltMesh.rotation.x = Math.PI / 2
+            rodGroup.add(boltMesh)
+          }
+
+          rodGroup.position.z = -0.45 + i * 0.3
+          group.add(rodGroup)
+        }
+
+        return group
+      }
+
+      case 'valves': {
+        // Realistic intake/exhaust valves
+        const group = new THREE.Group()
+
+        const valveMaterial = new THREE.MeshStandardMaterial({
+          color: 0x999999,
+          metalness: 0.95,
+          roughness: 0.05
+        })
+
+        for (let cyl = 0; cyl < 4; cyl++) {
+          for (let valve = 0; valve < 4; valve++) {
+            const valveGroup = new THREE.Group()
+
+            // Valve stem
+            const stemGeo = new THREE.CylinderGeometry(sx, sx, sy * 0.85, 16)
+            const stemMesh = new THREE.Mesh(stemGeo, valveMaterial)
+            stemMesh.position.y = sy * 0.42
+            valveGroup.add(stemMesh)
+
+            // Valve head (mushroom)
+            const headGeo = new THREE.CylinderGeometry(sx * 4, sx * 3, sy * 0.15, 24)
+            const headMesh = new THREE.Mesh(headGeo, valveMaterial)
+            headMesh.position.y = sy * 0.075
+            valveGroup.add(headMesh)
+
+            // Valve tip (keeper groove)
+            const tipGeo = new THREE.CylinderGeometry(sx * 0.8, sx, sy * 0.1, 16)
+            const tipMat = new THREE.MeshStandardMaterial({
+              color: 0x777777,
+              metalness: 0.9,
+              roughness: 0.2
+            })
+            const tipMesh = new THREE.Mesh(tipGeo, tipMat)
+            tipMesh.position.y = sy * 0.85
+            valveGroup.add(tipMesh)
+
+            const xPos = -0.15 + (valve % 2) * 0.3
+            const zPos = -0.35 + cyl * 0.25 + (valve < 2 ? -0.05 : 0.05)
+            valveGroup.position.set(xPos, 0, zPos)
+            group.add(valveGroup)
+          }
+        }
+
+        return group
+      }
+
+      case 'springs': {
+        // Coiled valve springs
+        const group = new THREE.Group()
+
+        const springMaterial = new THREE.MeshStandardMaterial({
+          color: part.color,
+          metalness: 0.8,
+          roughness: 0.2
+        })
+
+        for (let cyl = 0; cyl < 4; cyl++) {
+          for (let valve = 0; valve < 4; valve++) {
+            // Create coiled spring using multiple toruses
+            const springGroup = new THREE.Group()
+
+            const coils = 8
+            for (let i = 0; i < coils; i++) {
+              const coil = new THREE.TorusGeometry(sx * 0.8, sx * 0.2, 8, 16)
+              const coilMesh = new THREE.Mesh(coil, springMaterial)
+              coilMesh.rotation.x = Math.PI / 2
+              coilMesh.position.y = (i / coils) * sy * 3 - sy * 1.5
+              springGroup.add(coilMesh)
+            }
+
+            // Spring retainer on top
+            const retainerGeo = new THREE.CylinderGeometry(sx * 1.2, sx * 0.9, sx * 0.3, 16)
+            const retainerMat = new THREE.MeshStandardMaterial({
+              color: 0x666666,
+              metalness: 0.9,
+              roughness: 0.1
+            })
+            const retainerMesh = new THREE.Mesh(retainerGeo, retainerMat)
+            retainerMesh.position.y = sy * 1.5
+            springGroup.add(retainerMesh)
+
+            const xPos = -0.15 + (valve % 2) * 0.3
+            const zPos = -0.35 + cyl * 0.25 + (valve < 2 ? -0.05 : 0.05)
+            springGroup.position.set(xPos, 0, zPos)
+            group.add(springGroup)
+          }
+        }
+
+        return group
+      }
+
+      case 'plugs': {
+        // Detailed spark plugs
+        const group = new THREE.Group()
+
+        for (let i = 0; i < 4; i++) {
+          const plugGroup = new THREE.Group()
+
+          // Plug body (ceramic)
+          const bodyGeo = new THREE.CylinderGeometry(sx * 2, sx * 2, sy * 0.5, 16)
+          const bodyMat = new THREE.MeshStandardMaterial({
+            color: 0xeeeeee,
+            metalness: 0.1,
+            roughness: 0.8
+          })
+          const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat)
+          bodyMesh.position.y = sy * 0.25
+          plugGroup.add(bodyMesh)
+
+          // Hex nut
+          const nutGeo = new THREE.CylinderGeometry(sx * 3, sx * 3, sy * 0.2, 6)
+          const nutMat = new THREE.MeshStandardMaterial({
+            color: 0x888888,
+            metalness: 0.9,
+            roughness: 0.2
+          })
+          const nutMesh = new THREE.Mesh(nutGeo, nutMat)
+          nutMesh.position.y = sy * 0.5
+          plugGroup.add(nutMesh)
+
+          // Terminal
+          const termGeo = new THREE.CylinderGeometry(sx * 1.5, sx * 1.5, sy * 0.3, 16)
+          const termMesh = new THREE.Mesh(termGeo, nutMat)
+          termMesh.position.y = sy * 0.85
+          plugGroup.add(termMesh)
+
+          // Threads
+          for (let j = 0; j < 4; j++) {
+            const thread = new THREE.TorusGeometry(sx * 1.8, sx * 0.3, 6, 12)
+            const threadMesh = new THREE.Mesh(thread, nutMat)
+            threadMesh.rotation.x = Math.PI / 2
+            threadMesh.position.y = sy * 0.05 + j * 0.025
+            plugGroup.add(threadMesh)
+          }
+
+          // Ground electrode
+          const electrodeGeo = new THREE.BoxGeometry(sx * 0.5, sy * 0.3, sx * 4)
+          const electrodeMesh = new THREE.Mesh(electrodeGeo, nutMat)
+          electrodeMesh.position.set(sx * 2.5, -sy * 0.15, 0)
+          plugGroup.add(electrodeMesh)
+
+          plugGroup.position.z = -0.35 + i * 0.25
+          group.add(plugGroup)
+        }
+
+        return group
+      }
+
+      case 'injectors': {
+        // Fuel injectors
+        const group = new THREE.Group()
+
+        for (let i = 0; i < 4; i++) {
+          const injectorGroup = new THREE.Group()
+
+          // Injector body
+          const bodyGeo = new THREE.CylinderGeometry(sx * 2, sx * 2.5, sy * 0.7, 16)
+          const bodyMat = new THREE.MeshStandardMaterial({
+            color: part.color,
+            metalness: 0.85,
+            roughness: 0.2
+          })
+          const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat)
+          bodyMesh.position.y = sy * 0.35
+          injectorGroup.add(bodyMesh)
+
+          // Electrical connector
+          const connectorGeo = new THREE.BoxGeometry(sx * 3, sy * 0.3, sx * 4)
+          const connectorMat = new THREE.MeshStandardMaterial({
+            color: 0x2a2a2a,
+            metalness: 0.7,
+            roughness: 0.4
+          })
+          const connectorMesh = new THREE.Mesh(connectorGeo, connectorMat)
+          connectorMesh.position.set(sx * 3, sy * 0.5, 0)
+          injectorGroup.add(connectorMesh)
+
+          // O-ring seals
+          const oringMaterial = new THREE.MeshStandardMaterial({
+            color: 0x1a1a1a,
+            metalness: 0.3,
+            roughness: 0.9
+          })
+          const oring1 = new THREE.TorusGeometry(sx * 2.3, sx * 0.5, 8, 16)
+          const oring1Mesh = new THREE.Mesh(oring1, oringMaterial)
+          oring1Mesh.rotation.x = Math.PI / 2
+          oring1Mesh.position.y = sy * 0.6
+          injectorGroup.add(oring1Mesh)
+
+          const oring2 = oring1Mesh.clone()
+          oring2.position.y = sy * 0.1
+          injectorGroup.add(oring2)
+
+          // Nozzle tip
+          const nozzleGeo = new THREE.CylinderGeometry(sx * 0.8, sx * 1.5, sy * 0.15, 16)
+          const nozzleMesh = new THREE.Mesh(nozzleGeo, bodyMat)
+          nozzleMesh.position.y = sy * 0.075
+          injectorGroup.add(nozzleMesh)
+
+          injectorGroup.position.z = -0.35 + i * 0.25
+          group.add(injectorGroup)
+        }
+
+        return group
+      }
+
+      case 'manifold': {
+        // Detailed intake manifold
+        const group = new THREE.Group()
+
+        // Main plenum chamber
+        const plenumGeo = new THREE.CylinderGeometry(sx * 0.35, sx * 0.4, sy * 0.6, 24)
+        const plenumMesh = new THREE.Mesh(plenumGeo, material)
+        plenumMesh.rotation.z = Math.PI / 2
+        plenumMesh.position.y = sy * 0.25
+        group.add(plenumMesh)
+
+        // Individual runners to each cylinder
+        const runnerMaterial = new THREE.MeshStandardMaterial({
+          color: part.color,
+          metalness: 0.75,
+          roughness: 0.3
+        })
+
+        for (let i = 0; i < 4; i++) {
+          // Curved runner
+          const curve = new THREE.QuadraticBezierCurve3(
+            new THREE.Vector3(0, sy * 0.15, 0),
+            new THREE.Vector3(0, -sy * 0.1, 0.1),
+            new THREE.Vector3(0, -sy * 0.2, 0.2)
+          )
+
+          const tubeGeo = new THREE.TubeGeometry(curve, 12, 0.06, 12, false)
+          const tubeMesh = new THREE.Mesh(tubeGeo, runnerMaterial)
+          tubeMesh.position.x = -0.3 + i * 0.2
+          group.add(tubeMesh)
+
+          // Runner flange
+          const flangeGeo = new THREE.CylinderGeometry(0.08, 0.07, 0.04, 16)
+          const flangeMesh = new THREE.Mesh(flangeGeo, material)
+          flangeMesh.rotation.x = Math.PI / 2
+          flangeMesh.position.set(-0.3 + i * 0.2, -sy * 0.2, 0.2)
+          group.add(flangeMesh)
+        }
+
+        // Throttle body mounting flange
+        const tbFlangeGeo = new THREE.CylinderGeometry(0.12, 0.1, 0.06, 24)
+        const tbFlangeMesh = new THREE.Mesh(tbFlangeGeo, material)
+        tbFlangeMesh.rotation.z = Math.PI / 2
+        tbFlangeMesh.position.set(sx/2 + 0.05, sy * 0.25, 0)
+        group.add(tbFlangeMesh)
+
+        return group
+      }
+
+      case 'exhaust': {
+        // Tubular exhaust manifold
+        const group = new THREE.Group()
+
+        const pipeMaterial = new THREE.MeshStandardMaterial({
+          color: part.color,
+          metalness: 0.7,
+          roughness: 0.4
+        })
+
+        // Primary pipes from each cylinder
+        for (let i = 0; i < 4; i++) {
+          const curve = new THREE.QuadraticBezierCurve3(
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0.1, -0.05, 0.08),
+            new THREE.Vector3(0.35, -0.1, 0.15)
+          )
+
+          const pipeGeo = new THREE.TubeGeometry(curve, 16, 0.06, 12, false)
+          const pipeMesh = new THREE.Mesh(pipeGeo, pipeMaterial)
+          pipeMesh.position.x = -0.3 + i * 0.2
+          group.add(pipeMesh)
+
+          // Exhaust port flange
+          const flangeGeo = new THREE.CylinderGeometry(0.07, 0.075, 0.04, 12)
+          const flangeMat = new THREE.MeshStandardMaterial({
+            color: 0x4a3a2a,
+            metalness: 0.8,
+            roughness: 0.3
+          })
+          const flangeMesh = new THREE.Mesh(flangeGeo, flangeMat)
+          flangeMesh.rotation.x = Math.PI / 2
+          flangeMesh.position.set(-0.3 + i * 0.2, 0, 0)
+          group.add(flangeMesh)
+        }
+
+        // Collector
+        const collectorGeo = new THREE.CylinderGeometry(0.1, 0.08, 0.3, 16)
+        const collectorMesh = new THREE.Mesh(collectorGeo, pipeMaterial)
+        collectorMesh.rotation.x = Math.PI / 2
+        collectorMesh.position.set(0.35, -0.1, 0.25)
+        group.add(collectorMesh)
+
+        // Merge collector
+        const mergeGeo = new THREE.ConeGeometry(0.11, 0.15, 16)
+        const mergeMesh = new THREE.Mesh(mergeGeo, pipeMaterial)
+        mergeMesh.rotation.x = -Math.PI / 2
+        mergeMesh.position.set(0.35, -0.1, 0.1)
+        group.add(mergeMesh)
+
+        return group
+      }
+
+      case 'belt': {
+        // Timing belt with teeth
+        const group = new THREE.Group()
+
+        // Main belt body
+        const curve = new THREE.EllipseCurve(
+          0, 0,
+          0.15, sy / 2,
+          0, 2 * Math.PI,
+          false,
+          0
+        )
+
+        const points = curve.getPoints(50)
+        const beltShape = new THREE.Shape(points)
+
+        const extrudeSettings = {
+          depth: 0.04,
+          bevelEnabled: false,
+          steps: 1
+        }
+
+        const beltGeo = new THREE.ExtrudeGeometry(beltShape, extrudeSettings)
+        const beltMat = new THREE.MeshStandardMaterial({
+          color: part.color,
+          metalness: 0.2,
+          roughness: 0.9
+        })
+        const beltMesh = new THREE.Mesh(beltGeo, beltMat)
+        beltMesh.rotation.y = Math.PI / 2
+        beltMesh.position.x = -0.02
+        group.add(beltMesh)
+
+        return group
+      }
+
+      case 'pump': {
+        // Water pump
+        const group = new THREE.Group()
+
+        // Pump housing
+        const housingGeo = new THREE.CylinderGeometry(sx * 1.2, sx, sy, 24)
+        const housingMesh = new THREE.Mesh(housingGeo, material)
+        group.add(housingMesh)
+
+        // Pulley
+        const pulleyGeo = new THREE.CylinderGeometry(sx * 1.5, sx * 1.4, sy * 0.4, 32)
+        const pulleyMat = new THREE.MeshStandardMaterial({
+          color: 0x3a3a3a,
+          metalness: 0.9,
+          roughness: 0.2
+        })
+        const pulleyMesh = new THREE.Mesh(pulleyGeo, pulleyMat)
+        pulleyMesh.position.y = sy * 0.7
+        group.add(pulleyMesh)
+
+        // Pulley grooves
+        for (let i = 0; i < 3; i++) {
+          const groove = new THREE.TorusGeometry(sx * 1.3, sx * 0.15, 8, 24)
+          const grooveMesh = new THREE.Mesh(groove, new THREE.MeshStandardMaterial({
+            color: 0x2a2a2a,
+            metalness: 0.85,
+            roughness: 0.3
+          }))
+          grooveMesh.rotation.x = Math.PI / 2
+          grooveMesh.position.y = sy * 0.6 + i * 0.08
+          group.add(grooveMesh)
+        }
+
+        // Mounting flange
+        const flangeGeo = new THREE.CylinderGeometry(sx * 1.8, sx * 1.6, sy * 0.15, 6)
+        const flangeMesh = new THREE.Mesh(flangeGeo, material)
+        flangeMesh.position.y = -sy * 0.4
+        group.add(flangeMesh)
+
+        return group
+      }
+
+      case 'alternator': {
+        // Alternator with pulley
+        const group = new THREE.Group()
+
+        // Main housing
+        const housingGeo = new THREE.CylinderGeometry(sx * 1.1, sx * 1.2, sz, 32)
+        const housingMesh = new THREE.Mesh(housingGeo, material)
+        housingMesh.rotation.x = Math.PI / 2
+        group.add(housingMesh)
+
+        // Front cover
+        const coverGeo = new THREE.CylinderGeometry(sx * 1.15, sx * 1.05, sz * 0.2, 32)
+        const coverMat = new THREE.MeshStandardMaterial({
+          color: 0x2a2a2a,
+          metalness: 0.85,
+          roughness: 0.2
+        })
+        const coverMesh = new THREE.Mesh(coverGeo, coverMat)
+        coverMesh.rotation.x = Math.PI / 2
+        coverMesh.position.z = sz * 0.6
+        group.add(coverMesh)
+
+        // Pulley
+        const pulleyGeo = new THREE.CylinderGeometry(sx * 0.9, sx * 0.85, sz * 0.3, 32)
+        const pulleyMesh = new THREE.Mesh(pulleyGeo, coverMat)
+        pulleyMesh.rotation.x = Math.PI / 2
+        pulleyMesh.position.z = sz * 0.75
+        group.add(pulleyMesh)
+
+        // Voltage regulator
+        const regGeo = new THREE.BoxGeometry(sx * 0.8, sz * 0.4, sx * 1.2)
+        const regMat = new THREE.MeshStandardMaterial({
+          color: 0x1a1a1a,
+          metalness: 0.7,
+          roughness: 0.4
+        })
+        const regMesh = new THREE.Mesh(regGeo, regMat)
+        regMesh.position.set(sx * 0.9, sz * 0.2, 0)
+        group.add(regMesh)
+
+        // Mounting brackets
+        const bracketGeo = new THREE.BoxGeometry(sx * 0.3, sz * 0.15, sz * 1.2)
+        const bracketMesh = new THREE.Mesh(bracketGeo, material)
+        bracketMesh.position.y = sz * 0.6
+        group.add(bracketMesh)
+
+        return group
+      }
+
+      case 'cylinder':
+      case 'torus':
+      default: {
+        // Fallback for simple parts
+        let geo
+        if (part.geometry === 'cylinder') {
+          geo = new THREE.CylinderGeometry(sx, sx, sz, 24)
+          geo.rotateX(Math.PI / 2)
+        } else if (part.geometry === 'torus') {
+          geo = new THREE.TorusGeometry(sx, sy, 12, 24)
+        } else {
+          geo = new THREE.BoxGeometry(sx, sy, sz)
+        }
+        return geo
+      }
+    }
   }
 
   // Initialize Three.js scene
@@ -609,6 +1194,13 @@ export default function EngineBuilder() {
     if (geometry instanceof THREE.Group) {
       mesh = geometry
       mesh.position.set(...part.position)
+      // Enable shadows for all meshes in the group
+      mesh.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
+      })
     } else {
       const material = new THREE.MeshStandardMaterial({
         color: part.color,
@@ -618,10 +1210,10 @@ export default function EngineBuilder() {
       })
       mesh = new THREE.Mesh(geometry, material)
       mesh.position.set(...part.position)
+      mesh.castShadow = true
+      mesh.receiveShadow = true
     }
 
-    mesh.castShadow = true
-    mesh.receiveShadow = true
     mesh.name = partKey
 
     // Animate part appearing
@@ -684,33 +1276,24 @@ export default function EngineBuilder() {
     const placedCount = Object.keys(placedParts).length
 
     if (placedCount === totalParts && stage === 'assembly') {
-      setTimeout(() => setStage('tune'), 1500)
+      setTimeout(() => setStage('start'), 1500)
     }
   }, [placedParts, stage])
 
-  // Handle tuning
-  const handleTune = () => {
-    if (afr >= 45 && afr <= 55 && timing >= 45 && timing <= 55 && idle >= 45 && idle <= 55) {
-      setEngineTuned(true)
-    }
-  }
-
   // Handle engine start
   const handleStart = () => {
-    if (engineTuned) {
-      setEngineRunning(true)
-      // Simulate RPM rise
-      let currentRpm = 0
-      const rpmInterval = setInterval(() => {
-        currentRpm += 50
-        if (currentRpm >= 750) {
-          clearInterval(rpmInterval)
-          setRpm(750)
-        } else {
-          setRpm(currentRpm)
-        }
-      }, 30)
-    }
+    setEngineRunning(true)
+    // Simulate RPM rise
+    let currentRpm = 0
+    const rpmInterval = setInterval(() => {
+      currentRpm += 50
+      if (currentRpm >= 750) {
+        clearInterval(rpmInterval)
+        setRpm(750)
+      } else {
+        setRpm(currentRpm)
+      }
+    }, 30)
   }
 
   // Reset game
@@ -725,11 +1308,7 @@ export default function EngineBuilder() {
     setStage('assembly')
     setPlacedParts({})
     setSelectedPart(null)
-    setEngineTuned(false)
     setEngineRunning(false)
-    setAfr(50)
-    setTiming(50)
-    setIdle(50)
     setRpm(0)
   }
 
@@ -794,81 +1373,12 @@ export default function EngineBuilder() {
         </>
       )}
 
-      {stage === 'tune' && (
-        <div className="tuning-overlay">
-          <div className="tuning-panel">
-            <h2>Tune the Engine</h2>
-
-            <div className="control-group">
-              <label>Air/Fuel Ratio</label>
-              <div className="slider-row">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={afr}
-                  onChange={(e) => setAfr(parseInt(e.target.value))}
-                  className="tuning-slider"
-                />
-                <span className="value-display">{(10 + afr * 0.1).toFixed(1)}:1</span>
-              </div>
-            </div>
-
-            <div className="control-group">
-              <label>Ignition Timing</label>
-              <div className="slider-row">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={timing}
-                  onChange={(e) => setTiming(parseInt(e.target.value))}
-                  className="tuning-slider"
-                />
-                <span className="value-display">{Math.round(timing * 0.35)}° BTDC</span>
-              </div>
-            </div>
-
-            <div className="control-group">
-              <label>Idle Speed</label>
-              <div className="slider-row">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={idle}
-                  onChange={(e) => setIdle(parseInt(e.target.value))}
-                  className="tuning-slider"
-                />
-                <span className="value-display">{500 + Math.round(idle * 10)} RPM</span>
-              </div>
-            </div>
-
-            <button className="tune-button" onClick={handleTune}>
-              TEST TUNE
-            </button>
-
-            {engineTuned ? (
-              <div className="tune-success">
-                <div className="success-icon">✓</div>
-                <p>Perfect tune achieved!</p>
-                <button className="continue-button" onClick={() => setStage('start')}>
-                  START ENGINE →
-                </button>
-              </div>
-            ) : (
-              <p className="tune-hint">Adjust all settings to the optimal range (45-55%)</p>
-            )}
-          </div>
-        </div>
-      )}
-
       {stage === 'start' && (
         <div className="start-overlay">
           {!engineRunning ? (
             <div className="start-panel">
               <h2>Ready to Fire!</h2>
-              <p>Your D16Y8 is assembled and tuned</p>
+              <p>Your D16Y8 is fully assembled and ready</p>
               <button className="start-button" onClick={handleStart}>
                 <span className="key-icon">🔑</span>
                 TURN KEY
