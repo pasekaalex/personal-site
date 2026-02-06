@@ -402,10 +402,10 @@ export default function Intro() {
             <div className="projects-dropdown">
               <div className="dropdown-item">
                 <Link
-                  to="/engine-builder"
+                  to="/typing-test"
                   className="project-link-button orange-button"
                 >
-                  🔧 Engine Builder →
+                  ⌨️ Typing Test →
                 </Link>
                 <Link
                   to="/arcade"
