@@ -987,20 +987,21 @@ body {
 .start-button {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: rgba(155, 89, 182, 0.2);
-  border: 1px solid rgba(155, 89, 182, 0.3);
-  border-radius: 6px;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(155, 89, 182, 0.15);
+  border: 1px solid rgba(155, 89, 182, 0.4);
+  border-radius: 8px;
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .start-button:hover {
-  background: rgba(155, 89, 182, 0.4);
+  background: rgba(155, 89, 182, 0.3);
+  border-color: rgba(155, 89, 182, 0.6);
 }
 
 .start-icon {

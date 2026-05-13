@@ -390,7 +390,7 @@ export default function Intro() {
       <div className="taskbar">
         <div className="taskbar-left">
           <button className="start-button" onClick={() => setStartMenuOpen(!startMenuOpen)}>
-            <span className="start-icon">◉</span>
+            <span className="start-icon">☰</span>
             <span className="start-text">Menu</span>
           </button>
         </div>
