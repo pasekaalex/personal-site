@@ -65,6 +65,7 @@ const PROJECTS = [
 export default function Intro() {
   const [time, setTime] = useState(new Date())
   const [openWindows, setOpenWindows] = useState({})
+  const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [activeWindow, setActiveWindow] = useState(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [particles, setParticles] = useState([])
@@ -334,6 +335,28 @@ export default function Intro() {
         </div>
       )}
 
+      {/* Start Menu */}
+      {startMenuOpen && (
+        <div className="start-menu">
+          <div className="start-menu-header">
+            <span className="start-menu-logo">◉</span>
+            <span>paseka.dev</span>
+          </div>
+          <div className="start-menu-apps">
+            {DESKTOP_ICONS.map(icon => (
+              <button
+                key={icon.id}
+                className="start-menu-item"
+                onClick={() => { openWindow(icon.id); setStartMenuOpen(false) }}
+              >
+                <img src={icon.icon} alt={icon.label} className="start-menu-icon" />
+                <span>{icon.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Dock */}
       <div className="dock">
         {DESKTOP_ICONS.map(icon => (
@@ -351,7 +374,10 @@ export default function Intro() {
       {/* Taskbar */}
       <div className="taskbar">
         <div className="taskbar-left">
-          <span className="taskbar-user">paseka</span>
+          <button className="start-button" onClick={() => setStartMenuOpen(!startMenuOpen)}>
+            <span className="start-icon">◉</span>
+            <span className="start-text">Menu</span>
+          </button>
         </div>
         <div className="taskbar-right">
           <span className="taskbar-date">{formatDate(time)}</span>
