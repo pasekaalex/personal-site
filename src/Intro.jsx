@@ -57,6 +57,8 @@ export default function Intro() {
       <div className="bg-layer"></div>
       <div className="bg-grid"></div>
       <div className="bg-glow"></div>
+      <div className="bg-vignette"></div>
+      <div className="bg-scanlines"></div>
       
       {/* Desktop Icons */}
       <div className="desktop-icons">
