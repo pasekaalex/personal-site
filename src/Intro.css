@@ -1028,3 +1028,86 @@ body {
   background: rgba(155, 89, 182, 0.4);
   transform: scale(1.05);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   WEATHER WIDGET
+═══════════════════════════════════════════════════════════════ */
+.weather-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weather-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.weather-input {
+  flex: 1;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(155,89,182,0.3);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.weather-input::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+.weather-search {
+  padding: 8px 14px;
+  background: rgba(155,89,182,0.3);
+  border: 1px solid rgba(155,89,182,0.4);
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.weather-search:hover {
+  background: rgba(155,89,182,0.5);
+}
+
+.weather-display {
+  text-align: center;
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.weather-icon {
+  font-size: 2.5rem;
+}
+
+.weather-temp {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.weather-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+}
+
+.weather-highlow {
+  color: rgba(155,89,182,0.9);
+}
+
+.weather-error {
+  text-align: center;
+  color: #ff6b6b;
+  font-size: 0.85rem;
+}

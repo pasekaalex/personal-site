@@ -6,6 +6,7 @@ const DESKTOP_ICONS = [
   { id: 'about', icon: '/icons/about.png', label: 'About' },
   { id: 'projects', icon: '/icons/projects.png', label: 'Projects' },
   { id: 'contact', icon: '/icons/contact.png', label: 'Contact' },
+  { id: 'weather', icon: '🌤', label: 'Weather' },
 ]
 
 // Projects data
@@ -180,6 +181,60 @@ export default function Intro() {
     }
   }
 
+  const fetchWeather = async () => {
+    const zip = document.getElementById('weatherZip')?.value?.trim()
+    if (!zip || zip.length !== 5) return
+
+    try {
+      const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${zip}&count=1&language=en&format=json`)
+      const geoData = await geoRes.json()
+
+      if (!geoData.results || geoData.results.length === 0) {
+        document.getElementById('weatherError').style.display = 'block'
+        document.getElementById('weatherDisplay').style.display = 'none'
+        return
+      }
+
+      const { latitude, longitude } = geoData.results[0]
+
+      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`)
+      const weatherData = await weatherRes.json()
+
+      const code = weatherData.current_weather.weathercode
+      const max = Math.round(weatherData.daily.temperature_2m_max[0])
+      const min = Math.round(weatherData.daily.temperature_2m_min[0])
+
+      const icons = {
+        0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+        45: '🌫️', 48: '🌫️',
+        51: '🌧️', 53: '🌧️', 55: '🌧️',
+        61: '🌧️', 63: '🌧️', 65: '🌧️',
+        71: '🌨️', 73: '🌨️', 75: '🌨️',
+        80: '🌦️', 81: '🌦️', 82: '🌦️',
+        95: '⛈️', 96: '⛈️', 99: '⛈️'
+      }
+      const conditions = {
+        0: 'Clear', 1: 'Mostly Clear', 2: 'Partly Cloudy', 3: 'Cloudy',
+        45: 'Foggy', 48: 'Foggy',
+        51: 'Light Drizzle', 53: 'Drizzle', 55: 'Heavy Drizzle',
+        61: 'Light Rain', 63: 'Rain', 65: 'Heavy Rain',
+        71: 'Light Snow', 73: 'Snow', 75: 'Heavy Snow',
+        80: 'Light Showers', 81: 'Showers', 82: 'Heavy Showers',
+        95: 'Thunderstorm', 96: 'Thunderstorm', 99: 'Severe Thunderstorm'
+      }
+
+      document.getElementById('weatherIcon').textContent = icons[code] || '🌤️'
+      document.getElementById('weatherTemp').textContent = `${Math.round(weatherData.current_weather.temperature)}°`
+      document.getElementById('weatherCondition').textContent = conditions[code] || 'Unknown'
+      document.getElementById('weatherHighLow').textContent = `H: ${max}° L: ${min}°`
+      document.getElementById('weatherError').style.display = 'none'
+      document.getElementById('weatherDisplay').style.display = 'block'
+    } catch (err) {
+      document.getElementById('weatherError').style.display = 'block'
+      document.getElementById('weatherDisplay').style.display = 'none'
+    }
+  }
+
   return (
     <div className="os-container">
       {/* Particle Canvas */}
@@ -346,6 +401,42 @@ export default function Intro() {
                 </a>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* WEATHER Window */}
+      {openWindows.weather && (
+        <div className={`os-window ${openWindows.weather ? 'open' : ''}`} onClick={() => setActiveWindow('weather')}>
+          <div className="window-header">
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => closeWindow('weather', e)}>×</button>
+            </div>
+            <span className="window-title">Weather</span>
+            <div className="window-spacer" />
+          </div>
+          <div className="window-content weather-content">
+            <div className="weather-input-row">
+              <input
+                type="text"
+                placeholder="Enter zip code"
+                className="weather-input"
+                id="weatherZip"
+                maxLength={5}
+              />
+              <button className="weather-search" onClick={fetchWeather}>→</button>
+            </div>
+            <div id="weatherDisplay" className="weather-display" style={{display: 'none'}}>
+              <div className="weather-main">
+                <span className="weather-icon" id="weatherIcon">☀️</span>
+                <span className="weather-temp" id="weatherTemp">72°</span>
+              </div>
+              <div className="weather-details">
+                <span id="weatherCondition">Sunny</span>
+                <span className="weather-highlow" id="weatherHighLow">H: 78° L: 65°</span>
+              </div>
+            </div>
+            <div id="weatherError" className="weather-error" style={{display: 'none'}}>Invalid zip code</div>
           </div>
         </div>
       )}
