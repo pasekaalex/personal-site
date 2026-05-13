@@ -361,72 +361,81 @@ export default function Intro() {
 
           {projectsOpen && (
             <div className="projects-dropdown">
-              <div className="projects-grid">
-                <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-card spongebob-card">
-                  <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/raw.githubusercontent.com/pasekaalex/Coomer/master/assets/favicon.png" alt="Bob Pants" className="project-img" />
+              <div className="projects-scroll">
+                <div className="project-card spongebob-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="Bob Pants" className="project-img" />
                   <div className="project-info">
                     <span className="project-name spongebob-font">Bob Pants</span>
-                    <span className="project-desc">Spongebob parody with games & casino</span>
                     <span className="project-tag">18+</span>
+                    <span className="project-desc">Spongebob parody with web games and simulated casino games.</span>
+                    <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-card cooming-card">
+                </div>
+                <div className="project-card cooming-card">
                   <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="GoonClicker" className="project-img" />
                   <div className="project-info">
                     <span className="project-name">GoonClicker</span>
-                    <span className="project-desc">18+ clicker game about the Wojak meme</span>
                     <span className="project-tag">18+</span>
+                    <span className="project-desc">The ultimate idle clicker game. Click to fill your coom meter, level up your arm, build combos, and survive the descent.</span>
+                    <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                </div>
+                <div className="project-card bulk-card">
                   <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulkOS</span>
-                    <span className="project-desc">Browser OS with bulk games & movie</span>
+                    <span className="project-desc">Browser Operating System. Play bulk games and watch the bulk movie all in your browser.</span>
+                    <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                </div>
+                <div className="project-card bulk-card">
                   <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Bros</span>
-                    <span className="project-desc">Super Mario clone starring Bulk</span>
+                    <span className="project-desc">6-world platformer with checkpoints, boss fights, and combo system. Super Mario clone starring Bulk.</span>
+                    <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                </div>
+                <div className="project-card bulk-card">
                   <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulkagachi</span>
-                    <span className="project-desc">Pet simulator (74 sprites made by me)</span>
+                    <span className="project-desc">Virtual pet game. Care for Bulk through egg → baby → teen → adult → elder stages. 74 sprites made by me.</span>
+                    <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                </div>
+                <div className="project-card bulk-card">
                   <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Climb</span>
-                    <span className="project-desc">Doodle jump clone with Bulk</span>
+                    <span className="project-desc">Vertical climbing game. Jump between platforms, avoid falling, climb as high as possible.</span>
+                    <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                </div>
+                <div className="project-card bulk-card">
                   <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Flappy</span>
-                    <span className="project-desc">Flappy Bird clone with Bulk</span>
+                    <span className="project-desc">Flappy Bird clone featuring Bulk. Tap to flap, avoid pipes, get the highest score.</span>
+                    <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                </div>
+                <div className="project-card bulk-card">
                   <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Runner</span>
-                    <span className="project-desc">Endless runner game with Bulk</span>
+                    <span className="project-desc">Endless runner set in cyberpunk city. Jump over obstacles, collect coins, run as far as you can.</span>
+                    <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
-                <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="project-card">
+                </div>
+                <div className="project-card">
                   <div className="project-placeholder">⏱️</div>
                   <div className="project-info">
                     <span className="project-name">Ready Heady</span>
-                    <span className="project-desc">Webapp timer for productivity</span>
+                    <span className="project-desc">Webapp timer for productivity. Built with React. Timer webapp for focused work sessions.</span>
+                    <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
                   </div>
-                </a>
+                </div>
               </div>
             </div>
           )}
