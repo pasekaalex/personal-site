@@ -319,58 +319,19 @@ export default function Intro() {
                 <strong>Education:</strong>
                 <p>Bachelors of Science in Computer Science</p>
                 <p>CUNY Brooklyn College</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="skills-section">
-          <button
-            className="skills-button"
-            onClick={(e) => {
-              createRipple(e)
-              setSkillsOpen(!skillsOpen)
-            }}
-          >
-            Skills {skillsOpen ? '▼' : '▶'}
-            {ripples.map(ripple => (
-              <span
-                key={ripple.id}
-                className="ripple"
-                style={{
-                  left: ripple.x,
-                  top: ripple.y
-                }}
-              />
-            ))}
-          </button>
-
-          {skillsOpen && (
-            <div className="skills-dropdown">
-              <div className="dropdown-item skills-grid">
-                <div className="skill-item">
-                  <span className="skill-icon">💎</span>
-                  <span className="skill-name">Object Oriented Programming</span>
-                </div>
-                <div className="skill-item">
-                  <span className="skill-icon">⚛️</span>
-                  <span className="skill-name">React.js</span>
-                </div>
-                <div className="skill-item">
-                  <span className="skill-icon">🌐</span>
-                  <span className="skill-name">Web Development</span>
-                </div>
-                <div className="skill-item">
-                  <span className="skill-icon">📁</span>
-                  <span className="skill-name">File Server Management</span>
-                </div>
-                <div className="skill-item">
-                  <span className="skill-icon">🐧</span>
-                  <span className="skill-name">Linux Expertise</span>
-                </div>
-                <div className="skill-item">
-                  <span className="skill-icon">🔧</span>
-                  <span className="skill-name">System Administration</span>
+                <br/>
+                <strong>Skills:</strong>
+                <div className="skills-grid-inline">
+                  <span className="skill-tag">React</span>
+                  <span className="skill-tag">JavaScript</span>
+                  <span className="skill-tag">TypeScript</span>
+                  <span className="skill-tag">HTML/CSS</span>
+                  <span className="skill-tag">Node.js</span>
+                  <span className="skill-tag">Python</span>
+                  <span className="skill-tag">Linux</span>
+                  <span className="skill-tag">Git</span>
+                  <span className="skill-tag">Docker</span>
+                  <span className="skill-tag">PostgreSQL</span>
                 </div>
               </div>
             </div>
@@ -400,18 +361,49 @@ export default function Intro() {
 
           {projectsOpen && (
             <div className="projects-dropdown">
-              <div className="dropdown-item">
-                <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-link-button spongebob-button">🧽 Cockpants →</a>
-                <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-link-button cooming-button">💀 Cooming →</a>
-                <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-link-button purple-button">🖥️ bulkOS →</a>
-                <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="project-link-button">⏱️ Ready Heady →</a>
-                <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-link-button">🎮 bulk Bros →</a>
-                <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-link-button">🐾 bulkagachi →</a>
-                <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-link-button">🧗 bulk Climb →</a>
-                <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-link-button">🐦 bulk Flappy →</a>
-                <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-link-button">🏃 bulk Runner →</a>
-                <a href="https://www.bulked.lol" target="_blank" rel="noopener noreferrer" className="project-link-button purple-button">💪 All Bulk Games →</a>
-                
+              <div className="projects-grid">
+                <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-card spongebob">
+                  <span className="project-emoji">🧽</span>
+                  <span className="project-name">Cockpants</span>
+                  <span className="project-tag">18+</span>
+                </a>
+                <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-card cooming">
+                  <span className="project-emoji">💀</span>
+                  <span className="project-name">Cooming</span>
+                  <span className="project-tag">18+</span>
+                </a>
+                <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-card purple">
+                  <span className="project-emoji">🖥️</span>
+                  <span className="project-name">bulkOS</span>
+                </a>
+                <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="project-card">
+                  <span className="project-emoji">⏱️</span>
+                  <span className="project-name">Ready Heady</span>
+                </a>
+                <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-card">
+                  <span className="project-emoji">🎮</span>
+                  <span className="project-name">bulk Bros</span>
+                </a>
+                <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-card">
+                  <span className="project-emoji">🐾</span>
+                  <span className="project-name">bulkagachi</span>
+                </a>
+                <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-card">
+                  <span className="project-emoji">🧗</span>
+                  <span className="project-name">bulk Climb</span>
+                </a>
+                <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-card">
+                  <span className="project-emoji">🐦</span>
+                  <span className="project-name">bulk Flappy</span>
+                </a>
+                <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-card">
+                  <span className="project-emoji">🏃</span>
+                  <span className="project-name">bulk Runner</span>
+                </a>
+                <a href="https://www.bulked.lol" target="_blank" rel="noopener noreferrer" className="project-card purple wide">
+                  <span className="project-emoji">💪</span>
+                  <span className="project-name">All Bulk Games</span>
+                </a>
               </div>
             </div>
           )}
