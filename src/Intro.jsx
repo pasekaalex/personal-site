@@ -379,42 +379,42 @@ export default function Intro() {
                   </div>
                 </a>
                 <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulkagachi-godot/master/assets/sprites/pixelbulk.png" alt="bulkOS" className="project-img" />
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulkOS</span>
                     <span className="project-desc">Browser OS with bulk games & movie</span>
                   </div>
                 </a>
                 <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulkagachi-godot/master/assets/sprites/bulk-happy.png" alt="bulk Bros" className="project-img" />
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Bros</span>
                     <span className="project-desc">Super Mario clone starring Bulk</span>
                   </div>
                 </a>
                 <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulkagachi-godot/master/assets/sprites/cover-baby.png" alt="bulkagachi" className="project-img" />
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulkagachi</span>
                     <span className="project-desc">Pet simulator (74 sprites made by me)</span>
                   </div>
                 </a>
                 <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulkagachi-godot/master/assets/sprites/bulk-play.png" alt="bulk Climb" className="project-img" />
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Climb</span>
                     <span className="project-desc">Doodle jump clone with Bulk</span>
                   </div>
                 </a>
                 <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulkagachi-godot/master/assets/sprites/bulk-fly.png" alt="bulk Flappy" className="project-img" />
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Flappy</span>
                     <span className="project-desc">Flappy Bird clone with Bulk</span>
                   </div>
                 </a>
                 <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulkagachi-godot/master/assets/sprites/bulk-hungry.png" alt="bulk Runner" className="project-img" />
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="project-img" />
                   <div className="project-info">
                     <span className="project-name hulk-font">bulk Runner</span>
                     <span className="project-desc">Endless runner game with Bulk</span>
