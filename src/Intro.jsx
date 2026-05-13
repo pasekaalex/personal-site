@@ -363,7 +363,7 @@ export default function Intro() {
             <div className="projects-dropdown">
               <div className="projects-grid">
                 <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-card spongebob-card">
-                  <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/SpongeBob_SquarePants_logo.svg/800px-SpongeBob_SquarePants_logo.svg.png" alt="Bob Pants" className="project-img" />
+                  <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/raw.githubusercontent.com/pasekaalex/Coomer/master/assets/favicon.png" alt="Bob Pants" className="project-img" />
                   <div className="project-info">
                     <span className="project-name spongebob-font">Bob Pants</span>
                     <span className="project-desc">Spongebob parody with games & casino</span>
