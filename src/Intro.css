@@ -872,14 +872,23 @@ body {
   text-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
 }
 
-.taskbar-right { display: flex; align-items: center; gap: 16px; }
+.taskbar-right { display: flex; align-items: center; gap: 20px; }
+
+.taskbar-date {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.05em;
+}
 
 .taskbar-clock {
   font-family: 'Orbitron', monospace;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  letter-spacing: 0.05em;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
 }
 
 /* ═══════════════════════════════════════════════════════════════

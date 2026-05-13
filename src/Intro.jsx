@@ -161,6 +161,10 @@ export default function Intro() {
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' })
   }
 
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
   return (
     <div className="os-container">
       {/* Particle Canvas */}
@@ -350,6 +354,7 @@ export default function Intro() {
           <span className="taskbar-user">paseka</span>
         </div>
         <div className="taskbar-right">
+          <span className="taskbar-date">{formatDate(time)}</span>
           <span className="taskbar-clock">{formatTime(time)}</span>
         </div>
       </div>
