@@ -363,7 +363,7 @@ export default function Intro() {
             <div className="projects-dropdown">
               <div className="projects-scroll">
                 <div className="project-card spongebob-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="Bob Pants" className="project-img" />
+                  <img src="/spongebob.png" alt="Bob Pants" className="project-img" />
                   <div className="project-info">
                     <span className="project-name spongebob-font">Bob Pants</span>
                     <span className="project-tag">18+</span>
@@ -372,7 +372,7 @@ export default function Intro() {
                   </div>
                 </div>
                 <div className="project-card cooming-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="GoonClicker" className="project-img" />
+                  <img src="/spongebob.png" alt="GoonClicker" className="project-img" />
                   <div className="project-info">
                     <span className="project-name">GoonClicker</span>
                     <span className="project-tag">18+</span>
