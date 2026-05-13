@@ -514,19 +514,21 @@ export default function Intro() {
         </div>
       </div>
 
-      <button
-        className="chaos-button"
-        onClick={() => setChaosMode(!chaosMode)}
-      >
-        {chaosMode ? '⚠ disable ⚠' : '⚡ chaos'}
-      </button>
+      <footer className="site-footer">
+        <button
+          className="chaos-button"
+          onClick={() => setChaosMode(!chaosMode)}
+        >
+          {chaosMode ? '⚠ disable ⚠' : '⚡ chaos'}
+        </button>
 
-      <button
-        className="music-button"
-        onClick={toggleMusic}
-      >
-        {musicPlaying ? '🔊' : '🔇'}
-      </button>
+        <button
+          className="music-button"
+          onClick={toggleMusic}
+        >
+          {musicPlaying ? '🔊' : '🔇'}
+        </button>
+      </footer>
     </div>
   )
 }

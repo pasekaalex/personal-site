@@ -1773,3 +1773,27 @@
   background: rgba(0, 245, 255, 0.4);
   border-radius: 3px;
 }
+
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  z-index: 10001;
+  pointer-events: none;
+}
+
+.site-footer button {
+  pointer-events: auto;
+}
+
+.site-footer .chaos-button {
+  position: static;
+}
+
+.site-footer .music-button {
+  position: static;
+}
