@@ -14,6 +14,7 @@ export default function Intro() {
   const [ripples, setRipples] = useState([])
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [skillsOpen, setSkillsOpen] = useState(false)
+  const [selectedProject, setSelectedProject] = useState(null)
   const canvasRef = useRef(null)
   const particlesRef = useRef([])
   const animationFrameRef = useRef(null)
@@ -360,82 +361,153 @@ export default function Intro() {
           </button>
 
           {projectsOpen && (
-            <div className="projects-dropdown">
-              <div className="projects-scroll">
-                <div className="project-card spongebob-card">
-                  <img src="/spongebob.png" alt="Bob Pants" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name spongebob-font">Bob Pants</span>
-                    <span className="project-tag">18+</span>
-                    <span className="project-desc">Spongebob parody with web games and simulated casino games.</span>
-                    <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card cooming-card">
-                  <img src="/spongebob.png" alt="GoonClicker" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name">GoonClicker</span>
-                    <span className="project-tag">18+</span>
-                    <span className="project-desc">The ultimate idle clicker game. Click to fill your coom meter, level up your arm, build combos, and survive the descent.</span>
-                    <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name hulk-font">bulkOS</span>
-                    <span className="project-desc">Browser Operating System. Play bulk games and watch the bulk movie all in your browser.</span>
-                    <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name hulk-font">bulk Bros</span>
-                    <span className="project-desc">6-world platformer with checkpoints, boss fights, and combo system. Super Mario clone starring Bulk.</span>
-                    <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name hulk-font">bulkagachi</span>
-                    <span className="project-desc">Virtual pet game. Care for Bulk through egg → baby → teen → adult → elder stages. 74 sprites made by me.</span>
-                    <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name hulk-font">bulk Climb</span>
-                    <span className="project-desc">Vertical climbing game. Jump between platforms, avoid falling, climb as high as possible.</span>
-                    <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name hulk-font">bulk Flappy</span>
-                    <span className="project-desc">Flappy Bird clone featuring Bulk. Tap to flap, avoid pipes, get the highest score.</span>
-                    <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card bulk-card">
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="project-img" />
-                  <div className="project-info">
-                    <span className="project-name hulk-font">bulk Runner</span>
-                    <span className="project-desc">Endless runner set in cyberpunk city. Jump over obstacles, collect coins, run as far as you can.</span>
-                    <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
-                <div className="project-card">
-                  <div className="project-placeholder">⏱️</div>
-                  <div className="project-info">
-                    <span className="project-name">Ready Heady</span>
-                    <span className="project-desc">Webapp timer for productivity. Built with React. Timer webapp for focused work sessions.</span>
-                    <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="project-link">Play →</a>
-                  </div>
-                </div>
+            <div className="projects-dropdown projects-gallery">
+              <div className="projects-grid-icons">
+                <button className="project-icon-btn" onClick={() => setSelectedProject('bob-pants')}>
+                  <img src="/spongebob.png" alt="Bob Pants" className="project-icon" />
+                  <span className="project-icon-name">Bob Pants</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('goonclicker')}>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="GoonClicker" className="project-icon" />
+                  <span className="project-icon-name">GoonClicker</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('bulk-os')}>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="project-icon" />
+                  <span className="project-icon-name">bulkOS</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('bulk-bros')}>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="project-icon" />
+                  <span className="project-icon-name">bulk Bros</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('bulkagachi')}>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="project-icon" />
+                  <span className="project-icon-name">bulkagachi</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('bulk-climb')}>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="project-icon" />
+                  <span className="project-icon-name">bulk Climb</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('bulk-flappy')}>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="project-icon" />
+                  <span className="project-icon-name">bulk Flappy</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('bulk-runner')}>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="project-icon" />
+                  <span className="project-icon-name">bulk Runner</span>
+                </button>
+                <button className="project-icon-btn" onClick={() => setSelectedProject('ready-heady')}>
+                  <div className="project-icon-placeholder">⏱️</div>
+                  <span className="project-icon-name">Ready Heady</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {selectedProject && (
+            <div className="project-modal" onClick={() => setSelectedProject(null)}>
+              <div className="project-modal-content" onClick={e => e.stopPropagation()}>
+                <button className="modal-close" onClick={() => setSelectedProject(null)}>×</button>
+                {selectedProject === 'bob-pants' && (
+                  <>
+                    <img src="/spongebob.png" alt="Bob Pants" className="modal-img" />
+                    <h2 className="spongebob-font">Bob Pants</h2>
+                    <span className="modal-tag">18+</span>
+                    <p className="modal-desc">Spongebob parody with web games and simulated casino games. Dive into Bikini Bottom's wildest website!</p>
+                    <div className="modal-links">
+                      <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/cockpants" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'goonclicker' && (
+                  <>
+                    <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="GoonClicker" className="modal-img" />
+                    <h2>GoonClicker</h2>
+                    <span className="modal-tag">18+</span>
+                    <p className="modal-desc">The ultimate idle clicker game. Click to fill your coom meter, level up your arm, build combos, and survive the descent. Reach Arm Level 10 to win!</p>
+                    <div className="modal-links">
+                      <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/Coomer" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'bulk-os' && (
+                  <>
+                    <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="modal-img" />
+                    <h2 className="hulk-font">bulkOS</h2>
+                    <p className="modal-desc">Browser Operating System. Play bulk games and watch the bulk movie all in your browser. Built with React and TypeScript.</p>
+                    <div className="modal-links">
+                      <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'bulk-bros' && (
+                  <>
+                    <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="modal-img" />
+                    <h2 className="hulk-font">bulk Bros</h2>
+                    <p className="modal-desc">6-world platformer with checkpoints, boss fights, and combo system. Super Mario clone starring Bulk. Features 6 worlds to explore!</p>
+                    <div className="modal-links">
+                      <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'bulkagachi' && (
+                  <>
+                    <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="modal-img" />
+                    <h2 className="hulk-font">bulkagachi</h2>
+                    <p className="modal-desc">Virtual pet game. Care for Bulk through egg → baby → teen → adult → elder stages. All 74 sprites hand-made. Travel to different locations, level up, and more!</p>
+                    <div className="modal-links">
+                      <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'bulk-climb' && (
+                  <>
+                    <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="modal-img" />
+                    <h2 className="hulk-font">bulk Climb</h2>
+                    <p className="modal-desc">Vertical climbing game. Jump between platforms, avoid falling, climb as high as possible. Doodle Jump clone featuring Bulk.</p>
+                    <div className="modal-links">
+                      <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'bulk-flappy' && (
+                  <>
+                    <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="modal-img" />
+                    <h2 className="hulk-font">bulk Flappy</h2>
+                    <p className="modal-desc">Flappy Bird clone featuring Bulk. Tap to flap, avoid pipes, get the highest score. Simple but addictive!</p>
+                    <div className="modal-links">
+                      <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'bulk-runner' && (
+                  <>
+                    <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="modal-img" />
+                    <h2 className="hulk-font">bulk Runner</h2>
+                    <p className="modal-desc">Endless runner set in cyberpunk city. Jump over obstacles, collect coins, run as far as you can. How far can you go?</p>
+                    <div className="modal-links">
+                      <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
+                {selectedProject === 'ready-heady' && (
+                  <>
+                    <div className="modal-placeholder">⏱️</div>
+                    <h2>Ready Heady</h2>
+                    <p className="modal-desc">Webapp timer for productivity. Built with React. Timer webapp for focused work sessions and breaks.</p>
+                    <div className="modal-links">
+                      <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
+                      <a href="https://github.com/pasekaalex/readyheady" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}
