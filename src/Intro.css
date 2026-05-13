@@ -1007,3 +1007,23 @@ body {
   font-size: 1rem;
   color: #9b59b6;
 }
+
+/* Music Toggle */
+.music-toggle {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.music-toggle:hover {
+  background: rgba(155, 89, 182, 0.4);
+  transform: scale(1.05);
+}

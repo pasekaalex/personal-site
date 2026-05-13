@@ -66,10 +66,12 @@ export default function Intro() {
   const [time, setTime] = useState(new Date())
   const [openWindows, setOpenWindows] = useState({})
   const [startMenuOpen, setStartMenuOpen] = useState(false)
+  const [musicPlaying, setMusicPlaying] = useState(false)
   const [activeWindow, setActiveWindow] = useState(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [particles, setParticles] = useState([])
   const canvasRef = useRef(null)
+  const audioRef = useRef(null)
   const particleIdRef = useRef(0)
 
   // Clock
@@ -166,10 +168,23 @@ export default function Intro() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   }
 
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (musicPlaying) {
+        audioRef.current.pause()
+        setMusicPlaying(false)
+      } else {
+        audioRef.current.play()
+        setMusicPlaying(true)
+      }
+    }
+  }
+
   return (
     <div className="os-container">
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
+      <audio ref={audioRef} src="/jazz-chill.mp3" loop />
 
       {/* Animated Background */}
       <div className="bg-layer" />
@@ -380,6 +395,9 @@ export default function Intro() {
           </button>
         </div>
         <div className="taskbar-right">
+          <button className="music-toggle" onClick={toggleMusic} title={musicPlaying ? 'Mute' : 'Play Music'}>
+            {musicPlaying ? '🔊' : '🔇'}
+          </button>
           <span className="taskbar-date">{formatDate(time)}</span>
           <span className="taskbar-clock">{formatTime(time)}</span>
         </div>
