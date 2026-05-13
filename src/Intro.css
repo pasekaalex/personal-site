@@ -77,6 +77,12 @@
     radial-gradient(ellipse 80% 50% at 80% 90%, rgba(191, 0, 255, 0.08) 0%, transparent 50%),
     radial-gradient(ellipse 60% 40% at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
   pointer-events: none;
+  animation: glowPulse 8s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .bg-vignette {
@@ -132,6 +138,18 @@
   padding: 0 20px;
   z-index: 1000;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  animation: menuSlideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes menuSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .menu-logo {
@@ -626,8 +644,9 @@
 .about-role {
   font-size: 0.85rem;
   color: var(--neon-cyan);
-  margin: 0 0 10px 0;
+  margin: 0 0 12px 0;
   font-weight: 500;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
 }
 
 .about-badge {
