@@ -1216,81 +1216,111 @@
 }
 
 
-/* Projects grid layout */
+/* Projects grid layout - 2 column with images */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
   width: 100%;
 }
 
 .project-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 16px 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
+  overflow: hidden;
   text-decoration: none;
   color: #fff;
   transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
 }
 
 .project-card:hover {
-  transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 25px rgba(0, 245, 255, 0.25);
+  transform: translateY(-4px);
+  border-color: rgba(0, 245, 255, 0.5);
+  box-shadow: 0 12px 30px rgba(0, 245, 255, 0.2);
 }
 
-.project-card.purple {
-  background: linear-gradient(135deg, rgba(139, 0, 255, 0.3), rgba(191, 0, 255, 0.2));
-  border-color: rgba(139, 0, 255, 0.4);
+.project-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
 }
 
-.project-card.purple:hover {
-  box-shadow: 0 8px 25px rgba(139, 0, 255, 0.4);
-}
-
-.project-card.wide {
-  grid-column: span 3;
-  flex-direction: row;
+.project-placeholder {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 12px;
+  font-size: 3rem;
+  background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(191, 0, 255, 0.1));
 }
 
-.project-card .project-emoji {
-  font-size: 1.8rem;
+.project-info {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.project-card .project-name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-align: center;
+.project-name {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.project-card .project-tag {
+.project-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.project-tag {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 8px;
+  right: 8px;
   font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
   background: #ef4444;
   color: #fff;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: 4px;
 }
 
-.project-card.spongebob:hover {
-  box-shadow: 0 8px 25px rgba(255, 200, 0, 0.3);
+.project-card.bulk-card {
+  border-color: rgba(139, 0, 255, 0.3);
 }
 
-.project-card.cooming:hover {
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+.project-card.bulk-card:hover {
+  border-color: rgba(139, 0, 255, 0.6);
+  box-shadow: 0 12px 30px rgba(139, 0, 255, 0.25);
+}
+
+.project-card.spongebob-card:hover {
+  border-color: rgba(255, 200, 0, 0.5);
+  box-shadow: 0 12px 30px rgba(255, 200, 0, 0.2);
+}
+
+.project-card.cooming-card:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.25);
+}
+
+/* Hulk font for bulk stuff */
+.hulk-font {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  text-transform: uppercase;
+}
+
+/* Spongebob font for cockpants */
+.spongebob-font {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+  font-weight: bold;
 }
 
 /* Skills inline grid */

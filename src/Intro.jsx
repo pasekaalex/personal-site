@@ -362,47 +362,70 @@ export default function Intro() {
           {projectsOpen && (
             <div className="projects-dropdown">
               <div className="projects-grid">
-                <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-card spongebob">
-                  <span className="project-emoji">🧽</span>
-                  <span className="project-name">Cockpants</span>
-                  <span className="project-tag">18+</span>
+                <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-card spongebob-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/cockpants/main/hung.png" alt="Bob Pants" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name spongebob-font">Bob Pants</span>
+                    <span className="project-desc">Spongebob parody with games & casino</span>
+                    <span className="project-tag">18+</span>
+                  </div>
                 </a>
-                <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-card cooming">
-                  <span className="project-emoji">💀</span>
-                  <span className="project-name">Cooming</span>
-                  <span className="project-tag">18+</span>
+                <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-card cooming-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/main/assets/menu-banner.png" alt="GoonClicker" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name">GoonClicker</span>
+                    <span className="project-desc">18+ clicker game about the Wojak meme</span>
+                    <span className="project-tag">18+</span>
+                  </div>
                 </a>
-                <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-card purple">
-                  <span className="project-emoji">🖥️</span>
-                  <span className="project-name">bulkOS</span>
+                <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/agartha2/main/public/banner.jpeg" alt="bulkOS" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name hulk-font">bulkOS</span>
+                    <span className="project-desc">Browser OS with bulk games & movie</span>
+                  </div>
                 </a>
                 <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="project-card">
-                  <span className="project-emoji">⏱️</span>
-                  <span className="project-name">Ready Heady</span>
+                  <div className="project-placeholder">⏱️</div>
+                  <div className="project-info">
+                    <span className="project-name">Ready Heady</span>
+                    <span className="project-desc">Webapp timer for productivity</span>
+                  </div>
                 </a>
-                <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-card">
-                  <span className="project-emoji">🎮</span>
-                  <span className="project-name">bulk Bros</span>
+                <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/agartha2/main/public/banner.jpeg" alt="bulk Bros" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name hulk-font">bulk Bros</span>
+                    <span className="project-desc">Super Mario clone starring Bulk</span>
+                  </div>
                 </a>
-                <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-card">
-                  <span className="project-emoji">🐾</span>
-                  <span className="project-name">bulkagachi</span>
+                <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/agartha2/main/public/banner.jpeg" alt="bulkagachi" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name hulk-font">bulkagachi</span>
+                    <span className="project-desc">Pet simulator (74 sprites made by me)</span>
+                  </div>
                 </a>
-                <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-card">
-                  <span className="project-emoji">🧗</span>
-                  <span className="project-name">bulk Climb</span>
+                <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/agartha2/main/public/banner.jpeg" alt="bulk Climb" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name hulk-font">bulk Climb</span>
+                    <span className="project-desc">Doodle jump clone with Bulk</span>
+                  </div>
                 </a>
-                <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-card">
-                  <span className="project-emoji">🐦</span>
-                  <span className="project-name">bulk Flappy</span>
+                <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/agartha2/main/public/banner.jpeg" alt="bulk Flappy" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name hulk-font">bulk Flappy</span>
+                    <span className="project-desc">Flappy Bird clone with Bulk</span>
+                  </div>
                 </a>
-                <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-card">
-                  <span className="project-emoji">🏃</span>
-                  <span className="project-name">bulk Runner</span>
-                </a>
-                <a href="https://www.bulked.lol" target="_blank" rel="noopener noreferrer" className="project-card purple wide">
-                  <span className="project-emoji">💪</span>
-                  <span className="project-name">All Bulk Games</span>
+                <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-card bulk-card">
+                  <img src="https://raw.githubusercontent.com/pasekaalex/agartha2/main/public/banner.jpeg" alt="bulk Runner" className="project-img" />
+                  <div className="project-info">
+                    <span className="project-name hulk-font">bulk Runner</span>
+                    <span className="project-desc">Endless runner game with Bulk</span>
+                  </div>
                 </a>
               </div>
             </div>
