@@ -411,8 +411,7 @@ export default function Intro() {
                 <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-link-button">🐦 bulk Flappy →</a>
                 <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-link-button">🏃 bulk Runner →</a>
                 <a href="https://www.bulked.lol" target="_blank" rel="noopener noreferrer" className="project-link-button purple-button">💪 All Bulk Games →</a>
-                <Link to="/typing-test" className="project-link-button orange-button">⌨️ Typing Test →</Link>
-                <Link to="/arcade" className="project-link-button">🎮 React Arcade →</Link>
+                
               </div>
             </div>
           )}
