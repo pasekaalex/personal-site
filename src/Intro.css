@@ -239,6 +239,34 @@
   opacity: 1;
   transform: scale(1) translateY(0);
   pointer-events: all;
+  animation: windowOpen 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes windowOpen {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.about-window.open {
+  z-index: 210;
+}
+
+.projects-window.open {
+  z-index: 220;
+}
+
+.skills-window.open {
+  z-index: 230;
+}
+
+.contact-window.open {
+  z-index: 240;
 }
 
 .about-window {
@@ -254,6 +282,31 @@
   width: 680px;
   max-height: calc(100vh - 160px);
   z-index: 200;
+}
+
+.projects-window .project-detail {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(10, 15, 30, 0.98), rgba(5, 10, 20, 1));
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 245, 255, 0.15);
+  padding: 20px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.projects-window.open .project-detail {
+  transform: translateY(0);
+}
+
+.projects-window .window-body {
+  padding-bottom: 20px;
+  max-height: calc(100vh - 260px);
+  overflow-y: auto;
 }
 
 .skills-window {
@@ -598,37 +651,7 @@
   overflow: hidden;
 }
 
-/* Project Detail Panel */
-.project-detail {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(180deg, rgba(10, 15, 30, 0.95), rgba(5, 10, 20, 0.98));
-  backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(0, 245, 255, 0.15);
-  padding: 20px;
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-.projects-window:has(.project-detail) .window-body {
-  padding-bottom: 160px;
-}
-
-.project-card.selected + .project-detail,
-.project-detail:has(+ .project-card.selected) {
-  transform: translateY(0);
-}
-
-/* Fix for detail panel visibility */
-.projects-window.open .project-detail {
-  display: block;
-}
-
-.projects-window.open .project-detail {
-  transform: translateY(0);
-}
 
 .detail-header {
   display: flex;
