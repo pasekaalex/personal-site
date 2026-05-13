@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Render</title>
+  <style>
+    body { background: blue; color: white; font-size: 30px; margin: 0; padding: 20px; }
+  </style>
+</head>
+<body>
+  <div id="test">Testing 123</div>
+  <script type="module">
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    import Intro from './src/Intro.jsx'
+    const root = ReactDOM.createRoot(document.getElementById('test'))
+    root.render(React.createElement(Intro))
+  </script>
+</body>
+</html>
