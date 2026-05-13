@@ -5,556 +5,265 @@ import './Intro.css'
 export default function Intro() {
   const [aboutOpen, setAboutOpen] = useState(false)
   const [projectsOpen, setProjectsOpen] = useState(false)
-  const [chaosMode, setChaosMode] = useState(false)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [nameHovered, setNameHovered] = useState(false)
-  const [nameTyping, setNameTyping] = useState(false)
-  const [typedText, setTypedText] = useState('')
-  const [easterEgg, setEasterEgg] = useState(false)
-  const [ripples, setRipples] = useState([])
-  const [musicPlaying, setMusicPlaying] = useState(false)
   const [skillsOpen, setSkillsOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null)
-  const canvasRef = useRef(null)
-  const particlesRef = useRef([])
-  const animationFrameRef = useRef(null)
-  const profileCenterRef = useRef({ x: 0, y: 0 })
-  const rippleIdRef = useRef(0)
-  const typingTimeoutRef = useRef(null)
-  const audioRef = useRef(null)
-  const lastShakeRef = useRef(0)
-  const shakeThresholdRef = useRef(15)
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    const x = ((e.clientX - centerX) / rect.width) * 100
-    const y = ((e.clientY - centerY) / rect.height) * 100
-    setMousePos({ x, y })
-
-    // Create particles at mouse position
-    createParticles(e.clientX, e.clientY, 3)
-  }
-
-  const createParticles = (x, y, count) => {
-    const colors = ['#00f5ff', '#bf00ff', '#ff6b00', '#ffffff', '#a78bfa']
-    for (let i = 0; i < count; i++) {
-      particlesRef.current.push({
-        x,
-        y,
-        vx: (Math.random() - 0.5) * 4,
-        vy: (Math.random() - 0.5) * 4,
-        size: Math.random() * 3 + 1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        life: 1,
-        decay: Math.random() * 0.02 + 0.01
-      })
-    }
-  }
-
-  const handleProfileDoubleClick = () => {
-    setEasterEgg(true)
-    // Create explosion of particles
-    const rect = document.querySelector('.profile-pic')?.getBoundingClientRect()
-    if (rect) {
-      const centerX = rect.left + rect.width / 2
-      const centerY = rect.top + rect.height / 2
-      // Create burst of 50 particles
-      for (let i = 0; i < 50; i++) {
-        const angle = (Math.PI * 2 * i) / 50
-        const speed = 5 + Math.random() * 5
-        createParticles(centerX, centerY, 1)
-        // Give them radial velocity
-        const lastParticle = particlesRef.current[particlesRef.current.length - 1]
-        lastParticle.vx = Math.cos(angle) * speed
-        lastParticle.vy = Math.sin(angle) * speed
-      }
-    }
-    setTimeout(() => setEasterEgg(false), 2000)
-  }
-
-  const createRipple = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const id = rippleIdRef.current++
-    setRipples(prev => [...prev, { id, x, y }])
-    setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== id))
-    }, 600)
-  }
-
-  const startTypingAnimation = () => {
-    if (nameTyping) return // Don't restart if already typing
-
-    setNameTyping(true)
-    setTypedText('')
-    const fullName = 'Alex Paseka'
-    let currentIndex = 0
-
-    const typeNextChar = () => {
-      if (currentIndex < fullName.length) {
-        setTypedText(fullName.slice(0, currentIndex + 1))
-        currentIndex++
-        typingTimeoutRef.current = setTimeout(typeNextChar, 100)
-      } else {
-        // Wait 2 seconds then reset
-        typingTimeoutRef.current = setTimeout(() => {
-          setNameTyping(false)
-          setTypedText('')
-        }, 2000)
-      }
-    }
-
-    typeNextChar()
-  }
-
-  const handleNameHover = () => {
-    setNameHovered(true)
-    startTypingAnimation()
-  }
-
-  const handleNameClick = () => {
-    // Only trigger on mobile/touch devices
-    if (!('ontouchstart' in window)) return
-    startTypingAnimation()
-  }
+  // Clock state
+  const [time, setTime] = useState(new Date())
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    const ctx = canvas.getContext('2d')
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      // Emit particles from profile picture
-      if (profileCenterRef.current.x && profileCenterRef.current.y) {
-        if (Math.random() > 0.7) {
-          const angle = Math.random() * Math.PI * 2
-          const distance = 100 + Math.random() * 20
-          const x = profileCenterRef.current.x + Math.cos(angle) * distance
-          const y = profileCenterRef.current.y + Math.sin(angle) * distance
-          createParticles(x, y, 1)
-        }
-      }
-
-      // Update and draw particles
-      particlesRef.current = particlesRef.current.filter(particle => {
-        particle.x += particle.vx
-        particle.y += particle.vy
-        particle.vy += 0.1 // gravity
-        particle.life -= particle.decay
-
-        if (particle.life > 0) {
-          ctx.save()
-          ctx.globalAlpha = particle.life
-          ctx.fillStyle = particle.color
-          ctx.shadowBlur = 10
-          ctx.shadowColor = particle.color
-          ctx.beginPath()
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-          ctx.fill()
-          ctx.restore()
-          return true
-        }
-        return false
-      })
-
-      animationFrameRef.current = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    // Update profile center position
-    const updateProfileCenter = () => {
-      const profilePic = document.querySelector('.profile-pic')
-      if (profilePic) {
-        const rect = profilePic.getBoundingClientRect()
-        profileCenterRef.current = {
-          x: rect.left + rect.width / 2,
-          y: rect.top + rect.height / 2
-        }
-      }
-    }
-    updateProfileCenter()
-    window.addEventListener('resize', updateProfileCenter)
-    return () => window.removeEventListener('resize', updateProfileCenter)
-  }, [])
-
-  useEffect(() => {
-    // Cleanup typing timeout on unmount
-    return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current)
-      }
-    }
-  }, [])
-
-  const toggleMusic = () => {
-    if (audioRef.current) {
-      if (musicPlaying) {
-        audioRef.current.pause()
-        setMusicPlaying(false)
-      } else {
-        audioRef.current.play()
-        setMusicPlaying(true)
-      }
-    }
-  }
-
-  useEffect(() => {
-    // Set up audio to loop
-    if (audioRef.current) {
-      audioRef.current.volume = 0.3 // Set volume to 30%
-      audioRef.current.loop = true
-    }
-  }, [])
-
-  useEffect(() => {
-    // Shake detection for mobile
-    const handleShake = (event) => {
-      const acceleration = event.accelerationIncludingGravity
-      if (!acceleration) return
-
-      const currentTime = new Date().getTime()
-      if (currentTime - lastShakeRef.current < 1000) return // Debounce 1 second
-
-      const x = Math.abs(acceleration.x || 0)
-      const y = Math.abs(acceleration.y || 0)
-      const z = Math.abs(acceleration.z || 0)
-
-      if (x > shakeThresholdRef.current || y > shakeThresholdRef.current || z > shakeThresholdRef.current) {
-        lastShakeRef.current = currentTime
-        setChaosMode(prev => !prev)
-      }
-    }
-
-    if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', handleShake)
-      return () => window.removeEventListener('devicemotion', handleShake)
-    }
+    const timer = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(timer)
   }, [])
 
   return (
-    <div
-      className={`intro-container ${aboutOpen ? 'zoomed' : ''} ${chaosMode ? 'chaos-mode' : ''}`}
-      onMouseMove={handleMouseMove}
-    >
-      <canvas ref={canvasRef} className="particle-canvas" />
-      <audio ref={audioRef} src="/background-music.mp3" />
-      <div className="intro-content">
-        <h1
-          className={`name-title ${nameHovered ? 'name-hovered' : ''} ${nameTyping ? 'name-typing' : ''}`}
-          onMouseEnter={handleNameHover}
-          onMouseLeave={() => setNameHovered(false)}
-          onClick={handleNameClick}
-        >
-          {nameTyping ? (
-            <>
-              {typedText}
-              <span className="typing-cursor">|</span>
-            </>
-          ) : (
-            <>
-              Alex Paseka
-            </>
-          )}
-        </h1>
-        <div className="profile-pic-container">
-          <img
-            src="/avi.jpg"
-            alt="Alex Paseka"
-            className={`profile-pic ${easterEgg ? 'easter-egg-active' : ''}`}
-            style={{
-              transform: `translate(${mousePos.x * 0.1}px, ${mousePos.y * 0.1}px)`
-            }}
-            onDoubleClick={handleProfileDoubleClick}
-          />
-        </div>
-
-        <div className="about-section">
-          <button
-            className="about-button"
-            onClick={(e) => {
-              createRipple(e)
-              setAboutOpen(!aboutOpen)
-            }}
-          >
-            About {aboutOpen ? '▼' : '▶'}
-            {ripples.map(ripple => (
-              <span
-                key={ripple.id}
-                className="ripple"
-                style={{
-                  left: ripple.x,
-                  top: ripple.y
-                }}
-              />
-            ))}
-          </button>
-
+    <div className="os-container" style={{ backgroundImage: `url(/desktop-bg.jpg)` }}>
+      
+      {/* Desktop Area */}
+      <div className="desktop-area">
+        
+        {/* About Window */}
+        <div className={`os-window ${aboutOpen ? 'open' : ''}`}>
+          <div className="window-header">
+            <span className="window-title">About</span>
+            <button className="window-close" onClick={() => setAboutOpen(false)}>×</button>
+          </div>
           {aboutOpen && (
-            <div className="about-dropdown">
-              <div className="dropdown-item">
-                <strong>Education:</strong>
-                <p>Bachelors of Science in Computer Science</p>
-                <p>CUNY Brooklyn College</p>
-                <br/>
-                <strong>Skills:</strong>
-                <div className="skills-grid-inline">
-                  <span className="skill-tag">React</span>
-                  <span className="skill-tag">JavaScript</span>
-                  <span className="skill-tag">TypeScript</span>
-                  <span className="skill-tag">HTML/CSS</span>
-                  <span className="skill-tag">Node.js</span>
-                  <span className="skill-tag">Python</span>
-                  <span className="skill-tag">Linux</span>
-                  <span className="skill-tag">Git</span>
-                  <span className="skill-tag">Docker</span>
-                  <span className="skill-tag">PostgreSQL</span>
+            <div className="window-content">
+              <div className="about-content">
+                <img src="/avi.jpg" alt="Alex" className="about-avatar" />
+                <div className="about-text">
+                  <p><strong>Education:</strong> Bachelors of Science in Computer Science, CUNY Brooklyn College</p>
                 </div>
               </div>
             </div>
           )}
+          {!aboutOpen && (
+            <button className="window-launcher" onClick={() => setAboutOpen(true)}>
+              <span className="launcher-icon">👤</span>
+              <span className="launcher-label">About</span>
+            </button>
+          )}
         </div>
 
-        <div className="projects-section">
-          <button
-            className="projects-button"
-            onClick={(e) => {
-              createRipple(e)
-              setProjectsOpen(!projectsOpen)
-            }}
-          >
-            Projects {projectsOpen ? '▼' : '▶'}
-            {ripples.map(ripple => (
-              <span
-                key={ripple.id}
-                className="ripple"
-                style={{
-                  left: ripple.x,
-                  top: ripple.y
-                }}
-              />
-            ))}
-          </button>
-
-          {projectsOpen && (
-            <div className="projects-dropdown projects-gallery">
-              <div className="projects-grid-icons">
+        {/* Projects Window */}
+        <div className={`os-window ${projectsOpen ? 'open' : ''}`}>
+          <div className="window-header">
+            <span className="window-title">Projects</span>
+            <button className="window-close" onClick={() => { setProjectsOpen(false); setSelectedProject(null); }}>×</button>
+          </div>
+          {projectsOpen ? (
+            <div className="window-content projects-content">
+              <div className="projects-row">
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'bob-pants' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'bob-pants' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'bob-pants' ? null : 'bob-pants')}
                 >
-                  <img src="/spongebob.png" alt="Bob Pants" className="project-icon" />
-                  <span className="project-icon-name">Bob Pants</span>
+                  <img src="/spongebob.png" alt="Bob Pants" className="tile-img" />
+                  <span>Bob Pants</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'goonclicker' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'goonclicker' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'goonclicker' ? null : 'goonclicker')}
                 >
-                  <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="GoonClicker" className="project-icon" />
-                  <span className="project-icon-name">GoonClicker</span>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="GoonClicker" className="tile-img" />
+                  <span>GoonClicker</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'bulk-os' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'bulk-os' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'bulk-os' ? null : 'bulk-os')}
                 >
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="project-icon" />
-                  <span className="project-icon-name">bulkOS</span>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="tile-img" />
+                  <span>bulkOS</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'bulk-bros' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'bulk-bros' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'bulk-bros' ? null : 'bulk-bros')}
                 >
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="project-icon" />
-                  <span className="project-icon-name">bulk Bros</span>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="tile-img" />
+                  <span>bulk Bros</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'bulkagachi' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'bulkagachi' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'bulkagachi' ? null : 'bulkagachi')}
                 >
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="project-icon" />
-                  <span className="project-icon-name">bulkagachi</span>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="tile-img" />
+                  <span>bulkagachi</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'bulk-climb' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'bulk-climb' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'bulk-climb' ? null : 'bulk-climb')}
                 >
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="project-icon" />
-                  <span className="project-icon-name">bulk Climb</span>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="tile-img" />
+                  <span>bulk Climb</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'bulk-flappy' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'bulk-flappy' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'bulk-flappy' ? null : 'bulk-flappy')}
                 >
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="project-icon" />
-                  <span className="project-icon-name">bulk Flappy</span>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="tile-img" />
+                  <span>bulk Flappy</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'bulk-runner' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'bulk-runner' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'bulk-runner' ? null : 'bulk-runner')}
                 >
-                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="project-icon" />
-                  <span className="project-icon-name">bulk Runner</span>
+                  <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="tile-img" />
+                  <span>bulk Runner</span>
                 </button>
                 <button 
-                  className={`project-icon-btn ${selectedProject === 'ready-heady' ? 'selected' : ''}`}
+                  className={`project-tile ${selectedProject === 'ready-heady' ? 'selected' : ''}`}
                   onClick={() => setSelectedProject(selectedProject === 'ready-heady' ? null : 'ready-heady')}
                 >
-                  <div className="project-icon-placeholder">⏱️</div>
-                  <span className="project-icon-name">Ready Heady</span>
+                  <div className="tile-placeholder">⏱️</div>
+                  <span>Ready Heady</span>
                 </button>
               </div>
 
               {selectedProject && (
-                <div className="project-detail">
+                <div className="project-detail-panel">
                   {selectedProject === 'bob-pants' && (
                     <>
-                      <img src="/spongebob.png" alt="Bob Pants" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px'}} />
-                      <h3>Bob Pants</h3>
-                      <span style={{color: '#ff6b6b', fontSize: '0.8rem'}}>18+</span>
-                      <p>Spongebob parody with web games and simulated casino games. Dive into Bikini Bottom!</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/cockpants" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <h3>Bob Pants <span className="tag-18">18+</span></h3>
+                      <p>Spongebob parody with web games and simulated casino games.</p>
+                      <div className="detail-links">
+                        <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/cockpants" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'goonclicker' && (
                     <>
-                      <img src="https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png" alt="GoonClicker" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px', objectFit: 'cover'}} />
-                      <h3>GoonClicker</h3>
-                      <span style={{color: '#ff6b6b', fontSize: '0.8rem'}}>18+</span>
-                      <p>The ultimate idle clicker game. Click, level up your arm, build combos, reach Arm Level 10!</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/Coomer" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <h3>GoonClicker <span className="tag-18">18+</span></h3>
+                      <p>The ultimate idle clicker game. Click, level up your arm, reach Arm Level 10!</p>
+                      <div className="detail-links">
+                        <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/Coomer" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'bulk-os' && (
                     <>
-                      <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png" alt="bulkOS" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px', objectFit: 'cover'}} />
                       <h3>bulkOS</h3>
-                      <p>Browser Operating System. Play bulk games and watch the bulk movie in your browser.</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <p>Browser Operating System. Play bulk games in your browser.</p>
+                      <div className="detail-links">
+                        <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'bulk-bros' && (
                     <>
-                      <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png" alt="bulk Bros" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px', objectFit: 'cover'}} />
                       <h3>bulk Bros</h3>
-                      <p>6-world platformer with checkpoints, boss fights, and combo system. Super Mario clone!</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <p>6-world platformer with checkpoints, boss fights, and combo system.</p>
+                      <div className="detail-links">
+                        <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'bulkagachi' && (
                     <>
-                      <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png" alt="bulkagachi" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px', objectFit: 'cover'}} />
                       <h3>bulkagachi</h3>
-                      <p>Virtual pet game. Care for Bulk through egg → baby → teen → adult → elder. 74 hand-made sprites!</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <p>Virtual pet game. Care for Bulk through all life stages. 74 hand-made sprites!</p>
+                      <div className="detail-links">
+                        <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'bulk-climb' && (
                     <>
-                      <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png" alt="bulk Climb" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px', objectFit: 'cover'}} />
                       <h3>bulk Climb</h3>
-                      <p>Vertical climbing game. Jump between platforms, avoid falling, climb as high as possible!</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <p>Vertical climbing game. Jump between platforms, climb as high as possible!</p>
+                      <div className="detail-links">
+                        <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'bulk-flappy' && (
                     <>
-                      <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png" alt="bulk Flappy" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px', objectFit: 'cover'}} />
                       <h3>bulk Flappy</h3>
                       <p>Flappy Bird clone. Tap to flap, avoid pipes, get the highest score!</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <div className="detail-links">
+                        <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'bulk-runner' && (
                     <>
-                      <img src="https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png" alt="bulk Runner" className="project-icon" style={{width: '50px', height: '50px', marginBottom: '8px', borderRadius: '6px', objectFit: 'cover'}} />
                       <h3>bulk Runner</h3>
-                      <p>Side-scrolling runner. Run, jump, slide under obstacles, collect powerups!</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="modal-btn">Play →</a>
-                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <p>Side-scrolling runner. Run, jump, slide under obstacles!</p>
+                      <div className="detail-links">
+                        <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="os-btn primary">Play →</a>
+                        <a href="https://github.com/pasekaalex/bulk" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                   {selectedProject === 'ready-heady' && (
                     <>
-                      <div className="project-icon-placeholder" style={{width: '50px', height: '50px', marginBottom: '8px', fontSize: '1.5rem'}}>⏱️</div>
                       <h3>Ready Heady</h3>
                       <p>Webapp timer for productivity. Built with React.</p>
-                      <div className="project-detail-buttons">
-                        <a href="https://github.com/pasekaalex/readyheady" target="_blank" rel="noopener noreferrer" className="modal-btn secondary">GitHub →</a>
+                      <div className="detail-links">
+                        <a href="https://github.com/pasekaalex/readyheady" target="_blank" rel="noopener noreferrer" className="os-btn">GitHub →</a>
                       </div>
                     </>
                   )}
                 </div>
               )}
             </div>
+          ) : (
+            <button className="window-launcher" onClick={() => setProjectsOpen(true)}>
+              <span className="launcher-icon">🎮</span>
+              <span className="launcher-label">Projects</span>
+            </button>
           )}
-
-
         </div>
+
+        {/* Skills Window */}
+        <div className={`os-window ${skillsOpen ? 'open' : ''}`}>
+          <div className="window-header">
+            <span className="window-title">Skills</span>
+            <button className="window-close" onClick={() => setSkillsOpen(false)}>×</button>
+          </div>
+          {skillsOpen ? (
+            <div className="window-content">
+              <div className="skills-grid">
+                <span className="skill-tag">React</span>
+                <span className="skill-tag">JavaScript</span>
+                <span className="skill-tag">TypeScript</span>
+                <span className="skill-tag">HTML/CSS</span>
+                <span className="skill-tag">Node.js</span>
+                <span className="skill-tag">Python</span>
+                <span className="skill-tag">Linux</span>
+                <span className="skill-tag">Git</span>
+                <span className="skill-tag">Docker</span>
+                <span className="skill-tag">PostgreSQL</span>
+              </div>
+            </div>
+          ) : (
+            <button className="window-launcher" onClick={() => setSkillsOpen(true)}>
+              <span className="launcher-icon">⚡</span>
+              <span className="launcher-label">Skills</span>
+            </button>
+          )}
+        </div>
+
       </div>
 
-      <footer className="site-footer">
-        <button
-          className="chaos-button"
-          onClick={() => setChaosMode(!chaosMode)}
-        >
-          {chaosMode ? '⚠ disable ⚠' : '⚡ chaos'}
-        </button>
-
-        <button
-          className="music-button"
-          onClick={toggleMusic}
-        >
-          {musicPlaying ? '🔊' : '🔇'}
-        </button>
-      </footer>
+      {/* Taskbar */}
+      <div className="taskbar">
+        <div className="taskbar-left">
+          <span className="taskbar-user">paseka</span>
+        </div>
+        <div className="taskbar-right">
+          <span className="taskbar-time">
+            {time.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }
-
