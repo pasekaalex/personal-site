@@ -139,8 +139,14 @@
   font-weight: 700;
   font-size: 0.8rem;
   color: var(--neon-cyan);
-  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5), 0 0 20px rgba(0, 245, 255, 0.2);
   letter-spacing: 1px;
+  animation: logoGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+  0% { text-shadow: 0 0 10px rgba(0, 245, 255, 0.5), 0 0 20px rgba(0, 245, 255, 0.2); }
+  100% { text-shadow: 0 0 15px rgba(0, 245, 255, 0.7), 0 0 30px rgba(0, 245, 255, 0.3); }
 }
 
 .menu-center {
@@ -530,6 +536,18 @@
   background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.8));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.about-name::after {
+  content: '|';
+  -webkit-text-fill-color: var(--neon-cyan);
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
 }
 
 .about-role {
@@ -608,19 +626,40 @@
   overflow: hidden;
   text-align: left;
   padding: 0;
+  position: relative;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(0, 245, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-card:hover::before {
+  opacity: 1;
 }
 
 .project-card:hover {
   background: rgba(0, 245, 255, 0.08);
   border-color: rgba(0, 245, 255, 0.25);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(0, 245, 255, 0.15);
 }
 
 .project-card.selected {
   background: rgba(0, 245, 255, 0.12);
   border-color: var(--neon-cyan);
-  box-shadow: 0 0 25px rgba(0, 245, 255, 0.2);
+  box-shadow: 
+    0 0 25px rgba(0, 245, 255, 0.2),
+    inset 0 0 20px rgba(0, 245, 255, 0.05);
 }
 
 .card-image {
@@ -900,11 +939,24 @@
   transform: translateX(-50%);
   background: rgba(5, 10, 20, 0.75);
   backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(0, 245, 255, 0.15);
+  border: 1px solid rgba(0, 245, 255, 0.2);
   border-radius: 20px;
   padding: 8px 16px;
   z-index: 500;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 245, 255, 0.08);
+  box-shadow: 
+    0 10px 50px rgba(0, 0, 0, 0.5), 
+    0 0 40px rgba(0, 245, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dock::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.5), transparent);
 }
 
 .dock-items {
