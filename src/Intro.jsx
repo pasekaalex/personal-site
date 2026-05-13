@@ -401,26 +401,18 @@ export default function Intro() {
           {projectsOpen && (
             <div className="projects-dropdown">
               <div className="dropdown-item">
-                <Link
-                  to="/typing-test"
-                  className="project-link-button orange-button"
-                >
-                  ⌨️ Typing Test →
-                </Link>
-                <Link
-                  to="/arcade"
-                  className="project-link-button"
-                >
-                  React Arcade →
-                </Link>
-                <a
-                  href="https://www.Bulked.lol"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link-button purple-button"
-                >
-                  $Bulk →
-                </a>
+                <a href="https://www.cockpants.lol" target="_blank" rel="noopener noreferrer" className="project-link-button spongebob-button">🧽 Cockpants →</a>
+                <a href="https://www.cooming.lol" target="_blank" rel="noopener noreferrer" className="project-link-button cooming-button">💀 Cooming →</a>
+                <a href="https://www.bulked.lol/os" target="_blank" rel="noopener noreferrer" className="project-link-button purple-button">🖥️ bulkOS →</a>
+                <a href="https://readyheady.github.io/" target="_blank" rel="noopener noreferrer" className="project-link-button">⏱️ Ready Heady →</a>
+                <a href="https://www.bulked.lol/games/bulkbros" target="_blank" rel="noopener noreferrer" className="project-link-button">🎮 bulk Bros →</a>
+                <a href="https://www.bulked.lol/games/bulkagachi" target="_blank" rel="noopener noreferrer" className="project-link-button">🐾 bulkagachi →</a>
+                <a href="https://www.bulked.lol/games/climb" target="_blank" rel="noopener noreferrer" className="project-link-button">🧗 bulk Climb →</a>
+                <a href="https://www.bulked.lol/games/flappy" target="_blank" rel="noopener noreferrer" className="project-link-button">🐦 bulk Flappy →</a>
+                <a href="https://www.bulked.lol/games/runner" target="_blank" rel="noopener noreferrer" className="project-link-button">🏃 bulk Runner →</a>
+                <a href="https://www.bulked.lol" target="_blank" rel="noopener noreferrer" className="project-link-button purple-button">💪 All Bulk Games →</a>
+                <Link to="/typing-test" className="project-link-button orange-button">⌨️ Typing Test →</Link>
+                <Link to="/arcade" className="project-link-button">🎮 React Arcade →</Link>
               </div>
             </div>
           )}
