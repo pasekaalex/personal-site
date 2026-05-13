@@ -3,9 +3,9 @@ import './Intro.css'
 
 // Desktop icons config
 const DESKTOP_ICONS = [
-  { id: 'about', icon: '👤', label: 'About' },
-  { id: 'projects', icon: '🚀', label: 'Projects' },
-  { id: 'contact', icon: '📧', label: 'Contact' },
+  { id: 'about', icon: '/icons/about.png', label: 'About' },
+  { id: 'projects', icon: '/icons/projects.png', label: 'Projects' },
+  { id: 'contact', icon: '/icons/contact.png', label: 'Contact' },
 ]
 
 // Projects data
@@ -201,7 +201,7 @@ export default function Intro() {
               onClick={() => openWindow(icon.id)}
             >
               <span className="icon-glow" />
-              <span className="icon-emoji">{icon.icon}</span>
+              <img src={icon.icon} alt={icon.label} className="icon-img" />
               <span className="icon-label">{icon.label}</span>
             </button>
           ))}
@@ -339,7 +339,7 @@ export default function Intro() {
             onClick={() => openWindow(icon.id)}
             title={icon.label}
           >
-            <span className="dock-icon">{icon.icon}</span>
+            <img src={icon.icon} alt={icon.label} className="dock-icon" />
           </button>
         ))}
       </div>
