@@ -1,5 +1,33 @@
-/* pasekaOS - Premium Portfolio Operating System */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/* Cursor Canvas */
+.cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Parallax Avatar */
+.about-avatar.parallax {
+  width: 90px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid rgba(var(--accent-rgb), 0.3);
+  flex-shrink: 0;
+  transition: transform 0.1s ease-out;
+}
+
+.about-avatar.parallax img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* pasekaOS - Premium Portfolio Operating System */
 
 :root {
   --accent: #00f5ff;

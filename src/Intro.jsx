@@ -1,6 +1,113 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import './Intro.css'
 
+// ============================================
+// MOUSE CURSOR EFFECTS
+// ============================================
+function CursorEffects() {
+  const canvasRef = useRef(null)
+  const mousePos = useRef({ x: 0, y: 0 })
+  const particles = useRef([])
+  const animationRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const handleMouseMove = (e) => {
+      mousePos.current = { x: e.clientX, y: e.clientY }
+      // Add new particles on mouse move
+      for (let i = 0; i < 3; i++) {
+        particles.current.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          life: 1,
+          size: Math.random() * 3 + 1,
+          hue: Math.random() * 60 + 160 // cyan to purple range
+        })
+      }
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      
+      // Update and draw particles
+      particles.current = particles.current.filter(p => {
+        p.x += p.vx
+        p.y += p.vy
+        p.life -= 0.015
+        p.vy += 0.02 // slight gravity
+        
+        if (p.life <= 0) return false
+        
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2)
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.life * 0.8})`
+        ctx.fill()
+        
+        // Glow
+        ctx.shadowBlur = 10
+        ctx.shadowColor = `hsla(${p.hue}, 100%, 70%, ${p.life})`
+        
+        return true
+      })
+      
+      // Draw cursor glow
+      const mp = mousePos.current
+      const gradient = ctx.createRadialGradient(mp.x, mp.y, 0, mp.x, mp.y, 80)
+      gradient.addColorStop(0, 'rgba(0, 245, 255, 0.15)')
+      gradient.addColorStop(0.5, 'rgba(191, 0, 255, 0.05)')
+      gradient.addColorStop(1, 'transparent')
+      ctx.fillStyle = gradient
+      ctx.fillRect(mp.x - 80, mp.y - 80, 160, 160)
+      
+      animationRef.current = requestAnimationFrame(animate)
+    }
+    
+    animate()
+
+    return () => {
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('mousemove', handleMouseMove)
+      if (animationRef.current) cancelAnimationFrame(animationRef.current)
+    }
+  }, [])
+
+  return <canvas ref={canvasRef} className="cursor-canvas" />
+}
+
+// ============================================
+// PARALLAX AVATAR - About window avatar that follows mouse
+// ============================================
+function ParallaxAvatar({ mousePosition }) {
+  const offset = 10 // max pixels of movement
+  const x = (mousePosition.x / window.innerWidth - 0.5) * offset
+  const y = (mousePosition.y / window.innerHeight - 0.5) * offset
+  
+  return (
+    <div className="about-avatar parallax" style={{
+      transform: `translate(${x}px, ${y}px)`
+    }}>
+      <img src="/avi.jpg" alt="Alex" />
+      <div className="avatar-ring" />
+    </div>
+  )
+}
+
+// ============================================
+// WINDOW MANAGER HOOK
+// ============================================
 function useWindowManager() {
   const [windows, setWindows] = useState([
     { id: 'about', title: 'About', open: false, minimized: false, maximized: false, zIndex: 100, x: 150, y: 80 },
@@ -47,6 +154,9 @@ function useWindowManager() {
   return { windows, activeWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, focusWindow, updateWindowPosition }
 }
 
+// ============================================
+// CONTEXT MENU
+// ============================================
 function ContextMenu({ x, y, onClose, openWindow }) {
   const menuRef = useRef(null)
   useEffect(() => {
@@ -77,12 +187,15 @@ function ContextMenu({ x, y, onClose, openWindow }) {
   )
 }
 
+// ============================================
+// DRAGGABLE WINDOW
+// ============================================
 function Window({ window, onClose, onMinimize, onMaximize, onFocus, onPositionChange, children }) {
   const [isDragging, setIsDragging] = useState(false)
   const dragOffset = useRef({ x: 0, y: 0 })
 
   const handleMouseDown = (e) => {
-    if (e.target.closest('.window-controls') || e.target.closest('.resize-handle')) return
+    if (e.target.closest('.window-controls')) return
     setIsDragging(true)
     dragOffset.current = { x: e.clientX - window.x, y: e.clientY - window.y }
     onFocus()
@@ -130,6 +243,9 @@ function Window({ window, onClose, onMinimize, onMaximize, onFocus, onPositionCh
   )
 }
 
+// ============================================
+// TERMINAL
+// ============================================
 function Terminal() {
   const [lines, setLines] = useState([
     { type: 'system', text: '╔════════════════════════════════════╗' },
@@ -209,6 +325,9 @@ function Terminal() {
   )
 }
 
+// ============================================
+// FILES EXPLORER
+// ============================================
 function FilesExplorer() {
   return (
     <div className="files-explorer">
@@ -231,6 +350,9 @@ function FilesExplorer() {
   )
 }
 
+// ============================================
+// SETTINGS
+// ============================================
 function Settings({ accentColor, setAccentColor }) {
   return (
     <div className="settings-window">
@@ -253,6 +375,9 @@ function Settings({ accentColor, setAccentColor }) {
   )
 }
 
+// ============================================
+// MAIN APP
+// ============================================
 export default function Intro() {
   const { windows, activeWindow, openWindow, closeWindow, minimizeWindow, maximizeWindow, focusWindow, updateWindowPosition } = useWindowManager()
   const [contextMenu, setContextMenu] = useState(null)
@@ -260,10 +385,17 @@ export default function Intro() {
   const [accentColor, setAccentColor] = useState('#00f5ff')
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [time, setTime] = useState(new Date())
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const handleMouseMove = (e) => setMousePosition({ x: e.clientX, y: e.clientY })
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
   useEffect(() => {
@@ -296,12 +428,17 @@ export default function Intro() {
 
   return (
     <div className="os-container" onContextMenu={handleContextMenu} style={{ '--accent': accentColor }}>
+      {/* Mouse Cursor Effects */}
+      <CursorEffects />
+
+      {/* Background Layers */}
       <div className="bg-layer" /><div className="bg-grid" /><div className="bg-glow" /><div className="bg-vignette" />
 
+      {/* Windows */}
       <Window window={windows.find(w => w.id === 'about')} onClose={closeWindow} onMinimize={minimizeWindow} onMaximize={maximizeWindow} onFocus={() => focusWindow('about')} onPositionChange={updateWindowPosition}>
         <div className="about-content">
           <div className="about-hero">
-            <div className="about-avatar"><img src="/avi.jpg" alt="Alex" /><div className="avatar-ring" /></div>
+            <ParallaxAvatar mousePosition={mousePosition} />
             <div className="about-info">
               <h1 className="about-name">Alex Paseka</h1>
               <p className="about-role">Full Stack Developer</p>
