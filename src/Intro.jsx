@@ -11,67 +11,51 @@ const DESKTOP_ICONS = [
 // Projects data
 const PROJECTS = [
   {
-    title: 'Bob Pants',
-    desc: 'Procedurally generated NFT collection on the Blockchain',
+    name: 'Bob Pants',
     img: '/spongebob.png',
-    link: 'https://opensea.io/collection/bobpants',
-    color: '#9b59b6'
+    url: 'https://www.cockpants.lol',
+    tag: '18+'
   },
   {
-    title: 'GoonClicker',
-    desc: 'Clicker game built with clicker mechanics',
+    name: 'GoonClicker',
     img: 'https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png',
-    link: 'https://github.com/pasekaalex/Coomer',
-    color: '#9b59b6'
+    url: 'https://www.cooming.lol',
+    tag: '18+'
   },
   {
-    title: 'bulkOS',
-    desc: 'Custom OS-themed React interface',
+    name: 'bulkOS',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png',
-    link: 'https://github.com/pasekaalex/bulk',
-    color: '#9b59b6'
+    url: 'https://www.bulked.lol/os'
   },
   {
-    title: 'bulk Bros',
-    desc: 'Bulk-themed gaming project',
+    name: 'bulk Bros',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png',
-    link: 'https://github.com/pasekaalex/bulk',
-    color: '#9b59b6'
+    url: 'https://www.bulked.lol/games/bulkbros'
   },
   {
-    title: 'bulkagachi',
-    desc: 'Virtual pet / Tamagotchi style bulk game',
+    name: 'bulkagachi',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png',
-    link: 'https://github.com/pasekaalex/bulk',
-    color: '#9b59b6'
+    url: 'https://www.bulked.lol/games/bulkagachi'
   },
   {
-    title: 'bulk Climb',
-    desc: 'Vertical climbing game',
+    name: 'bulk Climb',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png',
-    link: 'https://github.com/pasekaalex/bulk',
-    color: '#9b59b6'
+    url: 'https://www.bulked.lol/games/climb'
   },
   {
-    title: 'bulk Flappy',
-    desc: 'Flappy Bird style bulk game',
+    name: 'bulk Flappy',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png',
-    link: 'https://github.com/pasekaalex/bulk',
-    color: '#9b59b6'
+    url: 'https://www.bulked.lol/games/flappy'
   },
   {
-    title: 'bulk Runner',
-    desc: 'Endless runner game',
+    name: 'bulk Runner',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png',
-    link: 'https://github.com/pasekaalex/bulk',
-    color: '#9b59b6'
+    url: 'https://www.bulked.lol/games/runner'
   },
   {
-    title: 'Ready Heady',
-    desc: 'Timer & productivity app',
+    name: 'Ready Heady',
     img: null,
-    link: 'https://github.com/pasekaalex',
-    color: '#9b59b6'
+    url: 'https://github.com/pasekaalex/readyheady'
   },
 ]
 
@@ -206,11 +190,6 @@ export default function Intro() {
             <span className="title-paseka">PASEKA</span>
           </h1>
           <div className="title-divider" />
-          <p className="desktop-subtitle">
-            <span className="subtitle-bracket">[</span>
-            Developer
-            <span className="subtitle-bracket">]</span>
-          </p>
         </div>
 
         {/* Desktop Icons */}
@@ -290,18 +269,18 @@ export default function Intro() {
           <div className="window-content">
             <div className="projects-grid">
               {PROJECTS.map((proj, i) => (
-                <a key={i} href={proj.link} target="_blank" rel="noopener" className="project-card" style={{ '--proj-color': proj.color }}>
+                <a key={i} href={proj.url} target="_blank" rel="noopener" className="project-card">
                   <div className="project-image-wrap">
                     {proj.img ? (
-                      <img src={proj.img} alt={proj.title} className="project-image" />
+                      <img src={proj.img} alt={proj.name} className="project-image" />
                     ) : (
                       <div className="project-emoji-placeholder">⏱️</div>
                     )}
+                    {proj.tag && <span className="project-tag">{proj.tag}</span>}
                     <div className="project-overlay" />
                   </div>
                   <div className="project-info">
-                    <h3 className="project-title">{proj.title}</h3>
-                    <p className="project-desc">{proj.desc}</p>
+                    <h3 className="project-title">{proj.name}</h3>
                   </div>
                 </a>
               ))}
