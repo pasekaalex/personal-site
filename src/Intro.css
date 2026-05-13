@@ -186,6 +186,22 @@
   border-radius: 4px;
 }
 
+.sound-toggle {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.sound-toggle:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 /* Desktop Icons */
 .desktop-icons {
   position: fixed;
@@ -433,6 +449,16 @@
 .light.green:hover {
   background: linear-gradient(135deg, #6ee07f, #5fd070);
   box-shadow: 0 0 12px rgba(76, 217, 100, 0.8);
+}
+
+.light.blue {
+  background: linear-gradient(135deg, #5b8def, #3b7dd8);
+  box-shadow: 0 0 8px rgba(91, 141, 239, 0.5);
+}
+
+.light.blue:hover {
+  background: linear-gradient(135deg, #7ba3f2, #5c91e1);
+  box-shadow: 0 0 12px rgba(91, 141, 239, 0.8);
 }
 
 .window-title-text {

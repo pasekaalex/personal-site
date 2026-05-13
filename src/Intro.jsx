@@ -8,6 +8,7 @@ export default function Intro() {
   const [contactOpen, setContactOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null)
   const [activeWindow, setActiveWindow] = useState(null)
+  const [soundEnabled, setSoundEnabled] = useState(false)
 
   // Clock state
   const [time, setTime] = useState(new Date())
@@ -104,7 +105,7 @@ export default function Intro() {
             <div className="titlebar-left">
               <div className="traffic-lights">
                 <button className="light red" onClick={(e) => { e.stopPropagation(); closeWindow('about') }}></button>
-                <button className="light yellow"></button>
+                <button className="light yellow" onClick={(e) => { e.stopPropagation(); closeWindow('about') }}></button>
                 <button className="light green"></button>
               </div>
               <span className="window-title-text">About</span>
@@ -529,6 +530,9 @@ export default function Intro() {
           {contactOpen && <span className="menu-breadcrumb">Contact</span>}
         </div>
         <div className="menu-right">
+          <button className="sound-toggle" onClick={() => setSoundEnabled(!soundEnabled)}>
+            {soundEnabled ? '🔊' : '🔇'}
+          </button>
           <span className="menu-date">{formatDate(date)}</span>
           <span className="menu-time">{formatTime(time)}</span>
         </div>
