@@ -5,7 +5,6 @@ import './Intro.css'
 const DESKTOP_ICONS = [
   { id: 'about', icon: '👤', label: 'About' },
   { id: 'projects', icon: '🚀', label: 'Projects' },
-  { id: 'skills', icon: '⚡', label: 'Skills' },
   { id: 'contact', icon: '📧', label: 'Contact' },
 ]
 
@@ -16,46 +15,68 @@ const PROJECTS = [
     desc: 'Procedurally generated NFT collection on the Blockchain',
     img: '/spongebob.png',
     link: 'https://opensea.io/collection/bobpants',
-    color: '#FFD700'
+    color: '#9b59b6'
   },
   {
-    title: 'Arcade',
-    desc: 'Onchain gaming platform with real rewards',
-    img: '/background.jpg',
-    link: 'https://github.com/pasekaalex/arcade',
-    color: '#00f5ff'
+    title: 'GoonClicker',
+    desc: 'Clicker game built with clicker mechanics',
+    img: 'https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png',
+    link: 'https://github.com/pasekaalex/Coomer',
+    color: '#9b59b6'
   },
   {
-    title: 'DeFi Dashboard',
-    desc: 'Portfolio tracker & analytics for DeFi investments',
-    img: 'https://raw.githubusercontent.com/pasekaalex/arcade/main/public/background.jpg',
+    title: 'bulkOS',
+    desc: 'Custom OS-themed React interface',
+    img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png',
+    link: 'https://github.com/pasekaalex/bulk',
+    color: '#9b59b6'
+  },
+  {
+    title: 'bulk Bros',
+    desc: 'Bulk-themed gaming project',
+    img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png',
+    link: 'https://github.com/pasekaalex/bulk',
+    color: '#9b59b6'
+  },
+  {
+    title: 'bulkagachi',
+    desc: 'Virtual pet / Tamagotchi style bulk game',
+    img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png',
+    link: 'https://github.com/pasekaalex/bulk',
+    color: '#9b59b6'
+  },
+  {
+    title: 'bulk Climb',
+    desc: 'Vertical climbing game',
+    img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png',
+    link: 'https://github.com/pasekaalex/bulk',
+    color: '#9b59b6'
+  },
+  {
+    title: 'bulk Flappy',
+    desc: 'Flappy Bird style bulk game',
+    img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png',
+    link: 'https://github.com/pasekaalex/bulk',
+    color: '#9b59b6'
+  },
+  {
+    title: 'bulk Runner',
+    desc: 'Endless runner game',
+    img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png',
+    link: 'https://github.com/pasekaalex/bulk',
+    color: '#9b59b6'
+  },
+  {
+    title: 'Ready Heady',
+    desc: 'Timer & productivity app',
+    img: null,
     link: 'https://github.com/pasekaalex',
-    color: '#bf00ff'
-  },
-  {
-    title: 'AI Agent Kit',
-    desc: 'Framework for building autonomous onchain agents',
-    img: 'https://raw.githubusercontent.com/pasekaalex/arcade/main/public/background.jpg',
-    link: 'https://github.com/pasekaalex',
-    color: '#00ff88'
+    color: '#9b59b6'
   },
 ]
 
 // Skills data
-const SKILLS = [
-  { name: 'React', level: 95 },
-  { name: 'TypeScript', level: 90 },
-  { name: 'JavaScript', level: 95 },
-  { name: 'Node.js', level: 88 },
-  { name: 'Python', level: 80 },
-  { name: 'Solidity', level: 75 },
-  { name: 'PostgreSQL', level: 82 },
-  { name: 'Docker', level: 78 },
-  { name: 'AWS', level: 76 },
-  { name: 'GraphQL', level: 80 },
-  { name: 'Rust', level: 65 },
-  { name: 'Next.js', level: 85 },
-]
+
 
 export default function Intro() {
   const [time, setTime] = useState(new Date())
@@ -95,7 +116,7 @@ export default function Intro() {
       
       // Add particle
       const id = ++particleIdRef.current
-      const p = { id, x: e.clientX, y: e.clientY, alpha: 0.8, radius: 4, color: Math.random() > 0.5 ? '#00f5ff' : '#bf00ff' }
+      const p = { id, x: e.clientX, y: e.clientY, alpha: 0.8, radius: 4, color: Math.random() > 0.5 ? '#9b59b6' : '#2d1b4e' }
       setParticles(prev => [...prev.slice(-30), p])
     }
 
@@ -122,8 +143,8 @@ export default function Intro() {
 
       // Mouse glow
       const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 60)
-      gradient.addColorStop(0, 'rgba(0, 245, 255, 0.15)')
-      gradient.addColorStop(1, 'rgba(0, 245, 255, 0)')
+      gradient.addColorStop(0, 'rgba(155, 89, 182, 0.15)')
+      gradient.addColorStop(1, 'rgba(155, 89, 182, 0)')
       ctx.fillStyle = gradient
       ctx.fillRect(pos.x - 60, pos.y - 60, 120, 120)
 
@@ -187,10 +208,9 @@ export default function Intro() {
           <div className="title-divider" />
           <p className="desktop-subtitle">
             <span className="subtitle-bracket">[</span>
-            Full Stack Developer
+            Developer
             <span className="subtitle-bracket">]</span>
           </p>
-          <p className="desktop-tagline">Building the future, one commit at a time</p>
         </div>
 
         {/* Desktop Icons */}
@@ -230,7 +250,7 @@ export default function Intro() {
               </div>
               <div className="about-info">
                 <h2 className="about-name">Alex Paseka</h2>
-                <p className="about-role">Full Stack Developer & Blockchain Enthusiast</p>
+                <p className="about-role">Developer & Blockchain Enthusiast</p>
                 <div className="about-divider" />
                 <p className="about-bio">
                   Passionate about building scalable web applications and exploring the intersection of 
@@ -247,7 +267,7 @@ export default function Intro() {
                   <a href="https://github.com/pasekaalex" target="_blank" rel="noopener" className="about-link">
                     <span>GH</span> GitHub
                   </a>
-                  <a href="mailto:alex@paseka.dev" className="about-link">
+                  <a href="mailto:alexpaseka97@gmail.com" className="about-link">
                     <span>✉</span> Email
                   </a>
                 </div>
@@ -272,7 +292,11 @@ export default function Intro() {
               {PROJECTS.map((proj, i) => (
                 <a key={i} href={proj.link} target="_blank" rel="noopener" className="project-card" style={{ '--proj-color': proj.color }}>
                   <div className="project-image-wrap">
-                    <img src={proj.img} alt={proj.title} className="project-image" />
+                    {proj.img ? (
+                      <img src={proj.img} alt={proj.title} className="project-image" />
+                    ) : (
+                      <div className="project-emoji-placeholder">⏱️</div>
+                    )}
                     <div className="project-overlay" />
                   </div>
                   <div className="project-info">
@@ -280,34 +304,6 @@ export default function Intro() {
                     <p className="project-desc">{proj.desc}</p>
                   </div>
                 </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* SKILLS Window */}
-      {openWindows.skills && (
-        <div className={`os-window ${openWindows.skills ? 'open' : ''}`} onClick={() => setActiveWindow('skills')}>
-          <div className="window-header">
-            <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('skills', e)}>×</button>
-            </div>
-            <span className="window-title">Skills</span>
-            <div className="window-spacer" />
-          </div>
-          <div className="window-content">
-            <div className="skills-grid">
-              {SKILLS.map((skill, i) => (
-                <div key={i} className="skill-item">
-                  <div className="skill-header">
-                    <span className="skill-name">{skill.name}</span>
-                    <span className="skill-percent">{skill.level}%</span>
-                  </div>
-                  <div className="skill-bar">
-                    <div className="skill-fill" style={{ width: `${skill.level}%` }} />
-                  </div>
-                </div>
               ))}
             </div>
           </div>
@@ -335,11 +331,11 @@ export default function Intro() {
                     <span>@pasekaalex</span>
                   </div>
                 </a>
-                <a href="mailto:alex@paseka.dev" className="contact-link">
+                <a href="mailto:alexpaseka97@gmail.com" className="contact-link">
                   <span className="contact-icon">✉</span>
                   <div>
                     <strong>Email</strong>
-                    <span>alex@paseka.dev</span>
+                    <span>alexpaseka97@gmail.com</span>
                   </div>
                 </a>
                 <a href="https://paseka.dev" target="_blank" rel="noopener" className="contact-link">
