@@ -375,7 +375,7 @@ body {
 
 .desktop-icon:hover .icon-glow { opacity: 1; }
 
-.icon-img { width: 48px; height: 48px; object-fit: contain; }
+.icon-img { width: 48px; height: 48px; object-fit: cover; border-radius: 12px; }
 .icon-emoji {
   font-size: 2.4rem;
   position: relative;
@@ -384,7 +384,7 @@ body {
   transition: transform var(--transition);
 }
 
-.desktop-icon:hover .icon-img { width: 48px; height: 48px; object-fit: contain; }
+.desktop-icon:hover .icon-img { width: 48px; height: 48px; object-fit: cover; border-radius: 12px; }
 .icon-emoji {
   transform: scale(1.15);
 }
@@ -826,7 +826,7 @@ body {
 .dock-item.open::before { transform: translateX(-50%) scale(1); }
 .dock-item.open { border-color: rgba(155, 89, 182, 0.3); }
 
-.dock-icon { width: 32px; height: 32px; object-fit: contain; transition: transform 0.3s; }
+.dock-icon { width: 32px; height: 32px; object-fit: cover; border-radius: 12px; transition: transform 0.3s; }
 
 .dock-item:hover {
   background: rgba(155, 89, 182, 0.12);
@@ -902,7 +902,7 @@ body {
   .avatar-glow { width: 150px; height: 150px; }
   .desktop-icons { gap: 10px; }
   .desktop-icon { padding: 12px 14px; min-width: 75px; }
-  .icon-img { width: 48px; height: 48px; object-fit: contain; }
+  .icon-img { width: 48px; height: 48px; object-fit: cover; border-radius: 12px; }
 .icon-emoji { font-size: 1.8rem; }
   .icon-label { font-size: 0.7rem; }
   .about-grid { grid-template-columns: 1fr; }
@@ -980,7 +980,7 @@ body {
 .start-menu-icon {
   width: 24px;
   height: 24px;
-  object-fit: contain;
+  object-fit: cover; border-radius: 12px;
 }
 
 /* Start Button */
