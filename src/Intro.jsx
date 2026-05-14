@@ -371,7 +371,7 @@ export default function Intro() {
   }, [dragState])
 
   const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' })
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
   }
 
   const formatDate = (date) => {
@@ -968,6 +968,7 @@ export default function Intro() {
             </div>
           </div>
           <span className="taskbar-date">{formatDate(time)}</span>
+          <span className="taskbar-sep">|</span>
           <span className="taskbar-clock">{formatTime(time)}</span>
           <button className="theme-toggle" onClick={() => setLightMode(!lightMode)} title={lightMode ? 'Dark Mode' : 'Light Mode'}>
             {lightMode ? '☀️' : '🌙'}
