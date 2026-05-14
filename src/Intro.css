@@ -1444,3 +1444,111 @@ body {
 .weather-widget-fixed {
   display: none !important;
 }
+
+/* Project Detail Modal */
+.project-detail-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.project-detail-content {
+  background: rgba(15, 15, 25, 0.98);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.project-detail-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.project-detail-close:hover {
+  color: #fff;
+}
+
+.project-detail-image {
+  width: 100%;
+  max-height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.project-detail-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.project-detail-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.project-detail-desc {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.project-detail-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-detail-link {
+  display: block;
+  padding: 12px 20px;
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid rgba(155, 89, 182, 0.4);
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.project-detail-link:hover {
+  background: rgba(155, 89, 182, 0.4);
+}
+
+.project-detail-link.primary {
+  background: #9b59b6;
+  border-color: #9b59b6;
+}
+
+.project-detail-link.primary:hover {
+  background: #a86bc4;
+}

@@ -14,48 +14,64 @@ const PROJECTS = [
     name: 'Bob Pants',
     img: '/spongebob.png',
     url: 'https://www.cockpants.lol',
-    tag: '18+'
+    github: 'https://github.com/pasekaalex/bobpants',
+    desc: '18+ content platform'
   },
   {
     name: 'GoonClicker',
     img: 'https://raw.githubusercontent.com/pasekaalex/Coomer/master/assets/nav-banner.png',
     url: 'https://www.cooming.lol',
-    tag: '18+'
+    github: 'https://github.com/pasekaalex/coomer',
+    desc: 'Clicker game'
   },
   {
     name: 'bulkOS',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png',
-    url: 'https://www.bulked.lol/os'
+    url: 'https://www.bulked.lol/os',
+    github: 'https://github.com/pasekaalex/bulk',
+    desc: 'Custom operating system'
   },
   {
     name: 'bulk Bros',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png',
-    url: 'https://www.bulked.lol/games/bulkbros'
+    url: 'https://www.bulked.lol/games/bulkbros',
+    github: 'https://github.com/pasekaalex/bulk',
+    desc: 'Co-op arcade game'
   },
   {
     name: 'bulkagachi',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png',
-    url: 'https://www.bulked.lol/games/bulkagachi'
+    url: 'https://www.bulked.lol/games/bulkagachi',
+    github: 'https://github.com/pasekaalex/bulk',
+    desc: 'Baby tamagotchi game'
   },
   {
     name: 'bulk Climb',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png',
-    url: 'https://www.bulked.lol/games/climb'
+    url: 'https://www.bulked.lol/games/climb',
+    github: 'https://github.com/pasekaalex/bulk',
+    desc: 'Platform climbing game'
   },
   {
     name: 'bulk Flappy',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png',
-    url: 'https://www.bulked.lol/games/flappy'
+    url: 'https://www.bulked.lol/games/flappy',
+    github: 'https://github.com/pasekaalex/bulk',
+    desc: 'Flappy bird style game'
   },
   {
     name: 'bulk Runner',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png',
-    url: 'https://www.bulked.lol/games/runner'
+    url: 'https://www.bulked.lol/games/runner',
+    github: 'https://github.com/pasekaalex/bulk',
+    desc: 'Endless runner game'
   },
   {
     name: 'Ready Heady',
     img: null,
-    url: 'https://github.com/pasekaalex/readyheady'
+    url: 'https://github.com/pasekaalex/readyheady',
+    github: 'https://github.com/pasekaalex/readyheady',
+    desc: 'Timing challenge game'
   },
 ]
 
@@ -68,6 +84,7 @@ export default function Intro() {
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicVolume, setMusicVolume] = useState(0.5)
+  const [selectedProject, setSelectedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
   const rainModeRef = useRef(false)
   const [typedName, setTypedName] = useState('')
@@ -532,21 +549,104 @@ export default function Intro() {
           <div className="window-content">
             <div className="projects-grid">
               {PROJECTS.map((proj, i) => (
-                <a key={i} href={proj.url} target="_blank" rel="noopener" className="project-card">
+                <button key={i} className="project-card" onClick={() => setSelectedProject(proj)}>
                   <div className="project-image-wrap">
                     {proj.img ? (
                       <img src={proj.img} alt={proj.name} className="project-image" />
                     ) : (
                       <div className="project-emoji-placeholder">⏱️</div>
                     )}
-                    {proj.tag && <span className="project-tag">{proj.tag}</span>}
                     <div className="project-overlay" />
                   </div>
-                  <div className="project-info">
-                    <h3 className="project-title">{proj.name}</h3>
-                  </div>
-                </a>
+                  <div className="project-name">{proj.name}</div>
+                </button>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Project Detail Modal */}
+      {selectedProject && (
+        <div className="project-detail-modal" onClick={() => setSelectedProject(null)}>
+          <div className="project-detail-content" onClick={e => e.stopPropagation()}>
+            <button className="project-detail-close" onClick={() => setSelectedProject(null)}>×</button>
+            <div className="project-detail-image">
+              {selectedProject.img ? (
+                <img src={selectedProject.img} alt={selectedProject.name} />
+              ) : (
+                <div className="project-emoji-placeholder">⏱️</div>
+              )}
+            </div>
+            <h2 className="project-detail-name">{selectedProject.name}</h2>
+            <p className="project-detail-desc">{selectedProject.desc}</p>
+            <div className="project-detail-links">
+              <a href={selectedProject.url} target="_blank" rel="noopener" className="project-detail-link primary">
+                Visit Project →
+              </a>
+              {selectedProject.github && (
+                <a href={selectedProject.github} target="_blank" rel="noopener" className="project-detail-link">
+                  View on GitHub ↗
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PROJECTS Window */}
+      {openWindows.projects && (
+        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''}`} onClick={() => setActiveWindow('projects')}>
+          <div className="window-header">
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => closeWindow('projects', e)}>×</button>
+            </div>
+            <span className="window-title">Projects</span>
+            <div className="window-spacer" />
+          </div>
+          <div className="window-content">
+            <div className="projects-grid">
+              {PROJECTS.map((proj, i) => (
+                <button key={i} className="project-card" onClick={() => setSelectedProject(proj)}>
+                  <div className="project-image-wrap">
+                    {proj.img ? (
+                      <img src={proj.img} alt={proj.name} className="project-image" />
+                    ) : (
+                      <div className="project-emoji-placeholder">⏱️</div>
+                    )}
+                    <div className="project-overlay" />
+                  </div>
+                  <div className="project-name">{proj.name}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Project Detail Modal */}
+      {selectedProject && (
+        <div className="project-detail-modal" onClick={() => setSelectedProject(null)}>
+          <div className="project-detail-content" onClick={e => e.stopPropagation()}>
+            <button className="project-detail-close" onClick={() => setSelectedProject(null)}>×</button>
+            <div className="project-detail-image">
+              {selectedProject.img ? (
+                <img src={selectedProject.img} alt={selectedProject.name} />
+              ) : (
+                <div className="project-emoji-placeholder">⏱️</div>
+              )}
+            </div>
+            <h2 className="project-detail-name">{selectedProject.name}</h2>
+            <p className="project-detail-desc">{selectedProject.desc}</p>
+            <div className="project-detail-links">
+              <a href={selectedProject.url} target="_blank" rel="noopener" className="project-detail-link primary">
+                Visit Project →
+              </a>
+              {selectedProject.github && (
+                <a href={selectedProject.github} target="_blank" rel="noopener" className="project-detail-link">
+                  View on GitHub ↗
+                </a>
+              )}
             </div>
           </div>
         </div>
