@@ -804,6 +804,13 @@ export default function Intro() {
           <div className="start-menu-section">
             <div className="start-menu-section-title">Apps</div>
             <div className="start-menu-apps">
+              <button
+                className="start-menu-item"
+                onClick={() => { openWindow('terminal'); setStartMenuOpen(false) }}
+              >
+                <span style={{fontSize: '1.2rem'}}>⌨️</span>
+                <span>Terminal</span>
+              </button>
               {DESKTOP_ICONS.map(icon => (
                 <button
                   key={icon.id}
