@@ -26,42 +26,42 @@ const PROJECTS = [
     desc: 'Clicker game'
   },
   {
-    name: 'bulkOS',
+    name: 'Bulk-OS',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/OS-bulk.png',
     url: 'https://www.bulked.lol/os',
     github: 'https://github.com/pasekaalex/bulk',
     desc: 'Custom operating system'
   },
   {
-    name: 'bulk Bros',
+    name: 'Bulk Bros',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverbros.png',
     url: 'https://www.bulked.lol/games/bulkbros',
     github: 'https://github.com/pasekaalex/bulk',
     desc: 'Co-op arcade game'
   },
   {
-    name: 'bulkagachi',
+    name: 'Bulkagachi',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/cover-baby.png',
     url: 'https://www.bulked.lol/games/bulkagachi',
     github: 'https://github.com/pasekaalex/bulk',
     desc: 'Baby tamagotchi game'
   },
   {
-    name: 'bulk Climb',
+    name: 'Bulk Climb',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverclimb.png',
     url: 'https://www.bulked.lol/games/climb',
     github: 'https://github.com/pasekaalex/bulk',
     desc: 'Platform climbing game'
   },
   {
-    name: 'bulk Flappy',
+    name: 'Flappy Bulk',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverflappy.png',
     url: 'https://www.bulked.lol/games/flappy',
     github: 'https://github.com/pasekaalex/bulk',
     desc: 'Flappy bird style game'
   },
   {
-    name: 'bulk Runner',
+    name: 'Bulk Runner',
     img: 'https://raw.githubusercontent.com/pasekaalex/bulk/master/bulk-react/public/images/coverrunner.png',
     url: 'https://www.bulked.lol/games/runner',
     github: 'https://github.com/pasekaalex/bulk',
