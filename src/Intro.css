@@ -924,6 +924,21 @@ body {
   color: #fff;
   letter-spacing: 0.1em;
   text-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
+  min-width: 60px;
+}
+
+.taskbar-sep {
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0 10px;
+}
+
+.taskbar-date {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.05em;
+  min-width: 100px;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2083,6 +2098,9 @@ body {
 .light-mode .taskbar-clock {
   color: #333;
 }
+.light-mode .taskbar-sep {
+  color: rgba(0, 0, 0, 0.3);
+}
 .light-mode .start-button,
 .light-mode .rain-toggle,
 .light-mode .music-taskbar-btn,
@@ -2188,6 +2206,9 @@ body {
 .light-mode .taskbar-date,
 .light-mode .taskbar-clock {
   color: #333;
+}
+.light-mode .taskbar-sep {
+  color: rgba(0, 0, 0, 0.3);
 }
 .light-mode .music-popup-taskbar,
 .light-mode .weather-popup-taskbar {
