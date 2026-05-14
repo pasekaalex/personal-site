@@ -322,9 +322,18 @@ export default function Intro() {
       document.getElementById('weatherHighLow').textContent = `H: ${max}° L: ${min}°`
       document.getElementById('weatherError').style.display = 'none'
       document.getElementById('weatherDisplay').style.display = 'block'
+      // Update taskbar weather
+      document.getElementById('weatherIconTaskbar').textContent = icons[code] || '🌤️'
+      document.getElementById('weatherTempTaskbar').textContent = `${Math.round(weatherData.current_weather.temperature)}°`
+      document.getElementById('weatherConditionTaskbar').textContent = conditions[code] || 'Unknown'
+      document.getElementById('weatherHighLowTaskbar').textContent = `H: ${max}° L: ${min}°`
+      document.getElementById('weatherErrorTaskbar').style.display = 'none'
+      document.getElementById('weatherDisplayTaskbar').style.display = 'block'
     } catch (err) {
       document.getElementById('weatherError').style.display = 'block'
       document.getElementById('weatherDisplay').style.display = 'none'
+      document.getElementById('weatherErrorTaskbar').style.display = 'block'
+      document.getElementById('weatherDisplayTaskbar').style.display = 'none'
     }
   }
 
@@ -637,6 +646,31 @@ export default function Intro() {
           }} title={rainMode ? 'Rain Off' : 'Rain On'}>
             🌧️
           </button>
+          <div className="weather-taskbar" style={{position: 'relative'}}>
+            <button className="weather-taskbar-btn" onClick={() => document.querySelector('.weather-popup-taskbar').classList.toggle('show')} title="Weather">
+              🌤️
+            </button>
+            <div className="weather-popup-taskbar">
+              <div className="weather-popup-header">Weather</div>
+              <div className="weather-popup-input-row">
+                <input type="text" placeholder="Zip" className="weather-popup-input" id="weatherZipTaskbar" maxLength={5} />
+                <button className="weather-popup-search" onClick={() => {
+                  const zip = document.getElementById('weatherZipTaskbar').value.trim()
+                  if (zip && zip.length === 5) {
+                    document.getElementById('weatherZip').value = zip
+                    fetchWeather()
+                  }
+                }}>→</button>
+              </div>
+              <div id="weatherDisplayTaskbar" className="weather-popup-display" style={{display: 'none'}}>
+                <span className="weather-popup-icon" id="weatherIconTaskbar">☀️</span>
+                <span className="weather-popup-temp" id="weatherTempTaskbar">--°</span>
+                <span className="weather-popup-details" id="weatherConditionTaskbar">--</span>
+                <span className="weather-popup-highlow" id="weatherHighLowTaskbar">--</span>
+              </div>
+              <div id="weatherErrorTaskbar" className="weather-popup-error" style={{display: 'none'}}>Not found</div>
+            </div>
+          </div>
           <span className="taskbar-date">{formatDate(time)}</span>
           <span className="taskbar-clock">{formatTime(time)}</span>
         </div>

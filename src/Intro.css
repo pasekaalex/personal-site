@@ -1114,7 +1114,7 @@ body {
 }
 
 /* Fixed Weather Widget */
-.weather-widget {
+.weather-widget-fixed {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -1162,7 +1162,7 @@ body {
   padding: 12px;
 }
 
-.weather-widget.collapsed .weather-body {
+.weather-widget-fixed.collapsed .weather-body {
   display: none;
 }
 
@@ -1328,4 +1328,119 @@ body {
 
 .music-close:hover {
   color: #fff;
+}
+
+/* Weather Taskbar Button */
+.weather-taskbar {
+  position: relative;
+}
+
+.weather-taskbar-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.weather-taskbar-btn:hover {
+  background: rgba(155, 89, 182, 0.4);
+}
+
+.weather-popup-taskbar {
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+  background: rgba(15, 15, 25, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 160px;
+  display: none;
+  z-index: 300;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.weather-popup-taskbar.show {
+  display: block;
+}
+
+.weather-popup-header {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #9b59b6;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.weather-popup-input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.weather-popup-input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+}
+
+.weather-popup-search {
+  padding: 6px 10px;
+  background: rgba(155, 89, 182, 0.3);
+  border: 1px solid rgba(155, 89, 182, 0.4);
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.weather-popup-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.weather-popup-icon {
+  font-size: 1.8rem;
+}
+
+.weather-popup-temp {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.weather-popup-details {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.weather-popup-highlow {
+  color: #9b59b6;
+}
+
+.weather-popup-error {
+  text-align: center;
+  color: #ff6b6b;
+  font-size: 0.7rem;
+}
+
+/* Hide old floating weather widget */
+.weather-widget-fixed {
+  display: none !important;
 }
