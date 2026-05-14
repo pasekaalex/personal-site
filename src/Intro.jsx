@@ -67,6 +67,7 @@ export default function Intro() {
   const [openWindows, setOpenWindows] = useState({})
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
+  const [rainMode, setRainMode] = useState(false)
   const [avatarClicks, setAvatarClicks] = useState(0)
   const [crazyMode, setCrazyMode] = useState(false)
   const avatarClickTimer = useRef(null)
@@ -122,6 +123,21 @@ export default function Intro() {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+      
+      // Rain effect
+      if (rainMode) {
+        for (let i = 0; i < 3; i++) {
+          const x = Math.random() * canvas.width
+          const y = Math.random() * canvas.height
+          const length = Math.random() * 20 + 10
+          ctx.beginPath()
+          ctx.moveTo(x, y)
+          ctx.lineTo(x - 2, y + length)
+          ctx.strokeStyle = 'rgba(100, 150, 255, 0.3)'
+          ctx.lineWidth = 1
+          ctx.stroke()
+        }
+      }
       
       setParticles(prev => {
         const updated = prev.map(p => ({
@@ -558,6 +574,9 @@ export default function Intro() {
         <div className="taskbar-right">
           <button className="music-toggle" onClick={toggleMusic} title={musicPlaying ? 'Mute' : 'Play Music'}>
             {musicPlaying ? '🔊' : '🔇'}
+          </button>
+          <button className="rain-toggle" onClick={() => setRainMode(!rainMode)} title={rainMode ? 'Rain Off' : 'Rain On'}>
+            🌧️
           </button>
           <span className="taskbar-date">{formatDate(time)}</span>
           <span className="taskbar-clock">{formatTime(time)}</span>

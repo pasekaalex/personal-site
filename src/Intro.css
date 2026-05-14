@@ -1244,3 +1244,23 @@ body {
   from { box-shadow: 0 0 30px #9b59b6, 0 0 60px #9b59b6; }
   to { box-shadow: 0 0 60px #ff00ff, 0 0 100px #ff00ff, 0 0 150px #9b59b6; }
 }
+
+/* Rain Toggle */
+.rain-toggle {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(100, 150, 255, 0.2);
+  border: 1px solid rgba(100, 150, 255, 0.3);
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rain-toggle:hover {
+  background: rgba(100, 150, 255, 0.4);
+  transform: scale(1.05);
+}
