@@ -1396,16 +1396,7 @@ body {
   display: block;
 }
 
-.music-taskbar-btn {
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
-.music-taskbar-btn:hover { background: rgba(255,255,255,0.1); }
+
 .music-popup-taskbar {
   display: none;
   position: absolute;
