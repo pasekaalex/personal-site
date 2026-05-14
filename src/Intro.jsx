@@ -67,6 +67,9 @@ export default function Intro() {
   const [openWindows, setOpenWindows] = useState({})
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
+  const [avatarClicks, setAvatarClicks] = useState(0)
+  const [crazyMode, setCrazyMode] = useState(false)
+  const avatarClickTimer = useRef(null)
   const [activeWindow, setActiveWindow] = useState(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [particles, setParticles] = useState([])
@@ -342,7 +345,22 @@ export default function Intro() {
         {/* Avatar Section */}
         <div className="avatar-section">
           <div className="avatar-glow" />
-          <img src="/avi.jpg" alt="Alex Paseka" className="main-avatar" />
+          <img src="/avi.jpg" alt="Alex Paseka" className={`main-avatar ${crazyMode ? 'crazy-avatar' : ''}`} onClick={() => {
+            setAvatarClicks(prev => {
+              const newCount = prev + 1
+              if (newCount >= 10) {
+                setCrazyMode(true)
+                setTimeout(() => setCrazyMode(false), 5000)
+                return 0
+              }
+              if (avatarClickTimer.current) clearTimeout(avatarClickTimer.current)
+              avatarClickTimer.current = setTimeout(() => setAvatarClicks(0), 800)
+              return newCount
+            })
+          }} onMouseLeave={() => {
+            if (avatarClickTimer.current) clearTimeout(avatarClickTimer.current)
+            avatarClickTimer.current = setTimeout(() => setAvatarClicks(0), 800)
+          }} />
           <div className="avatar-ring" />
         </div>
 

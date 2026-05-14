@@ -1225,3 +1225,22 @@ body {
   color: #ff6b6b;
   font-size: 0.7rem;
 }
+
+/* Crazy Avatar Mode */
+.crazy-avatar {
+  animation: crazySpin 0.2s linear infinite, crazyPulse 0.3s ease-in-out infinite alternate;
+  filter: hue-rotate(0deg) brightness(1.2);
+}
+
+@keyframes crazySpin {
+  0% { transform: rotate(0deg) scale(1.1); }
+  25% { transform: rotate(90deg) scale(1.2); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  75% { transform: rotate(270deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1.1); }
+}
+
+@keyframes crazyPulse {
+  from { box-shadow: 0 0 30px #9b59b6, 0 0 60px #9b59b6; }
+  to { box-shadow: 0 0 60px #ff00ff, 0 0 100px #ff00ff, 0 0 150px #9b59b6; }
+}
