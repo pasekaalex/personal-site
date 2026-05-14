@@ -1121,17 +1121,7 @@ body {
 
 /* Fixed Weather Widget */
 .weather-widget-fixed {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 180px;
-  background: rgba(26, 26, 46, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(155, 89, 182, 0.3);
-  border-radius: 12px;
-  z-index: 100;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  display: none !important;
 }
 
 .weather-header {
