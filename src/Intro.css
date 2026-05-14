@@ -264,19 +264,26 @@ body {
   text-shadow: 0 0 40px var(--lilac), 0 0 80px rgba(155, 89, 182, 0.5), 0 0 120px rgba(155, 89, 182, 0.3) !important;
 }
 
-.title-alex {
-  display: block;
+.title-typed {
   color: var(--lilac);
   text-shadow: var(--lilac-glow), 0 0 80px rgba(155, 89, 182, 0.3);
   animation: titleGlow 3s ease-in-out infinite;
 }
 
-.title-paseka {
-  display: block;
-  color: #d4a5e8;
-  text-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
-  animation: titleGlow 3s ease-in-out infinite 1.5s;
+
+.cursor-blink {
+  color: var(--lilac);
+  animation: blink 0.8s step-end infinite;
+  margin-left: 2px;
 }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
+.title-alex, .title-paseka { display: none; }
 
 @keyframes titleGlow {
   0%, 100% { filter: brightness(1); }

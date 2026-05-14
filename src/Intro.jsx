@@ -69,6 +69,8 @@ export default function Intro() {
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [rainMode, setRainMode] = useState(false)
   const rainModeRef = useRef(false)
+  const [typedName, setTypedName] = useState('')
+  const fullName = 'ALEX PASEKA'
   const [avatarClicks, setAvatarClicks] = useState(0)
   const [crazyMode, setCrazyMode] = useState(false)
   const avatarClickTimer = useRef(null)
@@ -83,6 +85,20 @@ export default function Intro() {
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(timer)
+  }, [])
+
+  // Typing animation for name
+  useEffect(() => {
+    let i = 0
+    const interval = setInterval(() => {
+      if (i <= fullName.length) {
+        setTypedName(fullName.slice(0, i))
+        i++
+      } else {
+        clearInterval(interval)
+      }
+    }, 100)
+    return () => clearInterval(interval)
   }, [])
 
   // Mouse particle trail
@@ -384,8 +400,7 @@ export default function Intro() {
         {/* Title Block */}
         <div className="title-block">
           <h1 className="desktop-title">
-            <span className="title-alex">ALEX</span>
-            <span className="title-paseka">PASEKA</span>
+            <span className="title-typed">{typedName}</span><span className="cursor-blink">|</span>
           </h1>
           <div className="title-divider" />
         </div>
