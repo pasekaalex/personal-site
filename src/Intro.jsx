@@ -83,6 +83,7 @@ export default function Intro() {
   const [raining, setRaining] = useState(false)
   const [lightMode, setLightMode] = useState(false)
   const rainModeRef = useRef(false)
+  const rainingRef = useRef(false)
   const [typedName, setTypedName] = useState('')
   const fullName = 'ALEX PASEKA'
   const [avatarClicks, setAvatarClicks] = useState(0)
@@ -184,24 +185,24 @@ export default function Intro() {
       })
       trail = trail.filter(t => t.alpha > 0)
       
-      // Draw rain
-      if (raining) {
-        for (let i = 0; i < 3; i++) {
+      // Draw rain using ref
+      if (rainingRef.current) {
+        for (let i = 0; i < 5; i++) {
           rainDrops.push({
             x: Math.random() * canvas.width,
             y: -10,
-            speed: Math.random() * 8 + 12,
-            length: Math.random() * 15 + 10
+            speed: Math.random() * 10 + 15,
+            length: Math.random() * 20 + 15
           })
         }
-        ctx.strokeStyle = 'rgba(150, 180, 255, 0.4)'
+        ctx.strokeStyle = 'rgba(180, 200, 255, 0.5)'
         ctx.lineWidth = 1.5
         rainDrops.forEach((drop, i) => {
           drop.y += drop.speed
-          drop.x += 1
+          drop.x += 1.5
           ctx.beginPath()
           ctx.moveTo(drop.x, drop.y)
-          ctx.lineTo(drop.x + 3, drop.y - drop.length)
+          ctx.lineTo(drop.x + 4, drop.y - drop.length)
           ctx.stroke()
         })
         rainDrops = rainDrops.filter(d => d.y < canvas.height)
@@ -707,8 +708,10 @@ export default function Intro() {
             const newVal = !raining
             setRaining(newVal)
             setRainMode(newVal)
+            rainModeRef.current = newVal
+            rainingRef.current = newVal
           }} title={raining ? 'Rain Off' : 'Rain On'}>
-            🌧️
+            {raining ? '🌧️' : '💧'}
           </button>
           <div className="weather-taskbar" style={{position: 'relative'}}>
             <button className="weather-taskbar-btn" onClick={() => document.querySelector('.weather-popup-taskbar').classList.toggle('show')} title="Weather">
