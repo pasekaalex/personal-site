@@ -927,6 +927,186 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   MOBILE REDESIGN
+   Mobile-first improvements for small screens
+═══════════════════════════════════════════════════════════════ */
+
+/* Tablet and below (768px) */
+@media (max-width: 768px) {
+  /* Hide desktop icons - access via menu instead */
+  .desktop-layout {
+    display: none;
+  }
+
+  /* Mobile bottom navigation bar */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(30px);
+    border-top: 1px solid rgba(155, 89, 182, 0.15);
+    z-index: 800;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobile-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .mobile-nav-btn:hover,
+  .mobile-nav-btn.active {
+    background: rgba(155, 89, 182, 0.2);
+    border-color: rgba(155, 89, 182, 0.3);
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  /* Mobile start menu - full width at bottom */
+  .start-menu {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 70px !important;
+    max-width: none !important;
+    width: auto !important;
+    max-height: calc(100vh - 140px);
+    max-height: calc(100dvh - 140px);
+    overflow-y: auto;
+  }
+
+  .start-menu-apps {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .start-menu-item {
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .start-menu-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Mobile windows - full screen */
+  .os-window {
+    width: 100vw !important;
+    width: 100vw !important;
+    height: calc(100vh - 60px) !important;
+    height: calc(100dvh - 60px) !important;
+    left: 0 !important;
+    top: 0 !important;
+    border-radius: 0 !important;
+    max-height: none !important;
+  }
+
+  .os-window.open {
+    transform: none !important;
+  }
+
+  .window-content {
+    max-height: calc(100vh - 60px - 52px);
+    max-height: calc(100dvh - 60px - 52px);
+  }
+
+  .window-projects {
+    width: 100vw !important;
+  }
+
+  /* Minimize taskbar on mobile */
+  .taskbar {
+    display: none;
+  }
+
+  /* Dock hidden on mobile - use bottom nav instead */
+  .dock {
+    display: none;
+  }
+
+  /* Hide avatar ring animation on mobile for performance */
+  .avatar-ring {
+    display: none;
+  }
+}
+
+/* Small phones (480px and below) */
+@media (max-width: 480px) {
+  /* Even smaller adjustments */
+  .start-menu {
+    left: 4px !important;
+    right: 4px !important;
+    bottom: 65px !important;
+    border-radius: 10px !important;
+  }
+
+  .start-menu-header {
+    padding: 10px 12px;
+  }
+
+  .start-menu-apps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .start-menu-item {
+    padding: 12px 8px;
+    font-size: 0.75rem;
+  }
+
+  .mobile-nav-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+
+  /* Project window on small phones */
+  .window-projects {
+    width: 100vw !important;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* About window on small phones */
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  .about-avatar-wrap {
+    flex-direction: row;
+  }
+}
+
+/* Mobile bottom nav - hide by default, show on small screens */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 600px) {
