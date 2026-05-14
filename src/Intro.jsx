@@ -579,8 +579,8 @@ export default function Intro() {
 
       {/* PROJECTS Window */}
       {openWindows.projects && (
-        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''}`} onClick={() => setActiveWindow('projects')} onMouseDown={(e) => handleWindowMouseDown(e, 'projects')}>
-          <div className="window-header">
+        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''}`} onClick={() => setActiveWindow('projects')}>
+          <div className="window-header" style={{ cursor: 'move' }} onMouseDown={(e) => handleWindowMouseDown(e, 'projects')}>
             <div className="window-controls">
               <button className="win-close" onClick={(e) => closeWindow('projects', e)}>×</button>
             </div>
