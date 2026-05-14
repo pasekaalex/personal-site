@@ -474,7 +474,8 @@ export default function Intro() {
             transform: 'none',
             left: pos.x,
             top: pos.y,
-            zIndex
+            zIndex,
+            transition: dragState.dragging && dragState.windowId === 'about' ? 'none' : undefined
           }}
         >
           <div 
