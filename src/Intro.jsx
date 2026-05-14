@@ -372,16 +372,18 @@ export default function Intro() {
             const rect = document.querySelector('.desktop-title').getBoundingClientRect()
             const centerX = rect.left + rect.width / 2
             const centerY = rect.top + rect.height / 2
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 30; i++) {
               const p = {
                 id: Date.now() + i,
-                x: centerX + (Math.random() - 0.5) * 100,
-                y: centerY + (Math.random() - 0.5) * 50,
+                x: centerX + (Math.random() - 0.5) * 150,
+                y: centerY + (Math.random() - 0.5) * 80,
                 alpha: 1,
-                radius: Math.random() * 6 + 4,
-                color: Math.random() > 0.5 ? '#9b59b6' : '#ff2d95'
+                radius: Math.random() * 8 + 4,
+                color: Math.random() > 0.3 ? '#ffffff' : '#d8a9e8',
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8 - 3
               }
-              setParticles(prev => [...prev.slice(-60), p])
+              setParticles(prev => [...prev.slice(-80), p])
             }
           }}>
             <span className="title-typed">{typedName}</span><span className="cursor-blink">|</span>
