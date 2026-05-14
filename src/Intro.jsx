@@ -103,6 +103,7 @@ export default function Intro() {
   const [particles, setParticles] = useState([])
   const canvasRef = useRef(null)
   const audioRef = useRef(null)
+  const rainAudioRef = useRef(null)
   
   // Window drag state
   const [windowPositions, setWindowPositions] = useState({})
@@ -124,6 +125,12 @@ export default function Intro() {
       audioRef.current.src = "/piano-v2.mp3"
       audioRef.current.volume = 0.2
       audioRef.current.play().catch(() => {})
+    }
+    // Setup rain audio
+    if (rainAudioRef.current) {
+      rainAudioRef.current.src = "/rain-sounds.mp3"
+      rainAudioRef.current.volume = 0.2
+      rainAudioRef.current.loop = true
     }
   }, [])
 
@@ -437,6 +444,7 @@ export default function Intro() {
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
       <audio ref={audioRef} loop volume={musicVolume} />
+      <audio ref={rainAudioRef} />
 
       {/* Animated Background */}
       <div className="bg-layer" />
@@ -810,6 +818,13 @@ export default function Intro() {
             setRainMode(newVal)
             rainModeRef.current = newVal
             rainingRef.current = newVal
+            if (rainAudioRef.current) {
+              if (newVal) {
+                rainAudioRef.current.play().catch(() => {})
+              } else {
+                rainAudioRef.current.pause()
+              }
+            }
           }} title={raining ? 'Rain Off' : 'Rain On'}>
             {raining ? '🌧️' : '💧'}
           </button>
@@ -850,7 +865,7 @@ export default function Intro() {
               <div className="music-popup-tracks">
                 <button className={`music-track-btn ${selectedTrack === 'jazz' ? 'active' : ''}`} onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/sax-jazz.mp3'; audioRef.current.load(); audioRef.current.play().catch(()=>{}); setMusicPlaying(true) } }}>🎷 Sax</button>
                 <button className={`music-track-btn ${selectedTrack === 'piano' ? 'active' : ''}`} onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-v2.mp3'; audioRef.current.load(); audioRef.current.play().catch(()=>{}); setMusicPlaying(true) } }}>🎹 Piano</button>
-                <button className={`music-track-btn ${selectedTrack === 'rain' ? 'active' : ''}`} onClick={() => { setSelectedTrack('rain'); if (audioRef.current) { audioRef.current.src = '/rain-sounds.mp3'; audioRef.current.load(); audioRef.current.play().catch(()=>{}); setMusicPlaying(true) } }}>🌧️ Rain</button>
+                <button className={`music-track-btn ${selectedTrack === 'rain' ? 'active' : ''}`} onClick={() => { setSelectedTrack('rain'); if (audioRef.current) { audioRef.current.src = '/rain-sounds.mp3'; audioRef.current.load(); audioRef.current.play().catch(()=>{}); setMusicPlaying(true) } }} disabled style={{opacity: 0.4}} title="Use rain toggle in taskbar instead">🌧️ Rain</button>
               </div>
               <div className="music-popup-vol">
                 <span>🔊</span>
