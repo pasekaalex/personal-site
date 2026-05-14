@@ -5,6 +5,7 @@ import './Intro.css'
 const DESKTOP_ICONS = [
   { id: 'about', icon: '/icons/about.png', label: 'About' },
   { id: 'projects', icon: '/icons/projects.png', label: 'Projects' },
+  { id: 'music', icon: '/icons/music.png', label: 'Music' },
   { id: 'contact', icon: '/icons/contact.png', label: 'Contact' },
 ]
 
@@ -91,6 +92,18 @@ export default function Intro() {
   const [particles, setParticles] = useState([])
   const canvasRef = useRef(null)
   const audioRef = useRef(null)
+  
+  // Window drag state
+  const [windowPositions, setWindowPositions] = useState({})
+  const [dragState, setDragState] = useState({ dragging: false, windowId: null, startX: 0, startY: 0, startPosX: 0, startPosY: 0 })
+  const highestZIndex = useRef(600)
+  
+  // Initialize window position when opened
+  const getWindowPosition = (windowId) => {
+    if (windowPositions[windowId]) return windowPositions[windowId]
+    // Default centered
+    return { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
+  }
   // Autoplay piano on mount
   useEffect(() => {
     if (audioRef.current) {
@@ -244,6 +257,48 @@ export default function Intro() {
     setOpenWindows(prev => ({ ...prev, [id]: false }))
     setActiveWindow(prev => prev === id ? null : prev)
   }, [])
+
+  // Window drag handlers
+  const handleWindowMouseDown = (e, windowId) => {
+    e.preventDefault()
+    const pos = getWindowPosition(windowId)
+    highestZIndex.current += 1
+    setDragState({
+      dragging: true,
+      windowId,
+      startX: e.clientX,
+      startY: e.clientY,
+      startPosX: pos.x,
+      startPosY: pos.y
+    })
+  }
+
+  useEffect(() => {
+    if (!dragState.dragging) return
+    
+    const handleMouseMove = (e) => {
+      const dx = e.clientX - dragState.startX
+      const dy = e.clientY - dragState.startY
+      setWindowPositions(prev => ({
+        ...prev,
+        [dragState.windowId]: {
+          x: dragState.startPosX + dx,
+          y: dragState.startPosY + dy
+        }
+      }))
+    }
+    
+    const handleMouseUp = () => {
+      setDragState(prev => ({ ...prev, dragging: false }))
+    }
+    
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [dragState])
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' })
@@ -408,9 +463,25 @@ export default function Intro() {
       </div>
 
       {/* ABOUT Window */}
-      {openWindows.about && (
-        <div className={`os-window ${openWindows.about ? 'open' : ''}`} onClick={() => setActiveWindow('about')}>
-          <div className="window-header">
+      {openWindows.about && (() => {
+        const pos = getWindowPosition('about')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window ${openWindows.about ? 'open' : ''}`} 
+          onClick={() => setActiveWindow('about')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'about')}
+          >
             <div className="window-controls">
               <button className="win-close" onClick={(e) => closeWindow('about', e)}>×</button>
             </div>
@@ -453,7 +524,7 @@ export default function Intro() {
             </div>
           </div>
         </div>
-      )}
+        )})()}
 
       {/* PROJECTS Window */}
       {openWindows.projects && (
@@ -572,9 +643,25 @@ export default function Intro() {
       )}
 
       {/* MUSIC Window */}
-      {openWindows.music && (
-        <div className={`os-window window-music ${openWindows.music ? 'open' : ''}`} onClick={() => setActiveWindow('music')}>
-          <div className="window-header">
+      {openWindows.music && (() => {
+        const pos = getWindowPosition('music')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window window-music ${openWindows.music ? 'open' : ''}`} 
+          onClick={() => setActiveWindow('music')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'music')}
+          >
             <div className="window-controls">
               <button className="win-close" onClick={(e) => closeWindow('music', e)}>×</button>
             </div>
@@ -644,12 +731,28 @@ export default function Intro() {
             </div>
           </div>
         </div>
-      )}
+        )})()}
 
       {/* CONTACT Window */}
-      {openWindows.contact && (
-        <div className={`os-window ${openWindows.contact ? 'open' : ''}`} onClick={() => setActiveWindow('contact')}>
-          <div className="window-header">
+      {openWindows.contact && (() => {
+        const pos = getWindowPosition('contact')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window ${openWindows.contact ? 'open' : ''}`} 
+          onClick={() => setActiveWindow('contact')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'contact')}
+          >
             <div className="window-controls">
               <button className="win-close" onClick={(e) => closeWindow('contact', e)}>×</button>
             </div>
@@ -684,7 +787,7 @@ export default function Intro() {
             </div>
           </div>
         </div>
-      )}
+        )})()}
 
       {/* Start Menu */}
       {startMenuOpen && (

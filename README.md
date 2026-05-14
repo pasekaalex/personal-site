@@ -1,12 +1,45 @@
-# 🎮 React Arcade
+# 🎨 Alex Paseka Personal Site
 
-A collection of classic arcade games built with React, Three.js, and modern web technologies.
+Browser-based desktop OS experience — a personal portfolio that feels like an operating system.
 
-## 🎯 Current Games
+**Live:** [paseka.dev](https://paseka.dev)
 
-1. **🎮 Downhill Balance** - 3D physics game where you balance a ball down a hill (Super Monkey Ball style)
-2. **🐍 Classic Snake** - The classic snake game with modern styling
-3. **🎯 Breakout** - Break all the blocks with your paddle!
+## ✨ Features
+
+- **Desktop OS UI** — Draggable windows, start menu, dock, taskbar
+- **Music Player** — Multiple ambient tracks (sax jazz, piano, rain sounds)
+- **Projects Gallery** — Browse all projects with modal details and GitHub links
+- **About Window** — Bio, education, social links
+- **Contact Window** — Quick links to GitHub, email, website
+- **Weather Widget** — Zip code weather lookup in taskbar
+- **Particle Effects** — Mouse trail with glow effects
+- **Rain Mode** — Toggleable rain overlay
+- **Double-Click Name** — Sparkle burst animation
+- **10x Avatar Click** — Easter egg crazy mode
+
+## 🎵 Music Tracks
+
+- **Sax Jazz** — Smooth instrumental jazz
+- **Piano Dreams** — Calm ambient piano
+- **Rain Sounds** — Peaceful rain ambience
+
+## 🛠️ Tech Stack
+
+- React 18
+- Vite
+- Canvas API (particle effects)
+- Web Audio API (music player)
+- Zippopotam + Open-Meteo APIs (weather)
+
+## 📁 Project Structure
+
+```
+src/
+  ├── Intro.jsx     # Main OS desktop component
+  ├── Intro.css    # All desktop styling
+  ├── main.jsx     # Entry point
+  └── index.css    # Base styles
+```
 
 ## 🚀 Getting Started
 
@@ -15,72 +48,6 @@ npm install
 npm run dev
 ```
 
-The arcade will open at `http://localhost:3000`
+## 🌐 Deploy
 
-## 🎨 Game Ideas for Future Development
-
-### Easy to Implement
-- **Pong** - Classic two-player paddle game
-- **Tic-Tac-Toe** - Simple strategy game
-- **Memory Game** - Card matching game
-- **Whack-a-Mole** - Click the moles as they appear
-- **2048** - Number puzzle game
-
-### Medium Difficulty
-- **Tetris** - Falling block puzzle game
-- **Asteroids** - Space shooter with rotation
-- **Frogger** - Cross the road game
-- **Pac-Man** - Maze navigation game
-- **Space Invaders** - Classic shooter
-- **Flappy Bird** - Tap to fly game
-
-### Advanced
-- **Racing Game** - 3D car racing with Three.js
-- **Fruit Ninja** - Slice fruits with gestures
-- **Angry Birds** - Physics-based puzzle game
-- **Mario-style Platformer** - Side-scrolling platform game
-- **Chess** - Full chess implementation
-- **Poker** - Card game with AI
-
-### Multiplayer Ideas
-- **Multiplayer Snake** - Compete with friends
-- **Battleship** - Turn-based strategy
-- **Online Pong** - Real-time multiplayer
-- **Quiz Game** - Trivia with friends
-
-## 🛠️ Technologies
-
-- **React 18** - UI framework
-- **Three.js** - 3D graphics
-- **Cannon.js** - Physics engine
-- **Vite** - Build tool
-- **Canvas API** - 2D game rendering
-
-## 📁 Project Structure
-
-```
-src/
-  ├── App.jsx          # Main arcade menu
-  ├── App.css          # Arcade styling
-  └── games/
-      ├── MonkeyBall.jsx   # 3D physics game
-      ├── Snake.jsx         # Snake game
-      └── Breakout.jsx      # Breakout game
-```
-
-## 🎮 Adding a New Game
-
-1. Create a new component in `src/games/YourGame.jsx`
-2. Export it as default
-3. Add it to the `GAMES` array in `App.jsx`
-4. Style it with your game's unique colors!
-
-## 🚀 Build
-
-```bash
-npm run build
-```
-
-## 📝 License
-
-MIT
+Vercel auto-deploys from main branch to paseka.dev
