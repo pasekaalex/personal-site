@@ -730,6 +730,7 @@ export default function Intro() {
 
       {/* TERMINAL Window */}
       {openWindows.terminal && (() => {
+        highestZIndex.current += 1
         const pos = getWindowPosition('terminal')
         const zIndex = highestZIndex.current
         return (
@@ -766,7 +767,10 @@ export default function Intro() {
               onChange={(e) => setTerminalInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && terminalInput.trim()) {
-                  setTerminalHistory(prev => [...prev, 'guest@paseka:~$ ' + terminalInput, executeCommand(terminalInput)])
+                  setTerminalHistory(prev => {
+                    const newHistory = [...prev, 'guest@paseka:~$ ' + terminalInput, executeCommand(terminalInput)]
+                    return newHistory.slice(-50)
+                  })
                   setTerminalInput('')
                 }
               }}
