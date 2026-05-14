@@ -1421,7 +1421,10 @@ body {
 }
 .music-popup-taskbar.show { display: block; }
 .music-popup-header { font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; }
-.music-popup-track { font-size: 0.85rem; opacity: 0.7; margin-bottom: 10px; }
+.music-popup-track { font-size: 0.85rem; opacity: 0.7; margin-bottom: 8px; }
+.music-popup-controls { display: flex; justify-content: center; margin-bottom: 10px; }
+.music-playpause-btn { background: rgba(155, 89, 182, 0.5); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; transition: background 0.2s; }
+.music-playpause-btn:hover { background: rgba(155, 89, 182, 0.7); }
 .music-popup-tracks { display: flex; flex-direction: column; gap: 4px; }
 .music-track-btn {
   background: rgba(255,255,255,0.05);

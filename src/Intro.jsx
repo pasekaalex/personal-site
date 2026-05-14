@@ -692,6 +692,11 @@ export default function Intro() {
             <div className="music-popup-taskbar">
               <div className="music-popup-header">🎵 Music</div>
               <div className="music-popup-track">{selectedTrack === 'jazz' ? 'Sax Jazz' : selectedTrack === 'piano' ? 'Piano Dreams' : 'Rain Sounds'}</div>
+              <div className="music-popup-controls">
+                <button className="music-playpause-btn" onClick={() => { if (audioRef.current) { if (musicPlaying) { audioRef.current.pause() } else { audioRef.current.play() }; setMusicPlaying(!musicPlaying) } }}>
+                  {musicPlaying ? '⏸️' : '▶️'}
+                </button>
+              </div>
               <div className="music-popup-tracks">
                 <button className={`music-track-btn ${selectedTrack === 'jazz' ? 'active' : ''}`} onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/sax-jazz.mp3'; audioRef.current.play(); setMusicPlaying(true) } }}>🎷 Sax</button>
                 <button className={`music-track-btn ${selectedTrack === 'piano' ? 'active' : ''}`} onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-v2.mp3'; audioRef.current.play(); setMusicPlaying(true) } }}>🎹 Piano</button>
