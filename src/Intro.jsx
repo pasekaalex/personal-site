@@ -267,8 +267,7 @@ export default function Intro() {
     }
   }
 
-  const fetchWeather = async () => {
-    const zip = document.getElementById('weatherZip')?.value?.trim()
+  const fetchWeather = async (zip) => {
     if (!zip || zip.length !== 5) return
 
     try {
@@ -718,10 +717,7 @@ export default function Intro() {
                 <input type="text" placeholder="Zip" className="weather-popup-input" id="weatherZipTaskbar" maxLength={5} />
                 <button className="weather-popup-search" onClick={() => {
                   const zip = document.getElementById('weatherZipTaskbar').value.trim()
-                  if (zip && zip.length === 5) {
-                    document.getElementById('weatherZip').value = zip
-                    fetchWeather()
-                  }
+                  if (zip && zip.length === 5) fetchWeather(zip)
                 }}>→</button>
               </div>
               <div id="weatherDisplayTaskbar" className="weather-popup-display" style={{display: 'none'}}>
