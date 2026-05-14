@@ -180,6 +180,38 @@ export default function Intro() {
     }
   }
 
+  const [weatherPos, setWeatherPos] = useState({ x: null, y: 20, dragging: false, offsetX: 0, offsetY: 0 })
+
+  const weatherRef = useRef(null)
+
+
+  const startWeatherDrag = (e) => {
+    const rect = weatherRef.current.getBoundingClientRect()
+    setWeatherPos(prev => ({
+      ...prev,
+      dragging: true,
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top
+    }))
+  }
+
+  const onWeatherDrag = (e) => {
+    if (!weatherPos.dragging) return
+    setWeatherPos(prev => ({
+      ...prev,
+      x: e.clientX - prev.offsetX,
+      y: e.clientY - prev.offsetY,
+      left: e.clientX - prev.offsetX,
+      top: e.clientY - prev.offsetY,
+      right: 'auto'
+    }))
+  }
+
+
+  const stopWeatherDrag = () => {
+    setWeatherPos(prev => ({ ...prev, dragging: false }))
+  }
+
   const fetchWeather = async () => {
     const zip = document.getElementById('weatherZip')?.value?.trim()
     if (!zip || zip.length !== 5) return
@@ -248,7 +280,18 @@ export default function Intro() {
       <div className="bg-scanlines" />
 
       {/* Fixed Weather Widget */}
-      <div className="weather-widget">
+      <div className="weather-widget" id="weatherWidget" ref={weatherRef}
+        style={{
+          left: weatherPos.x === null ? 'auto' : weatherPos.x,
+          right: weatherPos.x === null ? '20px' : 'auto',
+          top: weatherPos.y,
+          cursor: weatherPos.dragging ? 'grabbing' : 'grab'
+        }}
+        onMouseDown={startWeatherDrag}
+        onMouseMove={onWeatherDrag}
+        onMouseUp={stopWeatherDrag}
+        onMouseLeave={stopWeatherDrag}
+      >
         <div className="weather-header">
           <span className="weather-title">Weather</span>
           <button className="weather-toggle" onClick={() => document.querySelector('.weather-widget').classList.toggle('collapsed')}>−</button>
