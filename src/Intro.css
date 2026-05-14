@@ -1173,12 +1173,14 @@ body {
 
 .weather-input {
   flex: 1;
+  min-width: 0;
   padding: 6px 8px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(155, 89, 182, 0.3);
   border-radius: 6px;
   color: #fff;
   font-size: 0.8rem;
+  box-sizing: border-box;
 }
 
 .weather-search {
