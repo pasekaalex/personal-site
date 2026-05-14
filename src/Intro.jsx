@@ -101,11 +101,21 @@ export default function Intro() {
       pos.y = e.clientY
       setMousePos({ x: e.clientX, y: e.clientY })
       
-      // Add particle
-      const id = ++particleIdRef.current
-      const p = { id, x: e.clientX, y: e.clientY, alpha: 0.8, radius: 4, color: Math.random() > 0.5 ? '#9b59b6' : '#2d1b4e' }
-      setParticles(prev => [...prev.slice(-30), p])
+      // Add more particles for richer trail
+      for (let i = 0; i < 3; i++) {
+        const id = ++particleIdRef.current
+        const p = { 
+          id, 
+          x: e.clientX + (Math.random() - 0.5) * 20,
+          y: e.clientY + (Math.random() - 0.5) * 20,
+          alpha: 0.9,
+          radius: Math.random() * 5 + 3,
+          color: Math.random() > 0.3 ? '#9b59b6' : '#c39bd3'
+        }
+        setParticles(prev => [...prev.slice(-50), p])
+      }
     }
+
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -113,27 +123,43 @@ export default function Intro() {
       setParticles(prev => {
         const updated = prev.map(p => ({
           ...p,
-          alpha: p.alpha - 0.03,
-          radius: p.radius * 0.96,
-          y: p.y - 0.5
+          alpha: p.alpha - 0.025,
+          radius: p.radius * 0.97,
+          x: p.x + (Math.random() - 0.5) * 1.5,
+          y: p.y - 0.8
         })).filter(p => p.alpha > 0)
         
         updated.forEach(p => {
+          // Outer glow
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.radius * 2.5, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(155, 89, 182, ${p.alpha * 0.15})`
+          ctx.fill()
+          
+          // Inner glow
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.radius * 1.5, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(195, 155, 211, ${p.alpha * 0.3})`
+          ctx.fill()
+          
+          // Core
           ctx.beginPath()
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-          ctx.fillStyle = p.color + Math.floor(p.alpha * 80).toString(16).padStart(2, '0')
+          ctx.fillStyle = p.color + Math.floor(p.alpha * 255).toString(16).padStart(2, '0')
           ctx.fill()
         })
         
         return updated
       })
 
-      // Mouse glow
-      const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 60)
-      gradient.addColorStop(0, 'rgba(155, 89, 182, 0.15)')
+
+      // Stronger mouse glow aura
+      const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 100)
+      gradient.addColorStop(0, 'rgba(155, 89, 182, 0.25)')
+      gradient.addColorStop(0.5, 'rgba(155, 89, 182, 0.08)')
       gradient.addColorStop(1, 'rgba(155, 89, 182, 0)')
       ctx.fillStyle = gradient
-      ctx.fillRect(pos.x - 60, pos.y - 60, 120, 120)
+      ctx.fillRect(pos.x - 100, pos.y - 100, 200, 200)
 
       animFrame = requestAnimationFrame(animate)
     }
