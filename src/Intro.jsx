@@ -5,7 +5,6 @@ import './Intro.css'
 const DESKTOP_ICONS = [
   { id: 'about', icon: '/icons/about.png', label: 'About' },
   { id: 'projects', icon: '/icons/projects.png', label: 'Projects' },
-  { id: 'music', icon: '/icons/music.png', label: 'Music' },
   { id: 'contact', icon: '/icons/contact.png', label: 'Contact' },
 ]
 
@@ -122,7 +121,7 @@ export default function Intro() {
   }, [])
 
   // Typing animation for name
-  const restartTypingAnimation = () => {
+  const restartTypingAnimation = useCallback(() => {
     setTypedName('')
     let i = 0
     const interval = setInterval(() => {
@@ -133,7 +132,12 @@ export default function Intro() {
         clearInterval(interval)
       }
     }, 100)
-  }
+  }, [fullName])
+
+  // Run typing animation on mount
+  useEffect(() => {
+    restartTypingAnimation()
+  }, [restartTypingAnimation])
 
   // Mouse particle trail
   useEffect(() => {
@@ -644,98 +648,7 @@ export default function Intro() {
         </div>
       )}
 
-      {/* MUSIC Window */}
-      {openWindows.music && (() => {
-        const pos = getWindowPosition('music')
-        const zIndex = highestZIndex.current
-        return (
-        <div 
-          className={`os-window window-music ${openWindows.music ? 'open' : ''}`} 
-          onClick={() => setActiveWindow('music')}
-          style={{
-            transform: 'none',
-            left: pos.x,
-            top: pos.y,
-            zIndex
-          }}
-        >
-          <div 
-            className="window-header"
-            style={{ cursor: 'move' }}
-            onMouseDown={(e) => handleWindowMouseDown(e, 'music')}
-          >
-            <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('music', e)}>×</button>
-            </div>
-            <span className="window-title">Music Player</span>
-            <div className="window-spacer" />
-          </div>
-          <div className="window-content music-app">
-            <div className="music-visualizer">
-              <div className={`music-icon ${musicPlaying ? 'playing' : ''}`}>🎵</div>
-            </div>
-            <div className="music-track-name">{selectedTrack === 'jazz' ? 'Sax Jazz' : selectedTrack === 'piano' ? 'Piano Dreams' : 'Rain Sounds'}</div>
-            <div className="music-controls">
-              <button className="music-play-btn" onClick={toggleMusic}>
-                {musicPlaying ? '⏸️' : '▶️'}
-              </button>
-            </div>
-            <div className="music-track-list">
-              <button 
-                className={`track-item ${selectedTrack === 'jazz' ? 'active' : ''}`}
-                onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/sax-jazz.mp3'; if (musicPlaying) audioRef.current.play() } }}
-              >
-                <span className="track-icon">🎷</span>
-                <span className="track-info">
-                  <span className="track-title">Sax Jazz</span>
-                  <span className="track-desc">Smooth instrumental jazz</span>
-                </span>
-                {selectedTrack === 'jazz' && musicPlaying && <span className="track-playing">▶</span>}
-              </button>
-              <button 
-                className={`track-item ${selectedTrack === 'piano' ? 'active' : ''}`}
-                onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-v2.mp3'; if (musicPlaying) audioRef.current.play() } }}
-              >
-                <span className="track-icon">🎹</span>
-                <span className="track-info">
-                  <span className="track-title">Piano Dreams</span>
-                  <span className="track-desc">Calm ambient piano</span>
-                </span>
-                {selectedTrack === 'piano' && musicPlaying && <span className="track-playing">▶</span>}
-              </button>
-              <button 
-                className={`track-item ${selectedTrack === 'rain' ? 'active' : ''}`}
-                onClick={() => { setSelectedTrack('rain'); if (audioRef.current) { audioRef.current.src = '/rain-sounds.mp3'; if (musicPlaying) audioRef.current.play() } }}
-              >
-                <span className="track-icon">🌧️</span>
-                <span className="track-info">
-                  <span className="track-title">Rain Sounds</span>
-                  <span className="track-desc">Peaceful rain ambience</span>
-                </span>
-                {selectedTrack === 'rain' && musicPlaying && <span className="track-playing">▶</span>}
-              </button>
-            </div>
-            <div className="music-volume-section">
-              <span className="volume-icon">{musicVolume > 0.5 ? '🔊' : musicVolume > 0 ? '🔉' : '🔇'}</span>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={musicVolume}
-                onChange={(e) => {
-                  const v = parseFloat(e.target.value)
-                  setMusicVolume(v)
-                  if (audioRef.current) audioRef.current.volume = v
-                }}
-                className="music-volume-slider"
-              />
-            </div>
-          </div>
-        </div>
-        )})()}
-
-      {/* CONTACT Window */}
+            {/* CONTACT Window */}
       {openWindows.contact && (() => {
         const pos = getWindowPosition('contact')
         const zIndex = highestZIndex.current
@@ -829,6 +742,24 @@ export default function Intro() {
           }} title={rainMode ? 'Rain Off' : 'Rain On'}>
             🌧️
           </button>
+          <div className="music-taskbar" style={{position: 'relative'}}>
+            <button className="music-taskbar-btn" onClick={() => document.querySelector('.music-popup-taskbar').classList.toggle('show')} title={musicPlaying ? 'Pause Music' : 'Play Music'}>
+              {musicPlaying ? '🎵' : '🎶'}
+            </button>
+            <div className="music-popup-taskbar">
+              <div className="music-popup-header">🎵 Music</div>
+              <div className="music-popup-track">{selectedTrack === 'jazz' ? 'Sax Jazz' : selectedTrack === 'piano' ? 'Piano Dreams' : 'Rain Sounds'}</div>
+              <div className="music-popup-tracks">
+                <button className={`music-track-btn ${selectedTrack === 'jazz' ? 'active' : ''}`} onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/sax-jazz.mp3'; audioRef.current.play(); setMusicPlaying(true) } }}>🎷 Sax</button>
+                <button className={`music-track-btn ${selectedTrack === 'piano' ? 'active' : ''}`} onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-v2.mp3'; audioRef.current.play(); setMusicPlaying(true) } }}>🎹 Piano</button>
+                <button className={`music-track-btn ${selectedTrack === 'rain' ? 'active' : ''}`} onClick={() => { setSelectedTrack('rain'); if (audioRef.current) { audioRef.current.src = '/rain-sounds.mp3'; audioRef.current.play(); setMusicPlaying(true) } }}>🌧️ Rain</button>
+              </div>
+              <div className="music-popup-vol">
+                <span>🔊</span>
+                <input type="range" min="0" max="1" step="0.05" value={musicVolume} onChange={(e) => { const v = parseFloat(e.target.value); setMusicVolume(v); if (audioRef.current) audioRef.current.volume = v }} className="music-vol-slider" />
+              </div>
+            </div>
+          </div>
           <div className="weather-taskbar" style={{position: 'relative'}}>
             <button className="weather-taskbar-btn" onClick={() => document.querySelector('.weather-popup-taskbar').classList.toggle('show')} title="Weather">
               🌤️

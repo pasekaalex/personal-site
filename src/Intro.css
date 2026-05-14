@@ -1396,7 +1396,49 @@ body {
   display: block;
 }
 
-.weather-popup-header {
+.music-taskbar-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.music-taskbar-btn:hover { background: rgba(255,255,255,0.1); }
+.music-popup-taskbar {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: rgba(20, 20, 40, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 180px;
+  margin-bottom: 8px;
+}
+.music-popup-taskbar.show { display: block; }
+.music-popup-header { font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; }
+.music-popup-track { font-size: 0.85rem; opacity: 0.7; margin-bottom: 10px; }
+.music-popup-tracks { display: flex; flex-direction: column; gap: 4px; }
+.music-track-btn {
+  background: rgba(255,255,255,0.05);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+.music-track-btn:hover { background: rgba(255,255,255,0.1); }
+.music-track-btn.active { background: rgba(155, 89, 182, 0.3); }
+.music-popup-vol { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+.music-vol-slider { flex: 1; accent-color: #d8a9e8; }
+ {
   font-size: 0.65rem;
   text-transform: uppercase;
   color: #9b59b6;
