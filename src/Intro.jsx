@@ -68,6 +68,7 @@ export default function Intro() {
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [rainMode, setRainMode] = useState(false)
+  const rainModeRef = useRef(false)
   const [avatarClicks, setAvatarClicks] = useState(0)
   const [crazyMode, setCrazyMode] = useState(false)
   const avatarClickTimer = useRef(null)
@@ -125,7 +126,7 @@ export default function Intro() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       
       // Rain effect
-      if (rainMode) {
+      if (rainModeRef.current) {
         for (let i = 0; i < 3; i++) {
           const x = Math.random() * canvas.width
           const y = Math.random() * canvas.height
@@ -575,7 +576,11 @@ export default function Intro() {
           <button className="music-toggle" onClick={toggleMusic} title={musicPlaying ? 'Mute' : 'Play Music'}>
             {musicPlaying ? '🔊' : '🔇'}
           </button>
-          <button className="rain-toggle" onClick={() => setRainMode(!rainMode)} title={rainMode ? 'Rain Off' : 'Rain On'}>
+          <button className="rain-toggle" onClick={() => {
+            const newVal = !rainMode
+            setRainMode(newVal)
+            rainModeRef.current = newVal
+          }} title={rainMode ? 'Rain Off' : 'Rain On'}>
             🌧️
           </button>
           <span className="taskbar-date">{formatDate(time)}</span>
