@@ -193,7 +193,7 @@ export default function Intro() {
         document.getElementById('weatherDisplay').style.display = 'none'
         return
       }
-      const { latitude, longitude } = geoData.locations[0]
+      const { latitude, longitude } = geoData.places[0]
 
       const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`)
       const weatherData = await weatherRes.json()
