@@ -323,7 +323,7 @@ export default function Intro() {
     <div className="os-container">
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
-      <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'jazz-chill' : 'piano-chill'}.mp3`} loop volume={musicVolume} />
+      <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'sax-jazz' : selectedTrack === 'piano' ? 'piano-v2' : 'rain-sounds'}.mp3`} loop volume={musicVolume} />
 
       {/* Animated Background */}
       <div className="bg-layer" />
@@ -575,7 +575,7 @@ export default function Intro() {
             <div className="music-visualizer">
               <div className={`music-icon ${musicPlaying ? 'playing' : ''}`}>🎵</div>
             </div>
-            <div className="music-track-name">{selectedTrack === 'jazz' ? 'Chill Jazz Vibes' : 'Piano Dreams'}</div>
+            <div className="music-track-name">{selectedTrack === 'jazz' ? 'Sax Jazz' : selectedTrack === 'piano' ? 'Piano Dreams' : 'Rain Sounds'}</div>
             <div className="music-controls">
               <button className="music-play-btn" onClick={toggleMusic}>
                 {musicPlaying ? '⏸️' : '▶️'}
@@ -584,18 +584,18 @@ export default function Intro() {
             <div className="music-track-list">
               <button 
                 className={`track-item ${selectedTrack === 'jazz' ? 'active' : ''}`}
-                onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/jazz-chill.mp3'; if (musicPlaying) audioRef.current.play() } }}
+                onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/sax-jazz.mp3'; if (musicPlaying) audioRef.current.play() } }}
               >
                 <span className="track-icon">🎷</span>
                 <span className="track-info">
-                  <span className="track-title">Chill Jazz Vibes</span>
-                  <span className="track-desc">Lo-fi jazz beats</span>
+                  <span className="track-title">Sax Jazz</span>
+                  <span className="track-desc">Smooth instrumental jazz</span>
                 </span>
                 {selectedTrack === 'jazz' && musicPlaying && <span className="track-playing">▶</span>}
               </button>
               <button 
                 className={`track-item ${selectedTrack === 'piano' ? 'active' : ''}`}
-                onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-chill.mp3'; if (musicPlaying) audioRef.current.play() } }}
+                onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-v2.mp3'; if (musicPlaying) audioRef.current.play() } }}
               >
                 <span className="track-icon">🎹</span>
                 <span className="track-info">
@@ -603,6 +603,17 @@ export default function Intro() {
                   <span className="track-desc">Calm ambient piano</span>
                 </span>
                 {selectedTrack === 'piano' && musicPlaying && <span className="track-playing">▶</span>}
+              </button>
+              <button 
+                className={`track-item ${selectedTrack === 'rain' ? 'active' : ''}`}
+                onClick={() => { setSelectedTrack('rain'); if (audioRef.current) { audioRef.current.src = '/rain-sounds.mp3'; if (musicPlaying) audioRef.current.play() } }}
+              >
+                <span className="track-icon">🌧️</span>
+                <span className="track-info">
+                  <span className="track-title">Rain Sounds</span>
+                  <span className="track-desc">Peaceful rain ambience</span>
+                </span>
+                {selectedTrack === 'rain' && musicPlaying && <span className="track-playing">▶</span>}
               </button>
             </div>
             <div className="music-volume-section">
