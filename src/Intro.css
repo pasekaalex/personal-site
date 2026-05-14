@@ -1807,22 +1807,27 @@ body {
   --glass-border: rgba(0, 0, 0, 0.1);
 }
 .light-mode .taskbar {
-  background: rgba(240, 240, 245, 0.9) !important;
+  background: rgba(240, 240, 245, 0.5) !important;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 .light-mode .start-button,
 .light-mode .rain-toggle,
 .light-mode .music-taskbar-btn,
 .light-mode .weather-taskbar-btn {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.5);
   color: #333;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 .light-mode .taskbar-date,
 .light-mode .taskbar-clock {
   color: #333;
 }
 .light-mode .bg-layer {
-  opacity: 0;
+  opacity: 1;
+  filter: brightness(0.85) saturate(0.8);
+}
+.light-mode .os-container {
+  background: #f5f5fa;
 }
 .light-mode .music-popup-taskbar,
 .light-mode .weather-popup-taskbar {

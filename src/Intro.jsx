@@ -733,7 +733,7 @@ export default function Intro() {
           <span className="taskbar-date">{formatDate(time)}</span>
           <span className="taskbar-clock">{formatTime(time)}</span>
           <button className="theme-toggle" onClick={() => setLightMode(!lightMode)} title={lightMode ? 'Dark Mode' : 'Light Mode'}>
-            {lightMode ? '🌙' : '☀️'}
+            {lightMode ? '☀️' : '🌙'}
           </button>
         </div>
       </div>
