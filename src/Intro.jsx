@@ -110,26 +110,7 @@ export default function Intro() {
   const [dragState, setDragState] = useState({ dragging: false, windowId: null, startX: 0, startY: 0, startPosX: 0, startPosY: 0 })
   const highestZIndex = useRef(600)
   
-  // Terminal command executor
-  const executeCommand = (cmd) => {
-    const c = cmd.toLowerCase().trim()
-    if (c === 'help') return 'Commands: help, neofetch, date, clear, whoami, echo'
-    if (c === 'neofetch') return `
-  ██████╗ ███████╗██╗   ██╗
-  ██╔══██╗██╔════╝██║   ██║
-  ██████╔╝█████╗  ██║   ██║
-  ██╔═══╝ ██╔══╝  ╚██╗ ██╔╝
-  ██║     ███████╗ ╚████╔╝ 
-  ╚═╝     ╚══════╝  ╚═══╝  
-  OS: paseka.dev v1.0
-  Host: React + Vite
-  Shell: Intro.jsx`
-    if (c === 'date') return new Date().toLocaleString()
-    if (c === 'clear') { setTerminalHistory([]); return '' }
-    if (c === 'whoami') return 'guest'
-    if (c.startsWith('echo ')) return cmd.slice(5)
-    return `Command not found: ${c}. Type 'help' for commands.`
-  }
+  
   
   // Initialize window position when opened
   const getWindowPosition = (windowId) => {
@@ -691,60 +672,6 @@ export default function Intro() {
 
 
 
-      {/* TERMINAL Window */}
-      {openWindows.terminal && (() => {
-        highestZIndex.current += 1
-        const pos = getWindowPosition('terminal')
-        const zIndex = highestZIndex.current
-        return (
-        <div 
-          className={`os-window terminal-window open`} 
-          onClick={() => setActiveWindow('terminal')}
-          style={{
-            transform: 'none',
-            left: pos.x,
-            top: pos.y,
-            zIndex,
-            transition: dragState.dragging && dragState.windowId === 'terminal' ? 'none' : undefined
-          }}
-        >
-          <div 
-            className="window-header"
-            style={{ cursor: 'move' }}
-            onMouseDown={(e) => handleWindowMouseDown(e, 'terminal')}
-          >
-            <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('terminal', e)}>×</button>
-            </div>
-            <span className="window-title">Terminal</span>
-            <div className="window-spacer" />
-          </div>
-          <div className="terminal-popup" style={{height: '300px', background: '#0a0a0f', borderRadius: '0 0 12px 12px', overflow: 'hidden'}}>
-            <div style={{padding: '10px', height: 'calc(100% - 40px)', overflow: 'auto', fontFamily: 'monospace', fontSize: '0.85rem', color: '#0f0', background: '#0a0a0f'}}>
-              {terminalHistory.map((line, i) => <div key={i} style={{marginBottom: '4px'}}>{line}</div>)}
-              <div style={{color: '#0ff'}}>guest@paseka:~$</div>
-            </div>
-            <input 
-              type="text" 
-              value={terminalInput}
-              onChange={(e) => setTerminalInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && terminalInput.trim()) {
-                  setTerminalHistory(prev => {
-                    const newHistory = [...prev, 'guest@paseka:~$ ' + terminalInput, executeCommand(terminalInput)]
-                    return newHistory.slice(-50)
-                  })
-                  setTerminalInput('')
-                }
-              }}
-              style={{width: '100%', background: '#111', border: 'none', borderTop: '1px solid #333', padding: '8px 10px', color: '#0f0', fontFamily: 'monospace', fontSize: '0.85rem', outline: 'none'}}
-              placeholder="Type a command..."
-            />
-          </div>
-        </div>
-        )}
-      )()}
-
       {/* CONTACT Window */}
       {openWindows.contact && (() => {
         const pos = getWindowPosition('contact')
@@ -843,13 +770,6 @@ export default function Intro() {
           <div className="start-menu-section">
             <div className="start-menu-section-title">Apps</div>
             <div className="start-menu-apps">
-              <button
-                className="start-menu-item"
-                onClick={() => { openWindow('terminal'); setStartMenuOpen(false) }}
-              >
-                <span style={{fontSize: '1.2rem'}}>⌨️</span>
-                <span>Terminal</span>
-              </button>
               {DESKTOP_ICONS.map(icon => (
                 <button
                   key={icon.id}
