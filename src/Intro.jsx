@@ -185,16 +185,15 @@ export default function Intro() {
     if (!zip || zip.length !== 5) return
 
     try {
-      const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${zip}&count=1&language=en&format=json`)
+      const geoRes = await fetch(`https://api.zippopotam.us/us/${zip}`)
       const geoData = await geoRes.json()
 
-      if (!geoData.results || geoData.results.length === 0) {
+      if (!geoRes.ok) {
         document.getElementById('weatherError').style.display = 'block'
         document.getElementById('weatherDisplay').style.display = 'none'
         return
       }
-
-      const { latitude, longitude } = geoData.results[0]
+      const { latitude, longitude } = geoData.locations[0]
 
       const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`)
       const weatherData = await weatherRes.json()
