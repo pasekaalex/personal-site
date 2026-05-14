@@ -432,7 +432,7 @@ export default function Intro() {
     <div className={`os-container${lightMode ? ' light-mode' : ''}`}>
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
-      <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'sax-jazz' : selectedTrack === 'piano' ? 'piano-v2' : 'rain-sounds'}.mp3`} loop volume={musicVolume} />
+      <audio ref={audioRef} loop volume={musicVolume} />
 
       {/* Animated Background */}
       <div className="bg-layer" />
