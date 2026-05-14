@@ -2107,3 +2107,20 @@ body {
 .light-mode .start-menu-stat.click-counter:hover {
   opacity: 1;
 }
+
+/* Project Embed Window */
+.project-embed-window {
+  width: min(90vw, 1200px);
+  height: min(85vh, 800px);
+}
+.project-embed-content {
+  padding: 0;
+  height: calc(100% - 50px);
+}
+.project-embed-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0 0 12px 12px;
+  background: #fff;
+}

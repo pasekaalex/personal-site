@@ -79,6 +79,7 @@ export default function Intro() {
   const [musicVolume, setMusicVolume] = useState(0.2)
   const [selectedTrack, setSelectedTrack] = useState('piano')
   const [selectedProject, setSelectedProject] = useState(null)
+  const [embeddedProject, setEmbeddedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
   const [raining, setRaining] = useState(false)
   const [lightMode, setLightMode] = useState(false)
@@ -112,6 +113,9 @@ export default function Intro() {
   const getWindowPosition = (windowId) => {
     if (windowPositions[windowId]) return windowPositions[windowId]
     // Default centered
+    if (windowId === 'project-embed') {
+      return { x: window.innerWidth / 2 - 540, y: window.innerHeight / 2 - 350 }
+    }
     return { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
   }
   // Autoplay piano on mount
@@ -640,7 +644,10 @@ export default function Intro() {
             <h2 className="project-detail-name">{selectedProject.name}</h2>
             <p className="project-detail-desc">{selectedProject.desc}</p>
             <div className="project-detail-links">
-              <a href={selectedProject.url} target="_blank" rel="noopener" className="project-detail-link primary">
+              <button className="project-detail-link primary" onClick={() => { setEmbeddedProject(selectedProject); setSelectedProject(null); openWindow('project-embed'); }}>
+                Open in Window ↗
+              </button>
+              <a href={selectedProject.url} target="_blank" rel="noopener" className="project-detail-link">
                 Visit Project →
               </a>
               {selectedProject.github && (
@@ -652,6 +659,45 @@ export default function Intro() {
           </div>
         </div>
       )}
+
+      {/* PROJECT EMBED Window */}
+      {openWindows['project-embed'] && embeddedProject && (() => {
+        const pos = getWindowPosition('project-embed')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window project-embed-window open`} 
+          onClick={() => setActiveWindow('project-embed')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex,
+            transition: dragState.dragging && dragState.windowId === 'project-embed' ? 'none' : undefined
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'project-embed')}
+          >
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => { closeWindow('project-embed', e); setEmbeddedProject(null) }}>×</button>
+            </div>
+            <span className="window-title">{embeddedProject.name}</span>
+            <div className="window-spacer" />
+          </div>
+          <div className="window-content project-embed-content">
+            <iframe 
+              src={embeddedProject.url} 
+              title={embeddedProject.name}
+              sandbox="allow-scripts allow-same-origin allow-popups"
+              allow="fullscreen"
+            />
+          </div>
+        </div>
+        )
+      })()}
 
       {/* CONTACT Window */}
       {openWindows.contact && (() => {
