@@ -6,6 +6,7 @@ const DESKTOP_ICONS = [
   { id: 'about', icon: '/icons/about.png', label: 'About' },
   { id: 'projects', icon: '/icons/projects.png', label: 'Projects' },
   { id: 'contact', icon: '/icons/contact.png', label: 'Contact' },
+  { id: 'music', icon: '/icons/music.png', label: 'Music' },
 ]
 
 // Projects data
@@ -356,32 +357,6 @@ export default function Intro() {
       <canvas ref={canvasRef} className="particle-canvas" />
       <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'jazz-chill' : 'piano-chill'}.mp3`} loop volume={musicVolume} />
 
-      {/* Music Player Popup */}
-      {musicPlaying && (
-        <div className="music-popup">
-          <div className="music-header">Now Playing</div>
-          <div className="music-info">{selectedTrack === 'jazz' ? 'Chill Jazz Vibes' : 'Piano Dreams'}</div>
-          <div className="music-track-select">
-            <button className={`track-btn ${selectedTrack === 'jazz' ? 'active' : ''}`} onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/jazz-chill.mp3'; audioRef.current.play() } }}>🎷 Jazz</button>
-            <button className={`track-btn ${selectedTrack === 'piano' ? 'active' : ''}`} onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-chill.mp3'; audioRef.current.play() } }}>🎹 Piano</button>
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={musicVolume}
-            onChange={(e) => {
-              const v = parseFloat(e.target.value)
-              setMusicVolume(v)
-              if (audioRef.current) audioRef.current.volume = v
-            }}
-            className="volume-slider"
-          />
-          <button className="music-close" onClick={() => { audioRef.current?.pause(); setMusicPlaying(false) }}>×</button>
-        </div>
-      )}
-
       {/* Animated Background */}
       <div className="bg-layer" />
       <div className="bg-grid" />
@@ -650,6 +625,70 @@ export default function Intro() {
         </div>
       )}
 
+      {/* MUSIC Window */}
+      {openWindows.music && (
+        <div className={`os-window window-music ${openWindows.music ? 'open' : ''}`} onClick={() => setActiveWindow('music')}>
+          <div className="window-header">
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => closeWindow('music', e)}>×</button>
+            </div>
+            <span className="window-title">Music Player</span>
+            <div className="window-spacer" />
+          </div>
+          <div className="window-content music-app">
+            <div className="music-visualizer">
+              <div className={`music-icon ${musicPlaying ? 'playing' : ''}`}>🎵</div>
+            </div>
+            <div className="music-track-name">{selectedTrack === 'jazz' ? 'Chill Jazz Vibes' : 'Piano Dreams'}</div>
+            <div className="music-controls">
+              <button className="music-play-btn" onClick={toggleMusic}>
+                {musicPlaying ? '⏸️' : '▶️'}
+              </button>
+            </div>
+            <div className="music-track-list">
+              <button 
+                className={`track-item ${selectedTrack === 'jazz' ? 'active' : ''}`}
+                onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/jazz-chill.mp3'; if (musicPlaying) audioRef.current.play() } }}
+              >
+                <span className="track-icon">🎷</span>
+                <span className="track-info">
+                  <span className="track-title">Chill Jazz Vibes</span>
+                  <span className="track-desc">Lo-fi jazz beats</span>
+                </span>
+                {selectedTrack === 'jazz' && musicPlaying && <span className="track-playing">▶</span>}
+              </button>
+              <button 
+                className={`track-item ${selectedTrack === 'piano' ? 'active' : ''}`}
+                onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-chill.mp3'; if (musicPlaying) audioRef.current.play() } }}
+              >
+                <span className="track-icon">🎹</span>
+                <span className="track-info">
+                  <span className="track-title">Piano Dreams</span>
+                  <span className="track-desc">Calm ambient piano</span>
+                </span>
+                {selectedTrack === 'piano' && musicPlaying && <span className="track-playing">▶</span>}
+              </button>
+            </div>
+            <div className="music-volume-section">
+              <span className="volume-icon">{musicVolume > 0.5 ? '🔊' : musicVolume > 0 ? '🔉' : '🔇'}</span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={musicVolume}
+                onChange={(e) => {
+                  const v = parseFloat(e.target.value)
+                  setMusicVolume(v)
+                  if (audioRef.current) audioRef.current.volume = v
+                }}
+                className="music-volume-slider"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CONTACT Window */}
       {openWindows.contact && (
         <div className={`os-window ${openWindows.contact ? 'open' : ''}`} onClick={() => setActiveWindow('contact')}>
@@ -735,8 +774,8 @@ export default function Intro() {
           </button>
         </div>
         <div className="taskbar-right">
-          <button className="music-toggle" onClick={toggleMusic} title={musicPlaying ? 'Mute' : 'Play Music'}>
-            {musicPlaying ? '🔊' : '🔇'}
+          <button className="music-toggle" onClick={() => openWindow('music')} title="Music Player">
+            🎵
           </button>
           <button className="rain-toggle" onClick={() => {
             const newVal = !rainMode
