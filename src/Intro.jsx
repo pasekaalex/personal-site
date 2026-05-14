@@ -856,6 +856,7 @@ export default function Intro() {
               </button>
             </div>
           </div>
+          <div className="start-menu-divider"></div>
           <div className="start-menu-section">
             <div className="start-menu-section-title">Stats</div>
             <div className="start-menu-stats">
