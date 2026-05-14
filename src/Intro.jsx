@@ -946,7 +946,7 @@ export default function Intro() {
             </div>
           </div>
           <div className="music-taskbar" style={{position: 'relative'}}>
-            <button className="music-taskbar-btn" onClick={() => document.querySelector('.music-popup-taskbar').classList.toggle('show')} title={musicPlaying ? 'Pause Music' : 'Play Music'}>
+            <button className="music-taskbar-btn" onClick={() => document.querySelector('.music-popup-taskbar').classList.toggle('show')} onDoubleClick={() => { if (audioRef.current) { if (audioRef.current.volume > 0) { audioRef.current.volume = 0; setMusicVolume(0) } else { audioRef.current.volume = 0.2; setMusicVolume(0.2) } } }} title="Music (dbl click to mute)">
               {musicPlaying ? '🎵' : '🎶'}
             </button>
             <div className="music-popup-taskbar">
