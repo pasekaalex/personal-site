@@ -77,7 +77,6 @@ export default function Intro() {
     about: false,
     projects: false,
     contact: false,
-    terminal: false,
   })
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(true)
@@ -123,7 +122,7 @@ export default function Intro() {
     // Default centered
     const defaults = {
       'project-embed': { x: window.innerWidth / 2 - 540, y: window.innerHeight / 2 - 350 },
-      'terminal': { x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 200 },
+      
       'about': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'projects': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'contact': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
@@ -682,59 +681,7 @@ export default function Intro() {
 
 
       {/* TERMINAL Window */}
-      {openWindows.terminal && (() => {
-        highestZIndex.current += 1
-        const pos = getWindowPosition('terminal')
-        const zIndex = highestZIndex.current
-        return (
-        <div 
-          className={`os-window terminal-window open`} 
-          onClick={() => { setActiveWindow('terminal'); highestZIndex.current += 1 }}
-          style={{
-            transform: 'none',
-            left: pos.x,
-            top: pos.y,
-            zIndex,
-            transition: dragState.dragging && dragState.windowId === 'terminal' ? 'none' : undefined
-          }}
-        >
-          <div 
-            className="window-header"
-            style={{ cursor: 'move' }}
-            onMouseDown={(e) => handleWindowMouseDown(e, 'terminal')}
-          >
-            <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('terminal', e)}>x</button>
-            </div>
-            <span className="window-title">Terminal</span>
-            <div className="window-spacer" />
-          </div>
-          <div style={{height: '280px', background: '#0a0a0f', borderRadius: '0 0 12px 12px', display: 'flex', flexDirection: 'column'}}>
-            <div style={{flex: 1, padding: '10px', overflow: 'auto', fontFamily: 'monospace', fontSize: '0.8rem', color: '#0f0'}}>
-              {terminalHistory.map((line, i) => <div key={i} style={{marginBottom: '4px'}}>{line}</div>)}
-            </div>
-            <div style={{display: 'flex', alignItems: 'center', padding: '8px', borderTop: '1px solid #333', background: '#111'}}>
-              <span style={{color: '#0f0', marginRight: '8px'}}>{'>'}</span>
-              <input 
-                type="text" 
-                value={terminalInput}
-                onChange={(e) => setTerminalInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && terminalInput.trim()) {
-                    setTerminalHistory(prev => {
-                      const newHist = [...prev, '> ' + terminalInput, executeCommand(terminalInput)]
-                      return newHist.slice(-30)
-                    })
-                    setTerminalInput('')
-                  }
-                }}
-                style={{flex: 1, background: 'transparent', border: 'none', color: '#0f0', fontFamily: 'monospace', fontSize: '0.8rem', outline: 'none'}}
-              />
-            </div>
-          </div>
-        </div>
-        )}
-      )()}
+
 
       {/* CONTACT Window */}
       {openWindows.contact && (() => {
@@ -844,13 +791,7 @@ export default function Intro() {
                   <span>{icon.label}</span>
                 </button>
               ))}
-              <button
-                className="start-menu-item"
-                onClick={() => { openWindow('terminal'); setStartMenuOpen(false) }}
-              >
-                <span style={{fontSize: '1.1rem'}}>_</span>
-                <span>Terminal</span>
-              </button>
+              
             </div>
           </div>
         </div>
