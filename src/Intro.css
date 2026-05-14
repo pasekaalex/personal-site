@@ -1376,3 +1376,279 @@ body {
   90%  { transform: translate(-50%, -50%) rotate(0.3deg) scale(1); }
   100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PARALLAX BACKGROUND
+═══════════════════════════════════════════════════════════════ */
+.parallax-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: -10%; left: -10%;
+  width: 120%;
+  height: 120%;
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+.parallax-far {
+  background: radial-gradient(ellipse 80% 60% at 20% 30%, rgba(155, 89, 182, 0.05) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 50% at 80% 70%, rgba(45, 27, 78, 0.06) 0%, transparent 60%);
+}
+
+
+.parallax-mid {
+  background-image:
+    linear-gradient(rgba(155, 89, 182, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155, 89, 182, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+
+.parallax-near {
+  background: radial-gradient(ellipse 50% 40% at 50% 50%, rgba(155, 89, 182, 0.04) 0%, transparent 70%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WINDOW MANAGER POLISH
+═══════════════════════════════════════════════════════════════ */
+.os-window {
+  cursor: default;
+}
+
+.os-window.window-maximized {
+  border-radius: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.window-header {
+  cursor: grab;
+  user-select: none;
+}
+
+.window-header:active {
+  cursor: grabbing;
+}
+
+/* Window control buttons */
+.win-minimize {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffbd2e;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.win-minimize::after {
+  content: '−';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #7a5a10;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.win-minimize:hover {
+  background: #ff9a00;
+  transform: scale(1.15);
+}
+
+.win-minimize:hover::after { opacity: 1; }
+
+.win-maximize {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #28c940;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.win-maximize::after {
+  content: '□';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #0d5a1a;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+
+.win-maximize:hover {
+  background: #00cc33;
+  transform: scale(1.15);
+}
+
+.win-maximize:hover::after { opacity: 1; }
+
+
+/* Glassmorphism inner glow on window top */
+.os-window::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DOCK MAGNIFICATION
+═══════════════════════════════════════════════════════════════ */
+.dock {
+  perspective: 800px;
+}
+
+
+.dock-item {
+  transform-style: preserve-3d;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.dock-item:hover {
+  transform: translateY(-18px) scale(1.6) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(155, 89, 182, 0.25) !important;
+  z-index: 10;
+}
+
+.dock-item.minimized {
+  opacity: 0.5;
+}
+
+.dock-item.minimized::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lilac);
+  box-shadow: 0 0 8px var(--lilac);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.4; transform: translateX(-50%) scale(0.7); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTEXT MENU
+═══════════════════════════════════════════════════════════════ */
+.context-menu {
+  position: fixed;
+  background: rgba(20, 20, 38, 0.95);
+  backdrop-filter: blur(40px) saturate(1.5);
+  border: 1px solid rgba(155, 89, 182, 0.2);
+  border-radius: 12px;
+  padding: 8px 0;
+  min-width: 200px;
+  z-index: 9000;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(155, 89, 182, 0.08);
+  animation: contextMenuIn 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes contextMenuIn {
+  from { opacity: 0; transform: scale(0.92) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.context-item {
+  display: block;
+  width: 100%;
+  padding: 10px 18px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.context-item:hover {
+  background: rgba(155, 89, 182, 0.2);
+  color: #fff;
+}
+
+.context-divider {
+  height: 1px;
+  background: rgba(155, 89, 182, 0.15);
+  margin: 6px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SETTINGS WINDOW
+═══════════════════════════════════════════════════════════════ */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(155, 89, 182, 0.1);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+
+.toggle-btn {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  background: rgba(155, 89, 182, 0.1);
+  color: var(--lilac);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-btn.on {
+  background: rgba(155, 89, 182, 0.25);
+  border-color: var(--lilac);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(155, 89, 182, 0.2);
+}
+
+
+.toggle-btn:hover {
+  background: rgba(155, 89, 182, 0.2);
+}
+

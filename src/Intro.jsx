@@ -622,18 +622,18 @@ export default function Intro() {
         <div
           className={`os-window ${openWindows.about ? 'open' : ''} ${shakingWindows.about ? 'window-shake' : ''} ${windowStates.about?.maximized ? 'window-maximized' : ''}`}
           style={{
-            left: windowStates.about?.maximized ? 0 : windowStates.about?.x,
-            top: windowStates.about?.maximized ? 0 : windowStates.about?.y,
+            left: windowStates.about?.maximized ? 0 : windowStates.about?.x || undefined,
+            top: windowStates.about?.maximized ? 0 : windowStates.about?.y || undefined,
             width: windowStates.about?.maximized ? '100%' : windowStates.about?.width || 560,
             height: windowStates.about?.maximized ? 'calc(100vh - 42px)' : 'auto',
-            zIndex: windowStates.about?.zIndex || 0,
-            display: windowStates.about?.minimized ? 'none' : 'flex',
-            transform: 'none',
+            zIndex: windowStates.about?.zIndex || 500,
+            display: windowStates.about?.minimized ? 'none' : undefined,
+            transform: windowStates.about?.maximized ? 'none' : undefined,
           }}
           onClick={() => bringToFront('about')}
           onMouseMove={(e) => onWindowDrag('about', e)}
           onMouseUp={() => stopWindowDrag('about')}
-          onMouseLeave={stopWeatherDrag}
+          onMouseLeave={() => stopWindowDrag('about')}
         >
           <div className="window-header" onMouseDown={(e) => startWindowDrag('about', e)} onDoubleClick={(e) => handleHeaderDoubleClick('about', e)}>
             <div className="window-controls">
@@ -674,18 +674,18 @@ export default function Intro() {
         <div
           className={`os-window window-projects ${openWindows.projects ? 'open' : ''} ${shakingWindows.projects ? 'window-shake' : ''} ${windowStates.projects?.maximized ? 'window-maximized' : ''}`}
           style={{
-            left: windowStates.projects?.maximized ? 0 : windowStates.projects?.x,
-            top: windowStates.projects?.maximized ? 0 : windowStates.projects?.y,
+            left: windowStates.projects?.maximized ? 0 : windowStates.projects?.x || undefined,
+            top: windowStates.projects?.maximized ? 0 : windowStates.projects?.y || undefined,
             width: windowStates.projects?.maximized ? '100%' : windowStates.projects?.width || 720,
             height: windowStates.projects?.maximized ? 'calc(100vh - 42px)' : 'auto',
-            zIndex: windowStates.projects?.zIndex || 0,
-            display: windowStates.projects?.minimized ? 'none' : 'flex',
-            transform: 'none',
+            zIndex: windowStates.projects?.zIndex || 500,
+            display: windowStates.projects?.minimized ? 'none' : undefined,
+            transform: windowStates.projects?.maximized ? 'none' : undefined,
           }}
           onClick={() => bringToFront('projects')}
           onMouseMove={(e) => onWindowDrag('projects', e)}
           onMouseUp={() => stopWindowDrag('projects')}
-          onMouseLeave={stopWeatherDrag}
+          onMouseLeave={() => stopWindowDrag('projects')}
         >
           <div className="window-header" onMouseDown={(e) => startWindowDrag('projects', e)} onDoubleClick={(e) => handleHeaderDoubleClick('projects', e)}>
             <div className="window-controls">
@@ -718,18 +718,18 @@ export default function Intro() {
         <div
           className={`os-window ${openWindows.contact ? 'open' : ''} ${shakingWindows.contact ? 'window-shake' : ''} ${windowStates.contact?.maximized ? 'window-maximized' : ''}`}
           style={{
-            left: windowStates.contact?.maximized ? 0 : windowStates.contact?.x,
-            top: windowStates.contact?.maximized ? 0 : windowStates.contact?.y,
+            left: windowStates.contact?.maximized ? 0 : windowStates.contact?.x || undefined,
+            top: windowStates.contact?.maximized ? 0 : windowStates.contact?.y || undefined,
             width: windowStates.contact?.maximized ? '100%' : windowStates.contact?.width || 560,
             height: windowStates.contact?.maximized ? 'calc(100vh - 42px)' : 'auto',
-            zIndex: windowStates.contact?.zIndex || 0,
-            display: windowStates.contact?.minimized ? 'none' : 'flex',
-            transform: 'none',
+            zIndex: windowStates.contact?.zIndex || 500,
+            display: windowStates.contact?.minimized ? 'none' : undefined,
+            transform: windowStates.contact?.maximized ? 'none' : undefined,
           }}
           onClick={() => bringToFront('contact')}
           onMouseMove={(e) => onWindowDrag('contact', e)}
           onMouseUp={() => stopWindowDrag('contact')}
-          onMouseLeave={stopWeatherDrag}
+          onMouseLeave={() => stopWindowDrag('contact')}
         >
           <div className="window-header" onMouseDown={(e) => startWindowDrag('contact', e)} onDoubleClick={(e) => handleHeaderDoubleClick('contact', e)}>
             <div className="window-controls">
@@ -809,13 +809,13 @@ export default function Intro() {
         <div
           className={`os-window ${openWindows.settings ? 'open' : ''} ${windowStates.settings?.maximized ? 'window-maximized' : ''}`}
           style={{
-            left: windowStates.settings?.maximized ? 0 : windowStates.settings?.x,
-            top: windowStates.settings?.maximized ? 0 : windowStates.settings?.y,
+            left: windowStates.settings?.maximized ? 0 : windowStates.settings?.x || undefined,
+            top: windowStates.settings?.maximized ? 0 : windowStates.settings?.y || undefined,
             width: windowStates.settings?.maximized ? '100%' : windowStates.settings?.width || 400,
             height: windowStates.settings?.maximized ? 'calc(100vh - 42px)' : 'auto',
-            zIndex: windowStates.settings?.zIndex || 0,
-            display: windowStates.settings?.minimized ? 'none' : 'flex',
-            transform: 'none',
+            zIndex: windowStates.settings?.zIndex || 500,
+            display: windowStates.settings?.minimized ? 'none' : undefined,
+            transform: windowStates.settings?.maximized ? 'none' : undefined,
           }}
           onClick={() => bringToFront('settings')}
           onMouseMove={(e) => onWindowDrag('settings', e)}
