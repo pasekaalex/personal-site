@@ -975,17 +975,76 @@ body {
 .start-menu-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+  gap: 10px;
+  padding: 12px 14px;
   border-bottom: 1px solid rgba(155, 89, 182, 0.2);
-  color: #9b59b6;
-  font-weight: 600;
-  font-size: 0.85rem;
 }
 
 .start-menu-logo {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+}
+
+.start-menu-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.start-menu-title > span:first-child {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.start-menu-time {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #9b59b6;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.start-menu-date {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.start-menu-section-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
+}
+
+.start-menu-quick-settings {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.start-menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.start-menu-toggle:hover {
+  background: rgba(155, 89, 182, 0.2);
+  border-color: rgba(155, 89, 182, 0.4);
+}
+
+.start-menu-toggle.active {
+  background: rgba(155, 89, 182, 0.25);
+  border-color: rgba(155, 89, 182, 0.5);
+  color: #fff;
 }
 
 

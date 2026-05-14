@@ -770,6 +770,7 @@ export default function Intro() {
             <span className="start-menu-logo">◉</span>
             <div className="start-menu-title">
               <span>paseka.dev</span>
+              <span className="start-menu-time">{formatTime(time)}</span>
               <span className="start-menu-date">{formatDate(time)}</span>
             </div>
           </div>
@@ -791,11 +792,6 @@ export default function Intro() {
                 <span className="stat-icon">⏱️</span>
                 <span className="stat-label">Session</span>
                 <span className="stat-value">{formatSessionTime(sessionTime)}</span>
-              </div>
-              <div className="start-menu-stat">
-                <span className="stat-icon">🕐</span>
-                <span className="stat-label">Time</span>
-                <span className="stat-value">{formatTime(time)}</span>
               </div>
               <div className="start-menu-stat click-counter" title="Total avatar clicks (hidden)">
                 <span className="stat-icon">🐭</span>
