@@ -139,12 +139,13 @@ export default function Intro() {
     restartTypingAnimation()
   }, [restartTypingAnimation])
 
-  // Mouse particle trail
+  // Cursor sparkle trail
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let animFrame
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
 
     const resize = () => {
       canvas.width = window.innerWidth
@@ -153,91 +154,34 @@ export default function Intro() {
     resize()
     window.addEventListener('resize', resize)
 
-    let pos = { x: 0, y: 0 }
+    let pos = { x: -100, y: -100 }
+    let trail = []
 
     const onMove = (e) => {
-      pos.x = e.clientX
-      pos.y = e.clientY
-      setMousePos({ x: e.clientX, y: e.clientY })
-      
-      // Add more particles for richer trail - ENHANCED
-      for (let i = 0; i < 5; i++) {
-        const id = ++particleIdRef.current
-        const p = { 
-          id, 
-          x: e.clientX + (Math.random() - 0.5) * 30,
-          y: e.clientY + (Math.random() - 0.5) * 30,
-          vx: (Math.random() - 0.5) * 3,
-          vy: (Math.random() - 0.5) * 3,
-          alpha: 1,
-          radius: Math.random() * 8 + 4,
-          color: Math.random() > 0.4 ? '#b87aff' : '#ff2d95'
-        }
-        setParticles(prev => [...prev.slice(-80), p])
-      }
+      pos = { x: e.clientX, y: e.clientY }
     }
-
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       
-      // Rain effect
-      if (rainModeRef.current) {
-        for (let i = 0; i < 3; i++) {
-          const x = Math.random() * canvas.width
-          const y = Math.random() * canvas.height
-          const length = Math.random() * 20 + 10
-          ctx.beginPath()
-          ctx.moveTo(x, y)
-          ctx.lineTo(x - 2, y + length)
-          ctx.strokeStyle = 'rgba(100, 150, 255, 0.3)'
-          ctx.lineWidth = 1
-          ctx.stroke()
-        }
-      }
+      // Add new sparkle at cursor
+      trail.push({ x: pos.x, y: pos.y, alpha: 1, size: Math.random() * 3 + 2 })
+      if (trail.length > 15) trail.shift()
       
-      setParticles(prev => {
-        const updated = prev.map(p => ({
-          ...p,
-          alpha: p.alpha - 0.02,
-          radius: p.radius * 0.98,
-          x: p.x + (p.vx || 0) + (Math.random() - 0.5) * 0.5,
-          y: p.y + (p.vy || 0) - 0.3
-        })).filter(p => p.alpha > 0)
-        
-        updated.forEach(p => {
-          // Big outer glow
+      // Draw trail
+      trail.forEach((t, i) => {
+        t.alpha -= 0.08
+        if (t.alpha > 0) {
           ctx.beginPath()
-          ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(184, 122, 255, ${p.alpha * 0.1})`
+          ctx.arc(t.x, t.y, t.size * t.alpha, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(184, 122, 255, ${t.alpha})`
           ctx.fill()
-          
-          // Medium glow
-          ctx.beginPath()
-          ctx.arc(p.x, p.y, p.radius * 2.5, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(255, 45, 149, ${p.alpha * 0.2})`
-          ctx.fill()
-          
-          // Inner core
-          ctx.beginPath()
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-          ctx.fillStyle = p.color + Math.floor(p.alpha * 255).toString(16).padStart(2, '0')
-          ctx.fill()
-        })
-        
-        return updated
+        }
       })
+      
+      trail = trail.filter(t => t.alpha > 0)
 
-
-      // Stronger mouse glow aura
-      const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 100)
-      gradient.addColorStop(0, 'rgba(155, 89, 182, 0.25)')
-      gradient.addColorStop(0.5, 'rgba(155, 89, 182, 0.08)')
-      gradient.addColorStop(1, 'rgba(155, 89, 182, 0)')
-      ctx.fillStyle = gradient
-      ctx.fillRect(pos.x - 100, pos.y - 100, 200, 200)
-
-      animFrame = requestAnimationFrame(animate)
+      requestAnimationFrame(animate)
     }
 
     window.addEventListener('mousemove', onMove)
@@ -246,7 +190,6 @@ export default function Intro() {
     return () => {
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(animFrame)
     }
   }, [])
 
@@ -389,7 +332,7 @@ export default function Intro() {
   return (
     <div className="os-container">
       {/* Particle Canvas */}
-      <canvas ref={canvasRef} className="particle-canvas" style={{display: 'none'}} />
+      <canvas ref={canvasRef} className="particle-canvas" />
       <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'sax-jazz' : selectedTrack === 'piano' ? 'piano-v2' : 'rain-sounds'}.mp3`} loop volume={musicVolume} />
 
       {/* Animated Background */}
