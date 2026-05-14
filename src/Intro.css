@@ -1875,6 +1875,22 @@ body {
   background: rgba(255, 255, 255, 0.5);
   color: #333;
 }
+.light-mode .desktop-icon {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+.light-mode .desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(155, 89, 182, 0.3);
+}
+.light-mode .desktop-icon .icon-label {
+  color: #333;
+}
+.light-mode .bg-scanlines {
+  display: none;
+}
+
 .light-mode .start-menu-item:hover {
   background: rgba(255, 255, 255, 0.8);
 }
