@@ -88,6 +88,7 @@ export default function Intro() {
   const fullName = 'ALEX PASEKA'
   const [avatarClicks, setAvatarClicks] = useState(0)
   const [crazyMode, setCrazyMode] = useState(false)
+  const [sessionTime, setSessionTime] = useState(0)
   const avatarClickTimer = useRef(null)
   const [activeWindow, setActiveWindow] = useState(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
@@ -120,6 +121,12 @@ export default function Intro() {
   // Clock
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  // Session timer
+  useEffect(() => {
+    const timer = setInterval(() => setSessionTime(prev => prev + 1), 1000)
     return () => clearInterval(timer)
   }, [])
 
@@ -280,6 +287,15 @@ export default function Intro() {
 
   const formatDate = (date) => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  const formatSessionTime = (seconds) => {
+    const hrs = Math.floor(seconds / 3600)
+    const mins = Math.floor((seconds % 3600) / 60)
+    const secs = seconds % 60
+    if (hrs > 0) return `${hrs}h ${mins}m ${secs}s`
+    if (mins > 0) return `${mins}m ${secs}s`
+    return `${secs}s`
   }
 
   const toggleMusic = () => {
@@ -680,6 +696,19 @@ export default function Intro() {
             <span className="start-menu-logo">◉</span>
             <span>paseka.dev</span>
           </div>
+          <div className="start-menu-stats">
+            <div className="start-menu-stat">
+              <span className="stat-icon">⏱️</span>
+              <span className="stat-label">Session</span>
+              <span className="stat-value">{formatSessionTime(sessionTime)}</span>
+            </div>
+            <div className="start-menu-stat">
+              <span className="stat-icon">🕐</span>
+              <span className="stat-label">Time</span>
+              <span className="stat-value">{formatTime(time)}</span>
+            </div>
+          </div>
+          <div className="start-menu-divider"></div>
           <div className="start-menu-apps">
             {DESKTOP_ICONS.map(icon => (
               <button

@@ -988,6 +988,38 @@ body {
   font-size: 1.2rem;
 }
 
+
+.start-menu-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.start-menu-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+.stat-icon {
+  font-size: 0.9rem;
+}
+.stat-label {
+  color: rgba(255,255,255,0.6);
+  flex: 1;
+}
+.stat-value {
+  color: #fff;
+  font-weight: 500;
+}
+.start-menu-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 8px 0;
+}
 .start-menu-apps {
   display: flex;
   flex-direction: column;
@@ -2044,4 +2076,17 @@ body {
 .music-popup-taskbar.show {
   display: block !important;
   visibility: visible !important;
+}
+
+.light-mode .start-menu-stats {
+  background: rgba(0,0,0,0.05);
+}
+.light-mode .stat-label {
+  color: rgba(0,0,0,0.5);
+}
+.light-mode .stat-value {
+  color: #333;
+}
+.light-mode .start-menu-divider {
+  background: rgba(0,0,0,0.1);
 }
