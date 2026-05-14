@@ -811,20 +811,6 @@ export default function Intro() {
         </div>
       )}
 
-      {/* Dock */}
-      <div className="dock">
-        {DESKTOP_ICONS.map(icon => (
-          <button
-            key={icon.id}
-            className={`dock-item ${openWindows[icon.id] ? 'open' : ''}`}
-            onClick={() => openWindow(icon.id)}
-            title={icon.label}
-          >
-            <img src={icon.icon} alt={icon.label} className="dock-icon" />
-          </button>
-        ))}
-      </div>
-
       {/* Taskbar */}
       <div className="taskbar">
         <div className="taskbar-left">
@@ -834,9 +820,6 @@ export default function Intro() {
           </button>
         </div>
         <div className="taskbar-right">
-          <button className="music-toggle" onClick={() => openWindow('music')} title="Music Player">
-            🎵
-          </button>
           <button className="rain-toggle" onClick={() => {
             const newVal = !rainMode
             setRainMode(newVal)
