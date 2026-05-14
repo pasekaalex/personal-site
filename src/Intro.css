@@ -454,19 +454,38 @@ body {
 
 .window-controls {
   display: flex;
+  margin-left: auto;
   gap: 8px;
 }
 
 .win-close {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
   background: #ff5f57;
   border: none;
   cursor: pointer;
   transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.win-close::after {
+  content: "×";
+  font-size: 16px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.6);
+  line-height: 1;
+}
+
+.win-close:hover {
+  background: #ff3b30;
+  transform: scale(1.1);
+}
+
+.win-close:hover::after {
+  color: rgba(0,0,0,0.8);
 }
 
 .win-close::after {
