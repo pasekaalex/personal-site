@@ -250,7 +250,7 @@ body {
   letter-spacing: 0.05em;
   margin-bottom: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: default;
+  cursor: pointer;
 }
 
 .desktop-title:hover {

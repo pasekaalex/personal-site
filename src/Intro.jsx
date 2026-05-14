@@ -399,7 +399,23 @@ export default function Intro() {
 
         {/* Title Block */}
         <div className="title-block">
-          <h1 className="desktop-title">
+          <h1 className="desktop-title" onDoubleClick={() => {
+            // Double click name effect - burst of sparkles
+            const rect = document.querySelector('.desktop-title').getBoundingClientRect()
+            const centerX = rect.left + rect.width / 2
+            const centerY = rect.top + rect.height / 2
+            for (let i = 0; i < 20; i++) {
+              const p = {
+                id: Date.now() + i,
+                x: centerX + (Math.random() - 0.5) * 100,
+                y: centerY + (Math.random() - 0.5) * 50,
+                alpha: 1,
+                radius: Math.random() * 6 + 4,
+                color: Math.random() > 0.5 ? '#9b59b6' : '#ff2d95'
+              }
+              setParticles(prev => [...prev.slice(-60), p])
+            }
+          }}>
             <span className="title-typed">{typedName}</span><span className="cursor-blink">|</span>
           </h1>
           <div className="title-divider" />
