@@ -6,7 +6,6 @@ const DESKTOP_ICONS = [
   { id: 'about', icon: '/icons/about.png', label: 'About' },
   { id: 'projects', icon: '/icons/projects.png', label: 'Projects' },
   { id: 'contact', icon: '/icons/contact.png', label: 'Contact' },
-  { id: 'weather', icon: '🌤', label: 'Weather' },
 ]
 
 // Projects data
@@ -249,6 +248,27 @@ export default function Intro() {
       <div className="bg-vignette" />
       <div className="bg-scanlines" />
 
+      {/* Fixed Weather Widget */}
+      <div className="weather-widget">
+        <div className="weather-header">
+          <span className="weather-title">Weather</span>
+          <button className="weather-toggle" onClick={() => document.querySelector('.weather-widget').classList.toggle('collapsed')}>−</button>
+        </div>
+        <div className="weather-body">
+          <div className="weather-input-row">
+            <input type="text" placeholder="Zip" className="weather-input" id="weatherZip" maxLength={5} />
+            <button className="weather-search" onClick={fetchWeather}>→</button>
+          </div>
+          <div id="weatherDisplay" className="weather-display" style={{display: 'none'}}>
+            <span className="weather-icon" id="weatherIcon">☀️</span>
+            <span className="weather-temp" id="weatherTemp">--°</span>
+            <span className="weather-details" id="weatherCondition">--</span>
+            <span className="weather-highlow" id="weatherHighLow">--</span>
+          </div>
+          <div id="weatherError" className="weather-error" style={{display: 'none'}}>Not found</div>
+        </div>
+      </div>
+
       {/* Desktop Layout */}
       <div className="desktop-layout">
         {/* Avatar Section */}
@@ -401,42 +421,6 @@ export default function Intro() {
                 </a>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* WEATHER Window */}
-      {openWindows.weather && (
-        <div className={`os-window ${openWindows.weather ? 'open' : ''}`} onClick={() => setActiveWindow('weather')}>
-          <div className="window-header">
-            <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('weather', e)}>×</button>
-            </div>
-            <span className="window-title">Weather</span>
-            <div className="window-spacer" />
-          </div>
-          <div className="window-content weather-content">
-            <div className="weather-input-row">
-              <input
-                type="text"
-                placeholder="Enter zip code"
-                className="weather-input"
-                id="weatherZip"
-                maxLength={5}
-              />
-              <button className="weather-search" onClick={fetchWeather}>→</button>
-            </div>
-            <div id="weatherDisplay" className="weather-display" style={{display: 'none'}}>
-              <div className="weather-main">
-                <span className="weather-icon" id="weatherIcon">☀️</span>
-                <span className="weather-temp" id="weatherTemp">72°</span>
-              </div>
-              <div className="weather-details">
-                <span id="weatherCondition">Sunny</span>
-                <span className="weather-highlow" id="weatherHighLow">H: 78° L: 65°</span>
-              </div>
-            </div>
-            <div id="weatherError" className="weather-error" style={{display: 'none'}}>Invalid zip code</div>
           </div>
         </div>
       )}
