@@ -1562,3 +1562,32 @@ body {
 .project-detail-link.primary:hover {
   background: #a86bc4;
 }
+
+/* Music Track Selector */
+.music-track-select {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.track-btn {
+  flex: 1;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.track-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.track-btn.active {
+  background: rgba(155, 89, 182, 0.3);
+  border-color: rgba(155, 89, 182, 0.5);
+  color: #fff;
+}

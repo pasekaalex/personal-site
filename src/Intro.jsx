@@ -77,6 +77,7 @@ export default function Intro() {
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicVolume, setMusicVolume] = useState(0.5)
+  const [selectedTrack, setSelectedTrack] = useState('jazz')
   const [selectedProject, setSelectedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
   const rainModeRef = useRef(false)
@@ -353,13 +354,17 @@ export default function Intro() {
     <div className="os-container">
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
-      <audio ref={audioRef} src="/jazz-chill.mp3" loop volume={musicVolume} />
+      <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'jazz-chill' : 'piano-chill'}.mp3`} loop volume={musicVolume} />
 
       {/* Music Player Popup */}
       {musicPlaying && (
         <div className="music-popup">
           <div className="music-header">Now Playing</div>
-          <div className="music-info">Chill Jazz Vibes</div>
+          <div className="music-info">{selectedTrack === 'jazz' ? 'Chill Jazz Vibes' : 'Piano Dreams'}</div>
+          <div className="music-track-select">
+            <button className={`track-btn ${selectedTrack === 'jazz' ? 'active' : ''}`} onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/jazz-chill.mp3'; audioRef.current.play() } }}>🎷 Jazz</button>
+            <button className={`track-btn ${selectedTrack === 'piano' ? 'active' : ''}`} onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-chill.mp3'; audioRef.current.play() } }}>🎹 Piano</button>
+          </div>
           <input
             type="range"
             min="0"
