@@ -1265,3 +1265,67 @@ body {
   background: rgba(100, 150, 255, 0.4);
   transform: scale(1.05);
 }
+
+/* Music Popup */
+.music-popup {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  background: rgba(15, 15, 25, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  min-width: 180px;
+  z-index: 200;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.music-header {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #9b59b6;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.music-info {
+  font-size: 0.85rem;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.volume-slider {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #9b59b6;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
+}
+
+.music-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.music-close:hover {
+  color: #fff;
+}

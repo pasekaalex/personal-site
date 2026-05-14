@@ -67,6 +67,7 @@ export default function Intro() {
   const [openWindows, setOpenWindows] = useState({})
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
+  const [musicVolume, setMusicVolume] = useState(0.5)
   const [rainMode, setRainMode] = useState(false)
   const rainModeRef = useRef(false)
   const [typedName, setTypedName] = useState('')
@@ -331,7 +332,29 @@ export default function Intro() {
     <div className="os-container">
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
-      <audio ref={audioRef} src="/jazz-chill.mp3" loop />
+      <audio ref={audioRef} src="/jazz-chill.mp3" loop volume={musicVolume} />
+
+      {/* Music Player Popup */}
+      {musicPlaying && (
+        <div className="music-popup">
+          <div className="music-header">Now Playing</div>
+          <div className="music-info">Chill Jazz Vibes</div>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={musicVolume}
+            onChange={(e) => {
+              const v = parseFloat(e.target.value)
+              setMusicVolume(v)
+              if (audioRef.current) audioRef.current.volume = v
+            }}
+            className="volume-slider"
+          />
+          <button className="music-close" onClick={() => { audioRef.current?.pause(); setMusicPlaying(false) }}>×</button>
+        </div>
+      )}
 
       {/* Animated Background */}
       <div className="bg-layer" />
