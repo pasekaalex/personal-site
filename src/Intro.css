@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════
    FONTS
 ═══════════════════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 /* ═══════════════════════════════════════════════════════════════
    CSS VARIABLES
@@ -243,11 +243,9 @@ body {
 }
 
 .desktop-title {
-  font-family: 'Orbitron', sans-serif;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 900;
   line-height: 1.1;
-  letter-spacing: 0.05em;
   margin-bottom: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
@@ -257,18 +255,21 @@ body {
 
 .desktop-title:hover {
   transform: scale(1.03);
-  text-shadow: 0 0 40px var(--lilac), 0 0 80px rgba(155, 89, 182, 0.5), 0 0 120px rgba(155, 89, 182, 0.3) !important;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 215, 0, 0.7), 0 0 80px rgba(255, 215, 0, 0.4) !important;
 }
 
 .title-typed {
-  color: #7b3db3;
-  text-shadow: 0 0 30px rgba(123, 61, 179, 0.6), 0 0 60px rgba(123, 61, 179, 0.3);
+  color: #2a1a4a;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3), 0 0 60px rgba(255, 215, 0, 0.1);
   animation: titleGlow 3s ease-in-out infinite;
+  font-family: 'Playfair Display', 'Cinzel', serif;
+  letter-spacing: 0.1em;
 }
 
 
 .cursor-blink {
-  color: var(--lilac);
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
   animation: blink 0.8s step-end infinite;
   margin-left: 2px;
 }
