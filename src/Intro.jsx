@@ -66,13 +66,6 @@ const PROJECTS = [
     github: 'https://github.com/pasekaalex/bulk',
     desc: 'Endless runner game'
   },
-  {
-    name: 'Ready Heady',
-    img: null,
-    url: 'https://github.com/pasekaalex/readyheady',
-    github: 'https://github.com/pasekaalex/readyheady',
-    desc: 'Timing challenge game'
-  },
 ]
 
 // Skills data
