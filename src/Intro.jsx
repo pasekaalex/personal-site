@@ -389,7 +389,7 @@ export default function Intro() {
   return (
     <div className="os-container">
       {/* Particle Canvas */}
-      <canvas ref={canvasRef} className="particle-canvas" />
+      <canvas ref={canvasRef} className="particle-canvas" style={{display: 'none'}} />
       <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'sax-jazz' : selectedTrack === 'piano' ? 'piano-v2' : 'rain-sounds'}.mp3`} loop volume={musicVolume} />
 
       {/* Animated Background */}
