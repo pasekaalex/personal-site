@@ -123,18 +123,20 @@ export default function Intro() {
       pos.y = e.clientY
       setMousePos({ x: e.clientX, y: e.clientY })
       
-      // Add more particles for richer trail
-      for (let i = 0; i < 3; i++) {
+      // Add more particles for richer trail - ENHANCED
+      for (let i = 0; i < 5; i++) {
         const id = ++particleIdRef.current
         const p = { 
           id, 
-          x: e.clientX + (Math.random() - 0.5) * 20,
-          y: e.clientY + (Math.random() - 0.5) * 20,
-          alpha: 0.9,
-          radius: Math.random() * 5 + 3,
-          color: Math.random() > 0.3 ? '#9b59b6' : '#c39bd3'
+          x: e.clientX + (Math.random() - 0.5) * 30,
+          y: e.clientY + (Math.random() - 0.5) * 30,
+          vx: (Math.random() - 0.5) * 3,
+          vy: (Math.random() - 0.5) * 3,
+          alpha: 1,
+          radius: Math.random() * 8 + 4,
+          color: Math.random() > 0.4 ? '#b87aff' : '#ff2d95'
         }
-        setParticles(prev => [...prev.slice(-50), p])
+        setParticles(prev => [...prev.slice(-80), p])
       }
     }
 
@@ -160,26 +162,26 @@ export default function Intro() {
       setParticles(prev => {
         const updated = prev.map(p => ({
           ...p,
-          alpha: p.alpha - 0.025,
-          radius: p.radius * 0.97,
-          x: p.x + (Math.random() - 0.5) * 1.5,
-          y: p.y - 0.8
+          alpha: p.alpha - 0.02,
+          radius: p.radius * 0.98,
+          x: p.x + (p.vx || 0) + (Math.random() - 0.5) * 0.5,
+          y: p.y + (p.vy || 0) - 0.3
         })).filter(p => p.alpha > 0)
         
         updated.forEach(p => {
-          // Outer glow
+          // Big outer glow
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(184, 122, 255, ${p.alpha * 0.1})`
+          ctx.fill()
+          
+          // Medium glow
           ctx.beginPath()
           ctx.arc(p.x, p.y, p.radius * 2.5, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(155, 89, 182, ${p.alpha * 0.15})`
+          ctx.fillStyle = `rgba(255, 45, 149, ${p.alpha * 0.2})`
           ctx.fill()
           
-          // Inner glow
-          ctx.beginPath()
-          ctx.arc(p.x, p.y, p.radius * 1.5, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(195, 155, 211, ${p.alpha * 0.3})`
-          ctx.fill()
-          
-          // Core
+          // Inner core
           ctx.beginPath()
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
           ctx.fillStyle = p.color + Math.floor(p.alpha * 255).toString(16).padStart(2, '0')
