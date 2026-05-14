@@ -529,7 +529,7 @@ export default function Intro() {
 
       {/* PROJECTS Window */}
       {openWindows.projects && (
-        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''}`} onClick={() => setActiveWindow('projects')}>
+        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''}`} onClick={() => setActiveWindow('projects')} onMouseDown={(e) => handleWindowMouseDown(e, 'projects')}>
           <div className="window-header">
             <div className="window-controls">
               <button className="win-close" onClick={(e) => closeWindow('projects', e)}>×</button>
@@ -585,65 +585,7 @@ export default function Intro() {
         </div>
       )}
 
-      {/* PROJECTS Window */}
-      {openWindows.projects && (
-        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''}`} onClick={() => setActiveWindow('projects')}>
-          <div className="window-header">
-            <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('projects', e)}>×</button>
-            </div>
-            <span className="window-title">Projects</span>
-            <div className="window-spacer" />
-          </div>
-          <div className="window-content">
-            <div className="projects-grid">
-              {PROJECTS.map((proj, i) => (
-                <button key={i} className="project-card" onClick={() => setSelectedProject(proj)}>
-                  <div className="project-image-wrap">
-                    {proj.img ? (
-                      <img src={proj.img} alt={proj.name} className="project-image" />
-                    ) : (
-                      <div className="project-emoji-placeholder">⏱️</div>
-                    )}
-                    <div className="project-overlay" />
-                  </div>
-                  <div className="project-name">{proj.name}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Project Detail Modal */}
-      {selectedProject && (
-        <div className="project-detail-modal" onClick={() => setSelectedProject(null)}>
-          <div className="project-detail-content" onClick={e => e.stopPropagation()}>
-            <button className="project-detail-close" onClick={() => setSelectedProject(null)}>×</button>
-            <div className="project-detail-image">
-              {selectedProject.img ? (
-                <img src={selectedProject.img} alt={selectedProject.name} />
-              ) : (
-                <div className="project-emoji-placeholder">⏱️</div>
-              )}
-            </div>
-            <h2 className="project-detail-name">{selectedProject.name}</h2>
-            <p className="project-detail-desc">{selectedProject.desc}</p>
-            <div className="project-detail-links">
-              <a href={selectedProject.url} target="_blank" rel="noopener" className="project-detail-link primary">
-                Visit Project →
-              </a>
-              {selectedProject.github && (
-                <a href={selectedProject.github} target="_blank" rel="noopener" className="project-detail-link">
-                  View on GitHub ↗
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-            {/* CONTACT Window */}
+      {/* CONTACT Window */}
       {openWindows.contact && (() => {
         const pos = getWindowPosition('contact')
         const zIndex = highestZIndex.current
