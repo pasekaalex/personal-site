@@ -2038,3 +2038,10 @@ body {
 .light-mode .start-menu span {
   color: #333;
 }
+
+/* Force show weather popup */
+.weather-popup-taskbar.show,
+.music-popup-taskbar.show {
+  display: block !important;
+  visibility: visible !important;
+}
