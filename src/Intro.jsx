@@ -673,8 +673,8 @@ export default function Intro() {
             <h2 className="project-detail-name">{selectedProject.name}</h2>
             <p className="project-detail-desc">{selectedProject.desc}</p>
             <div className="project-detail-links">
-              <button className="project-detail-link primary" onClick={() => { setEmbeddedProject(selectedProject); setSelectedProject(null); openWindow('project-embed'); }}>
-                Open in Window ↗
+              <button className="project-detail-link primary" onClick={() => { window.open(selectedProject.url, '_blank') }}>
+                Open in New Tab ↗
               </button>
               <a href={selectedProject.url} target="_blank" rel="noopener" className="project-detail-link">
                 Visit Project →
@@ -689,44 +689,7 @@ export default function Intro() {
         </div>
       )}
 
-      {/* PROJECT EMBED Window */}
-      {openWindows['project-embed'] && embeddedProject && (() => {
-        const pos = getWindowPosition('project-embed')
-        const zIndex = highestZIndex.current
-        return (
-        <div 
-          className={`os-window project-embed-window open`} 
-          onClick={() => setActiveWindow('project-embed')}
-          style={{
-            transform: 'none',
-            left: pos.x,
-            top: pos.y,
-            zIndex,
-            transition: dragState.dragging && dragState.windowId === 'project-embed' ? 'none' : undefined
-          }}
-        >
-          <div 
-            className="window-header"
-            style={{ cursor: 'move' }}
-            onMouseDown={(e) => handleWindowMouseDown(e, 'project-embed')}
-          >
-            <div className="window-controls">
-              <button className="win-close" onClick={(e) => { closeWindow('project-embed', e); setEmbeddedProject(null) }}>×</button>
-            </div>
-            <span className="window-title">{embeddedProject.name}</span>
-            <div className="window-spacer" />
-          </div>
-          <div className="window-content project-embed-content">
-            <iframe 
-              src={embeddedProject.url} 
-              title={embeddedProject.name}
-              sandbox="allow-scripts allow-same-origin allow-popups"
-              allow="fullscreen"
-            />
-          </div>
-        </div>
-        )
-      })()}
+
 
       {/* TERMINAL Window */}
       {openWindows.terminal && (() => {
