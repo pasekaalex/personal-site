@@ -371,7 +371,7 @@ export default function Intro() {
   }, [dragState])
 
   const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' })
   }
 
   const formatDate = (date) => {
@@ -976,7 +976,7 @@ export default function Intro() {
           </button>
           <span className="taskbar-date">{formatDate(time)}</span>
           <span className="taskbar-sep">|</span>
-          <span className="taskbar-clock">{formatTime(time)}</span>
+          <span className="taskbar-clock" style={{fontVariantNumeric: 'tabular-nums', minWidth: '75px'}}>{formatTime(time)}</span>
         </div>
       </div>
     </div>
