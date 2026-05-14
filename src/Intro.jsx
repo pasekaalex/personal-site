@@ -122,7 +122,8 @@ export default function Intro() {
   }, [])
 
   // Typing animation for name
-  useEffect(() => {
+  const restartTypingAnimation = () => {
+    setTypedName('')
     let i = 0
     const interval = setInterval(() => {
       if (i <= fullName.length) {
@@ -132,8 +133,7 @@ export default function Intro() {
         clearInterval(interval)
       }
     }, 100)
-    return () => clearInterval(interval)
-  }, [])
+  }
 
   // Mouse particle trail
   useEffect(() => {
@@ -423,6 +423,7 @@ export default function Intro() {
         {/* Title Block */}
         <div className="title-block">
           <h1 className="desktop-title" onDoubleClick={() => {
+            restartTypingAnimation()
             // Double click name effect - burst of sparkles
             const rect = document.querySelector('.desktop-title').getBoundingClientRect()
             const centerX = rect.left + rect.width / 2

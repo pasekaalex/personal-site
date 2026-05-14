@@ -277,8 +277,7 @@ body {
 
 
 .cursor-blink {
-  color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+  color: #ffffff;
   animation: blink 0.8s step-end infinite;
   margin-left: 2px;
 }
