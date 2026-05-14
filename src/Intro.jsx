@@ -578,9 +578,26 @@ export default function Intro() {
         )})()}
 
       {/* PROJECTS Window */}
-      {openWindows.projects && (
-        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''}`} onClick={() => setActiveWindow('projects')}>
-          <div className="window-header" style={{ cursor: 'move' }} onMouseDown={(e) => handleWindowMouseDown(e, 'projects')}>
+      {openWindows.projects && (() => {
+        const pos = getWindowPosition('projects')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window window-projects open`} 
+          onClick={() => setActiveWindow('projects')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex,
+            transition: dragState.dragging && dragState.windowId === 'projects' ? 'none' : undefined
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'projects')}
+          >
             <div className="window-controls">
               <button className="win-close" onClick={(e) => closeWindow('projects', e)}>×</button>
             </div>
@@ -605,7 +622,8 @@ export default function Intro() {
             </div>
           </div>
         </div>
-      )}
+        )
+      })()}
 
       {/* Project Detail Modal */}
       {selectedProject && (
