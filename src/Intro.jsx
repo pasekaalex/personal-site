@@ -6,7 +6,6 @@ const DESKTOP_ICONS = [
   { id: 'about', icon: '/icons/about.png', label: 'About' },
   { id: 'projects', icon: '/icons/projects.png', label: 'Projects' },
   { id: 'contact', icon: '/icons/contact.png', label: 'Contact' },
-  { id: 'music', icon: '/icons/music.png', label: 'Music' },
 ]
 
 // Projects data
