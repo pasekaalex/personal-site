@@ -73,7 +73,12 @@ const PROJECTS = [
 
 export default function Intro() {
   const [time, setTime] = useState(new Date())
-  const [openWindows, setOpenWindows] = useState({})
+  const [openWindows, setOpenWindows] = useState({
+    about: false,
+    projects: false,
+    contact: false,
+    terminal: false,
+  })
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(true)
   const [musicVolume, setMusicVolume] = useState(0.2)
@@ -116,10 +121,14 @@ export default function Intro() {
   const getWindowPosition = (windowId) => {
     if (windowPositions[windowId]) return windowPositions[windowId]
     // Default centered
-    if (windowId === 'project-embed') {
-      return { x: window.innerWidth / 2 - 540, y: window.innerHeight / 2 - 350 }
+    const defaults = {
+      'project-embed': { x: window.innerWidth / 2 - 540, y: window.innerHeight / 2 - 350 },
+      'terminal': { x: window.innerWidth / 2 - 200, y: window.innerHeight / 2 - 200 },
+      'about': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
+      'projects': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
+      'contact': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
     }
-    return { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
+    return defaults[windowId] || { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
   }
   // Autoplay piano on mount
   useEffect(() => {
