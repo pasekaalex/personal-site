@@ -83,6 +83,7 @@ export default function Intro() {
   const [musicVolume, setMusicVolume] = useState(0.2)
   const [selectedTrack, setSelectedTrack] = useState('piano')
   const [selectedProject, setSelectedProject] = useState(null)
+  const [projectsView, setProjectsView] = useState('gallery')
   const [embeddedProject, setEmbeddedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
   const [raining, setRaining] = useState(false)
@@ -633,57 +634,53 @@ export default function Intro() {
             <span className="window-title">Projects</span>
             <div className="window-spacer" />
           </div>
-          <div className="window-content">
-            <div className="projects-grid">
-              {PROJECTS.map((proj, i) => (
-                <button key={i} className="project-card" onClick={() => setSelectedProject(proj)}>
-                  <div className="project-image-wrap">
-                    {proj.img ? (
-                      <img src={proj.img} alt={proj.name} className="project-image" />
-                    ) : (
-                      <div className="project-emoji-placeholder">⏱️</div>
-                    )}
-                    <div className="project-overlay" />
-                  </div>
-                  <div className="project-name">{proj.name}</div>
-                </button>
-              ))}
-            </div>
+          <div className="window-content" style={{padding: projectsView === 'detail' ? '20px' : '0'}}>
+            {projectsView === 'gallery' ? (
+              <div className="projects-grid">
+                {PROJECTS.map((proj, i) => (
+                  <button key={i} className="project-card" onClick={() => { setSelectedProject(proj); setProjectsView('detail'); }}>
+                    <div className="project-image-wrap">
+                      {proj.img ? (
+                        <img src={proj.img} alt={proj.name} className="project-image" />
+                      ) : (
+                        <div className="project-emoji-placeholder">⏱️</div>
+                      )}
+                      <div className="project-overlay" />
+                    </div>
+                    <div className="project-name">{proj.name}</div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="project-detail-view">
+                <button className="project-back-btn" onClick={() => setProjectsView('gallery')}>← Back</button>
+                <div className="project-detail-full-image">
+                  {selectedProject && selectedProject.img ? (
+                    <img src={selectedProject.img} alt={selectedProject.name} />
+                  ) : (
+                    <div className="project-emoji-placeholder">⏱️</div>
+                  )}
+                </div>
+                <h2 className="project-detail-full-name">{selectedProject ? selectedProject.name : ''}</h2>
+                <p className="project-detail-full-desc">{selectedProject ? selectedProject.desc : ''}</p>
+                <div className="project-detail-full-links">
+                  {selectedProject && (
+                    <>
+                      <a href={selectedProject.url} target="_blank" rel="noopener" className="project-link-btn primary">Visit Project</a>
+                      {selectedProject.github && (
+                        <a href={selectedProject.github} target="_blank" rel="noopener" className="project-link-btn">GitHub</a>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
         )
       })()}
 
-      {/* Project Detail Modal */}
-      {selectedProject && (
-        <div className="project-detail-modal" onClick={() => setSelectedProject(null)}>
-          <div className="project-detail-content" onClick={e => e.stopPropagation()}>
-            <button className="project-detail-close" onClick={() => setSelectedProject(null)}>×</button>
-            <div className="project-detail-image">
-              {selectedProject.img ? (
-                <img src={selectedProject.img} alt={selectedProject.name} />
-              ) : (
-                <div className="project-emoji-placeholder">⏱️</div>
-              )}
-            </div>
-            <h2 className="project-detail-name">{selectedProject.name}</h2>
-            <p className="project-detail-desc">{selectedProject.desc}</p>
-            <div className="project-detail-links">
-              <button className="project-detail-link primary" onClick={() => { window.open(selectedProject.url, '_blank') }}>
-                Open in New Tab ↗
-              </button>
-              <a href={selectedProject.url} target="_blank" rel="noopener" className="project-detail-link">
-                Visit Project →
-              </a>
-              {selectedProject.github && (
-                <a href={selectedProject.github} target="_blank" rel="noopener" className="project-detail-link">
-                  View on GitHub ↗
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+
 
 
 

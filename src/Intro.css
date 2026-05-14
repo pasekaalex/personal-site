@@ -2397,3 +2397,86 @@ body {
   background: rgba(155, 89, 182, 0.2);
   border-color: rgba(155, 89, 182, 0.4);
 }
+
+
+/* Project Detail View (inside Projects window) */
+.project-detail-view {
+  padding: 20px;
+  text-align: center;
+}
+
+.project-back-btn {
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  color: #9b59b6;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.project-back-btn:hover {
+  background: rgba(155, 89, 182, 0.3);
+}
+
+.project-detail-full-image {
+  width: 100%;
+  max-height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.project-detail-full-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.project-detail-full-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.project-detail-full-desc {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.project-detail-full-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.project-link-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s;
+}
+
+.project-link-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.project-link-btn.primary {
+  background: #9b59b6;
+  border-color: #9b59b6;
+  color: #fff;
+}
+
+.project-link-btn.primary:hover {
+  background: #8e44ad;
+}
+
