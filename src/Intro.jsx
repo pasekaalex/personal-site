@@ -619,9 +619,26 @@ export default function Intro() {
 
       {/* ABOUT Window */}
       {openWindows.about && (
-        <div className={`os-window ${openWindows.about ? 'open' : ''} ${shakingWindows.about ? 'window-shake' : ''}`} onClick={() => setActiveWindow('about')}>
-          <div className="window-header" onClick={(e) => handleWindowHeaderClick('about', e)}>
+        <div
+          className={`os-window ${openWindows.about ? 'open' : ''} ${shakingWindows.about ? 'window-shake' : ''} ${windowStates.about?.maximized ? 'window-maximized' : ''}`}
+          style={{
+            left: windowStates.about?.maximized ? 0 : windowStates.about?.x,
+            top: windowStates.about?.maximized ? 0 : windowStates.about?.y,
+            width: windowStates.about?.maximized ? '100%' : windowStates.about?.width || 560,
+            height: windowStates.about?.maximized ? 'calc(100vh - 42px)' : 'auto',
+            zIndex: windowStates.about?.zIndex || 0,
+            display: windowStates.about?.minimized ? 'none' : 'flex',
+            transform: 'none',
+          }}
+          onClick={() => bringToFront('about')}
+          onMouseMove={(e) => onWindowDrag('about', e)}
+          onMouseUp={() => stopWindowDrag('about')}
+          onMouseLeave={stopWeatherDrag}
+        >
+          <div className="window-header" onMouseDown={(e) => startWindowDrag('about', e)} onDoubleClick={(e) => handleHeaderDoubleClick('about', e)}>
             <div className="window-controls">
+              <button className="win-minimize" onClick={(e) => { e.stopPropagation(); toggleMinimize('about', e) }}>−</button>
+              <button className="win-maximize" onClick={(e) => { e.stopPropagation(); toggleMaximize('about', e) }}>□</button>
               <button className="win-close" onClick={(e) => { e.stopPropagation(); closeWindow('about', e) }}>×</button>
             </div>
             <span className="window-title">About Me</span>
@@ -654,9 +671,26 @@ export default function Intro() {
 
       {/* PROJECTS Window */}
       {openWindows.projects && (
-        <div className={`os-window window-projects ${openWindows.projects ? 'open' : ''} ${shakingWindows.projects ? 'window-shake' : ''}`} onClick={() => setActiveWindow('projects')}>
-          <div className="window-header" onClick={(e) => handleWindowHeaderClick('projects', e)}>
+        <div
+          className={`os-window window-projects ${openWindows.projects ? 'open' : ''} ${shakingWindows.projects ? 'window-shake' : ''} ${windowStates.projects?.maximized ? 'window-maximized' : ''}`}
+          style={{
+            left: windowStates.projects?.maximized ? 0 : windowStates.projects?.x,
+            top: windowStates.projects?.maximized ? 0 : windowStates.projects?.y,
+            width: windowStates.projects?.maximized ? '100%' : windowStates.projects?.width || 720,
+            height: windowStates.projects?.maximized ? 'calc(100vh - 42px)' : 'auto',
+            zIndex: windowStates.projects?.zIndex || 0,
+            display: windowStates.projects?.minimized ? 'none' : 'flex',
+            transform: 'none',
+          }}
+          onClick={() => bringToFront('projects')}
+          onMouseMove={(e) => onWindowDrag('projects', e)}
+          onMouseUp={() => stopWindowDrag('projects')}
+          onMouseLeave={stopWeatherDrag}
+        >
+          <div className="window-header" onMouseDown={(e) => startWindowDrag('projects', e)} onDoubleClick={(e) => handleHeaderDoubleClick('projects', e)}>
             <div className="window-controls">
+              <button className="win-minimize" onClick={(e) => { e.stopPropagation(); toggleMinimize('projects', e) }}>−</button>
+              <button className="win-maximize" onClick={(e) => { e.stopPropagation(); toggleMaximize('projects', e) }}>□</button>
               <button className="win-close" onClick={(e) => { e.stopPropagation(); closeWindow('projects', e) }}>×</button>
             </div>
             <span className="window-title">Projects</span>
@@ -681,9 +715,26 @@ export default function Intro() {
 
       {/* CONTACT Window */}
       {openWindows.contact && (
-        <div className={`os-window ${openWindows.contact ? 'open' : ''} ${shakingWindows.contact ? 'window-shake' : ''}`} onClick={() => setActiveWindow('contact')}>
-          <div className="window-header" onClick={(e) => handleWindowHeaderClick('contact', e)}>
+        <div
+          className={`os-window ${openWindows.contact ? 'open' : ''} ${shakingWindows.contact ? 'window-shake' : ''} ${windowStates.contact?.maximized ? 'window-maximized' : ''}`}
+          style={{
+            left: windowStates.contact?.maximized ? 0 : windowStates.contact?.x,
+            top: windowStates.contact?.maximized ? 0 : windowStates.contact?.y,
+            width: windowStates.contact?.maximized ? '100%' : windowStates.contact?.width || 560,
+            height: windowStates.contact?.maximized ? 'calc(100vh - 42px)' : 'auto',
+            zIndex: windowStates.contact?.zIndex || 0,
+            display: windowStates.contact?.minimized ? 'none' : 'flex',
+            transform: 'none',
+          }}
+          onClick={() => bringToFront('contact')}
+          onMouseMove={(e) => onWindowDrag('contact', e)}
+          onMouseUp={() => stopWindowDrag('contact')}
+          onMouseLeave={stopWeatherDrag}
+        >
+          <div className="window-header" onMouseDown={(e) => startWindowDrag('contact', e)} onDoubleClick={(e) => handleHeaderDoubleClick('contact', e)}>
             <div className="window-controls">
+              <button className="win-minimize" onClick={(e) => { e.stopPropagation(); toggleMinimize('contact', e) }}>−</button>
+              <button className="win-maximize" onClick={(e) => { e.stopPropagation(); toggleMaximize('contact', e) }}>□</button>
               <button className="win-close" onClick={(e) => { e.stopPropagation(); closeWindow('contact', e) }}>×</button>
             </div>
             <span className="window-title">Contact</span>
@@ -720,11 +771,83 @@ export default function Intro() {
       {/* Dock */}
       <div className="dock">
         {DESKTOP_ICONS.map(icon => (
-          <button key={icon.id} className={`dock-item ${openWindows[icon.id] ? 'open' : ''}`} onClick={() => openWindow(icon.id)} title={icon.label}>
+          <button
+            key={icon.id}
+            className={`dock-item ${openWindows[icon.id] ? 'open' : ''} ${windowStates[icon.id]?.minimized ? 'minimized' : ''}`}
+            onClick={() => {
+              if (windowStates[icon.id]?.minimized) {
+                restoreWindow(icon.id)
+              } else if (openWindows[icon.id]) {
+                bringToFront(icon.id)
+              } else {
+                openWindow(icon.id)
+              }
+            }}
+            title={icon.label}
+          >
             <img src={icon.icon} alt={icon.label} className="dock-icon" />
           </button>
         ))}
       </div>
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <div className="context-menu" style={{ left: contextMenu.x, top: contextMenu.y }} onClick={(e) => e.stopPropagation()}>
+          <button className="context-item" onClick={() => { openWindow('about'); closeContextMenu() }}>About This Device</button>
+          <button className="context-item" onClick={() => { openWindow('projects'); closeContextMenu() }}>Projects</button>
+          <button className="context-item" onClick={() => { openWindow('contact'); closeContextMenu() }}>Contact</button>
+          <div className="context-divider" />
+          <button className="context-item" onClick={() => { openWindow('settings'); closeContextMenu() }}>Settings</button>
+          <div className="context-divider" />
+          <button className="context-item" onClick={() => { cycleWallpaper(); closeContextMenu() }}>Change Wallpaper</button>
+          <button className="context-item" onClick={() => { closeContextMenu() }}>Refresh</button>
+        </div>
+      )}
+
+      {/* Settings Window */}
+      {openWindows.settings && (
+        <div
+          className={`os-window ${openWindows.settings ? 'open' : ''} ${windowStates.settings?.maximized ? 'window-maximized' : ''}`}
+          style={{
+            left: windowStates.settings?.maximized ? 0 : windowStates.settings?.x,
+            top: windowStates.settings?.maximized ? 0 : windowStates.settings?.y,
+            width: windowStates.settings?.maximized ? '100%' : windowStates.settings?.width || 400,
+            height: windowStates.settings?.maximized ? 'calc(100vh - 42px)' : 'auto',
+            zIndex: windowStates.settings?.zIndex || 0,
+            display: windowStates.settings?.minimized ? 'none' : 'flex',
+            transform: 'none',
+          }}
+          onClick={() => bringToFront('settings')}
+          onMouseMove={(e) => onWindowDrag('settings', e)}
+          onMouseUp={() => stopWindowDrag('settings')}
+        >
+          <div className="window-header" onMouseDown={(e) => startWindowDrag('settings', e)} onDoubleClick={(e) => handleHeaderDoubleClick('settings', e)}>
+            <div className="window-controls">
+              <button className="win-minimize" onClick={(e) => { e.stopPropagation(); toggleMinimize('settings', e) }}>−</button>
+              <button className="win-maximize" onClick={(e) => { e.stopPropagation(); toggleMaximize('settings', e) }}>□</button>
+              <button className="win-close" onClick={(e) => { e.stopPropagation(); closeWindow('settings', e) }}>×</button>
+            </div>
+            <span className="window-title">Settings</span>
+            <div className="window-spacer" />
+          </div>
+          <div className="window-content">
+            <div className="settings-list">
+              <div className="settings-item">
+                <span>Music</span>
+                <button className={`toggle-btn ${musicPlaying ? 'on' : 'off'}`} onClick={toggleMusic}>
+                  {musicPlaying ? 'ON' : 'OFF'}
+                </button>
+              </div>
+              <div className="settings-item">
+                <span>Rain Effect</span>
+                <button className={`toggle-btn ${rainMode ? 'on' : 'off'}`} onClick={() => setRainMode(!rainMode)}>
+                  {rainMode ? 'ON' : 'OFF'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Taskbar */}
       <div className="taskbar">
