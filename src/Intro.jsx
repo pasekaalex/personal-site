@@ -797,8 +797,8 @@ export default function Intro() {
         </div>
       )}
 
-      {/* Taskbar */}
-      <div className="taskbar">
+      {/* Desktop Taskbar */}
+      <div className="taskbar desktop-taskbar">
         <div className="taskbar-left">
           <button className="start-button" onClick={() => setStartMenuOpen(!startMenuOpen)}>
             <span className="start-icon">☰</span>
@@ -807,10 +807,10 @@ export default function Intro() {
         </div>
         <div className="taskbar-right">
           <div className="music-taskbar" style={{position: 'relative'}}>
-            <button className="music-taskbar-btn" onClick={() => document.querySelector('.music-popup-taskbar').classList.toggle('show')} onDoubleClick={() => { if (audioRef.current) { if (audioRef.current.volume > 0) { audioRef.current.volume = 0; setMusicVolume(0) } else { audioRef.current.volume = 0.2; setMusicVolume(0.2) } } }} title="Music (dbl click to mute)">
+            <button className="music-taskbar-btn" onClick={() => setMusicPopupOpen(!musicPopupOpen)} onDoubleClick={() => { if (audioRef.current) { if (audioRef.current.volume > 0) { audioRef.current.volume = 0; setMusicVolume(0) } else { audioRef.current.volume = 0.2; setMusicVolume(0.2) } } }} title="Music (dbl click to mute)">
               {musicPlaying ? '🎵' : '🎶'}
             </button>
-            <div className="music-popup-taskbar">
+            <div className={`music-popup-taskbar ${musicPopupOpen ? 'show' : ''}`}>
               <div className="music-popup-header">🎵 Music</div>
               <div className="music-popup-track">{selectedTrack === 'jazz' ? 'Sax Jazz' : 'Piano Dreams'}</div>
               <div className="music-popup-controls">
@@ -829,10 +829,10 @@ export default function Intro() {
             </div>
           </div>
           <div className="weather-taskbar" style={{position: 'relative'}}>
-            <button className="weather-taskbar-btn" onClick={() => document.querySelector('.weather-popup-taskbar').classList.toggle('show')} title="Weather">
+            <button className="weather-taskbar-btn" onClick={() => setWeatherPopupOpen(!weatherPopupOpen)} title="Weather">
               🌤️
             </button>
-            <div className="weather-popup-taskbar">
+            <div className={`weather-popup-taskbar ${weatherPopupOpen ? 'show' : ''}`}>
               <div className="weather-popup-header">Weather</div>
               <div className="weather-popup-input-row">
                 <input type="text" placeholder="Zip" className="weather-popup-input" id="weatherZipTaskbar" maxLength={5} />
