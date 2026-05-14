@@ -89,6 +89,13 @@ export default function Intro() {
   const [avatarClicks, setAvatarClicks] = useState(0)
   const [crazyMode, setCrazyMode] = useState(false)
   const [sessionTime, setSessionTime] = useState(0)
+  const [totalClicks, setTotalClicks] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('avatarClicks')
+      return saved ? parseInt(saved, 10) : 0
+    }
+    return 0
+  })
   const avatarClickTimer = useRef(null)
   const [activeWindow, setActiveWindow] = useState(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
@@ -393,6 +400,9 @@ export default function Intro() {
           <img src="/avi.jpg" alt="Alex Paseka" className={`main-avatar ${crazyMode ? 'crazy-avatar' : ''}`} onClick={() => {
             setAvatarClicks(prev => {
               const newCount = prev + 1
+              const newTotal = totalClicks + 1
+              setTotalClicks(newTotal)
+              localStorage.setItem('avatarClicks', newTotal.toString())
               if (newCount >= 10) {
                 setCrazyMode(true)
                 setTimeout(() => setCrazyMode(false), 5000)
@@ -706,6 +716,11 @@ export default function Intro() {
               <span className="stat-icon">🕐</span>
               <span className="stat-label">Time</span>
               <span className="stat-value">{formatTime(time)}</span>
+            </div>
+            <div className="start-menu-stat click-counter" title="Total avatar clicks (hidden)">
+              <span className="stat-icon">🐭</span>
+              <span className="stat-label">Clicks</span>
+              <span className="stat-value">{totalClicks}</span>
             </div>
           </div>
           <div className="start-menu-divider"></div>

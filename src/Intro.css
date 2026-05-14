@@ -2090,3 +2090,20 @@ body {
 .light-mode .start-menu-divider {
   background: rgba(0,0,0,0.1);
 }
+
+/* Hidden click counter - shows on hover */
+.start-menu-stat.click-counter {
+  opacity: 0.3;
+  filter: grayscale(1);
+  transition: all 0.3s ease;
+}
+.start-menu-stat.click-counter:hover {
+  opacity: 1;
+  filter: grayscale(0);
+}
+.light-mode .start-menu-stat.click-counter {
+  opacity: 0.25;
+}
+.light-mode .start-menu-stat.click-counter:hover {
+  opacity: 1;
+}
