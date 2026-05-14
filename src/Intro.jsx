@@ -75,9 +75,9 @@ export default function Intro() {
   const [time, setTime] = useState(new Date())
   const [openWindows, setOpenWindows] = useState({})
   const [startMenuOpen, setStartMenuOpen] = useState(false)
-  const [musicPlaying, setMusicPlaying] = useState(false)
-  const [musicVolume, setMusicVolume] = useState(0.5)
-  const [selectedTrack, setSelectedTrack] = useState('jazz')
+  const [musicPlaying, setMusicPlaying] = useState(true)
+  const [musicVolume, setMusicVolume] = useState(0.2)
+  const [selectedTrack, setSelectedTrack] = useState('piano')
   const [selectedProject, setSelectedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
   const rainModeRef = useRef(false)
@@ -91,6 +91,15 @@ export default function Intro() {
   const [particles, setParticles] = useState([])
   const canvasRef = useRef(null)
   const audioRef = useRef(null)
+  // Autoplay piano on mount
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = "/piano-v2.mp3"
+      audioRef.current.volume = 0.2
+      audioRef.current.play().catch(() => {})
+    }
+  }, [])
+
   const particleIdRef = useRef(0)
 
   // Clock
