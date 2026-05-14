@@ -685,6 +685,28 @@ export default function Intro() {
           }} title={rainMode ? 'Rain Off' : 'Rain On'}>
             🌧️
           </button>
+          <div className="weather-taskbar" style={{position: 'relative'}}>
+            <button className="weather-taskbar-btn" onClick={() => document.querySelector('.weather-popup-taskbar').classList.toggle('show')} title="Weather">
+              🌤️
+            </button>
+            <div className="weather-popup-taskbar">
+              <div className="weather-popup-header">Weather</div>
+              <div className="weather-popup-input-row">
+                <input type="text" placeholder="Zip" className="weather-popup-input" id="weatherZipTaskbar" maxLength={5} />
+                <button className="weather-popup-search" onClick={() => {
+                  const zip = document.getElementById('weatherZipTaskbar').value.trim()
+                  if (zip && zip.length === 5) fetchWeather(zip)
+                }}>→</button>
+              </div>
+              <div id="weatherDisplayTaskbar" className="weather-popup-display" style={{display: 'none'}}>
+                <span className="weather-popup-icon" id="weatherIconTaskbar">☀️</span>
+                <span className="weather-popup-temp" id="weatherTempTaskbar">--°</span>
+                <span className="weather-popup-details" id="weatherConditionTaskbar">--</span>
+                <span className="weather-popup-highlow" id="weatherHighLowTaskbar">--</span>
+              </div>
+              <div id="weatherErrorTaskbar" className="weather-popup-error" style={{display: 'none'}}>Not found</div>
+            </div>
+          </div>
           <div className="music-taskbar" style={{position: 'relative'}}>
             <button className="music-taskbar-btn" onClick={() => document.querySelector('.music-popup-taskbar').classList.toggle('show')} title={musicPlaying ? 'Pause Music' : 'Play Music'}>
               {musicPlaying ? '🎵' : '🎶'}
@@ -706,28 +728,6 @@ export default function Intro() {
                 <span>🔊</span>
                 <input type="range" min="0" max="1" step="0.05" value={musicVolume} onChange={(e) => { const v = parseFloat(e.target.value); setMusicVolume(v); if (audioRef.current) audioRef.current.volume = v }} className="music-vol-slider" />
               </div>
-            </div>
-          </div>
-          <div className="weather-taskbar" style={{position: 'relative'}}>
-            <button className="weather-taskbar-btn" onClick={() => document.querySelector('.weather-popup-taskbar').classList.toggle('show')} title="Weather">
-              🌤️
-            </button>
-            <div className="weather-popup-taskbar">
-              <div className="weather-popup-header">Weather</div>
-              <div className="weather-popup-input-row">
-                <input type="text" placeholder="Zip" className="weather-popup-input" id="weatherZipTaskbar" maxLength={5} />
-                <button className="weather-popup-search" onClick={() => {
-                  const zip = document.getElementById('weatherZipTaskbar').value.trim()
-                  if (zip && zip.length === 5) fetchWeather(zip)
-                }}>→</button>
-              </div>
-              <div id="weatherDisplayTaskbar" className="weather-popup-display" style={{display: 'none'}}>
-                <span className="weather-popup-icon" id="weatherIconTaskbar">☀️</span>
-                <span className="weather-popup-temp" id="weatherTempTaskbar">--°</span>
-                <span className="weather-popup-details" id="weatherConditionTaskbar">--</span>
-                <span className="weather-popup-highlow" id="weatherHighLowTaskbar">--</span>
-              </div>
-              <div id="weatherErrorTaskbar" className="weather-popup-error" style={{display: 'none'}}>Not found</div>
             </div>
           </div>
           <span className="taskbar-date">{formatDate(time)}</span>
