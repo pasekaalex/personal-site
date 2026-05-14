@@ -172,10 +172,47 @@ export default function Intro() {
     window.addEventListener('resize', resize)
 
     let pos = { x: -100, y: -100 }
-    let trail = []
+    let lastPos = { x: -100, y: -100 }
+    let particles = []
 
     const onMove = (e) => {
       pos = { x: e.clientX, y: e.clientY }
+      // Spawn pixels along the path
+      if (Math.abs(pos.x - lastPos.x) > 8 || Math.abs(pos.y - lastPos.y) > 8) {
+        for (let i = 0; i < 2; i++) {
+          particles.push({
+            x: pos.x + (Math.random() - 0.5) * 10,
+            y: pos.y + (Math.random() - 0.5) * 10,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
+            size: Math.random() * 3 + 2,
+            alpha: 1,
+            color: `hsl(${Math.random() * 60 + 260}, 80%, ${50 + Math.random() * 30}%)`,
+            rotation: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.3
+          })
+        }
+        lastPos = pos
+      }
+    }
+
+    const onClick = (e) => {
+      // Burst of pixels on click
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI * 2 * i) / 12 + Math.random() * 0.5
+        const speed = Math.random() * 4 + 3
+        particles.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: Math.random() * 4 + 3,
+          alpha: 1,
+          color: `hsl(${Math.random() * 60 + 260}, 90%, ${60 + Math.random() * 20}%)`,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.4
+        })
+      }
     }
 
     // Rain drops state
@@ -184,20 +221,31 @@ export default function Intro() {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       
-      // Draw sparkle trail
-      trail.push({ x: pos.x, y: pos.y, alpha: 1, size: Math.random() * 3 + 2 })
-      if (trail.length > 15) trail.shift()
-      
-      trail.forEach((t, i) => {
-        t.alpha -= 0.08
-        if (t.alpha > 0) {
-          ctx.beginPath()
-          ctx.arc(t.x, t.y, t.size * t.alpha, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(184, 122, 255, ${t.alpha})`
-          ctx.fill()
+      // Draw and update pixels
+      particles.forEach((p, i) => {
+        p.x += p.vx
+        p.y += p.vy
+        p.vy += 0.15 // gravity
+        p.vx *= 0.98 // friction
+        p.alpha -= 0.025
+        p.rotation += p.rotSpeed
+        
+        if (p.alpha > 0) {
+          ctx.save()
+          ctx.translate(p.x, p.y)
+          ctx.rotate(p.rotation)
+          ctx.globalAlpha = p.alpha
+          ctx.fillStyle = p.color
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size)
+          ctx.restore()
         }
       })
-      trail = trail.filter(t => t.alpha > 0)
+      particles = particles.filter(p => p.alpha > 0)
+      
+      // Keep particles limited
+      if (particles.length > 150) {
+        particles = particles.slice(-150)
+      }
       
       // Draw rain using ref
       if (rainingRef.current) {
@@ -226,11 +274,13 @@ export default function Intro() {
     }
 
     window.addEventListener('mousemove', onMove)
+    window.addEventListener('click', onClick)
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('click', onClick)
     }
   }, [])
 
