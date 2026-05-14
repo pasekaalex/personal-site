@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, Fragment } from 'react'
 import './Intro.css'
 
 // Desktop icons config
@@ -450,7 +450,14 @@ export default function Intro() {
   }
 
   return (
-    <div className={`os-container${lightMode ? ' light-mode' : ''}`}>
+    <Fragment>
+      <div className="mobile-message">
+        <div className="mobile-message-content">
+          <h2>◉ paseka.dev</h2>
+          <p>Please use desktop for this website</p>
+        </div>
+      </div>
+      <div className={`os-container${lightMode ? ' light-mode' : ''}`}>
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
       <audio ref={audioRef} loop volume={musicVolume} />
@@ -875,5 +882,6 @@ export default function Intro() {
         </div>
       </div>
     </div>
+    </Fragment>
   )
 }
