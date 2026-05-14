@@ -2080,15 +2080,18 @@ body {
 
 /* Light Mode */
 .light-mode {
-  --win-bg: rgba(240, 240, 245, 0.95);
-  --glass-border: rgba(0, 0, 0, 0.1);
+  --win-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(0, 0, 0, 0.08);
 }
 .light-mode .os-container {
-  background: #e8e8ee !important;
+  background: linear-gradient(135deg, #f8f8fc 0%, #f0f0f8 50%, #f5f5fa 100%) !important;
 }
 .light-mode .bg-layer {
-  opacity: 0.3 !important;
-  filter: brightness(1) saturate(0.9) !important;
+  opacity: 0.08 !important;
+  filter: brightness(1.5) saturate(0.5) !important;
+}
+.light-mode .bg-grid {
+  opacity: 0.05 !important;
 }
 .light-mode .taskbar {
   background: rgba(240, 240, 245, 0.5) !important;
