@@ -564,7 +564,6 @@ export default function Intro() {
           </div>
           <div className="window-content">
             <div className="contact-grid">
-              <p className="contact-intro">Let's build something amazing together</p>
               <div className="contact-links">
                 <a href="https://github.com/pasekaalex" target="_blank" rel="noopener" className="contact-link">
                   <span className="contact-icon">⌨</span>
