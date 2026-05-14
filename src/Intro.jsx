@@ -80,6 +80,7 @@ export default function Intro() {
   const [selectedTrack, setSelectedTrack] = useState('piano')
   const [selectedProject, setSelectedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
+  const [raining, setRaining] = useState(false)
   const [lightMode, setLightMode] = useState(false)
   const rainModeRef = useRef(false)
   const [typedName, setTypedName] = useState('')
@@ -162,14 +163,16 @@ export default function Intro() {
       pos = { x: e.clientX, y: e.clientY }
     }
 
+    // Rain drops state
+    let rainDrops = []
+
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       
-      // Add new sparkle at cursor
+      // Draw sparkle trail
       trail.push({ x: pos.x, y: pos.y, alpha: 1, size: Math.random() * 3 + 2 })
       if (trail.length > 15) trail.shift()
       
-      // Draw trail
       trail.forEach((t, i) => {
         t.alpha -= 0.08
         if (t.alpha > 0) {
@@ -179,8 +182,30 @@ export default function Intro() {
           ctx.fill()
         }
       })
-      
       trail = trail.filter(t => t.alpha > 0)
+      
+      // Draw rain
+      if (raining) {
+        for (let i = 0; i < 3; i++) {
+          rainDrops.push({
+            x: Math.random() * canvas.width,
+            y: -10,
+            speed: Math.random() * 8 + 12,
+            length: Math.random() * 15 + 10
+          })
+        }
+        ctx.strokeStyle = 'rgba(150, 180, 255, 0.4)'
+        ctx.lineWidth = 1.5
+        rainDrops.forEach((drop, i) => {
+          drop.y += drop.speed
+          drop.x += 1
+          ctx.beginPath()
+          ctx.moveTo(drop.x, drop.y)
+          ctx.lineTo(drop.x + 3, drop.y - drop.length)
+          ctx.stroke()
+        })
+        rainDrops = rainDrops.filter(d => d.y < canvas.height)
+      }
 
       requestAnimationFrame(animate)
     }
@@ -679,10 +704,10 @@ export default function Intro() {
         </div>
         <div className="taskbar-right">
           <button className="rain-toggle" onClick={() => {
-            const newVal = !rainMode
+            const newVal = !raining
+            setRaining(newVal)
             setRainMode(newVal)
-            rainModeRef.current = newVal
-          }} title={rainMode ? 'Rain Off' : 'Rain On'}>
+          }} title={raining ? 'Rain Off' : 'Rain On'}>
             🌧️
           </button>
           <div className="weather-taskbar" style={{position: 'relative'}}>
