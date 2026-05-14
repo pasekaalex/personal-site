@@ -1800,3 +1800,79 @@ body {
   cursor: pointer;
   box-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
 }
+
+/* Light Mode */
+.light-mode {
+  --win-bg: rgba(240, 240, 245, 0.95);
+  --glass-border: rgba(0, 0, 0, 0.1);
+}
+.light-mode .taskbar {
+  background: rgba(240, 240, 245, 0.9) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-mode .start-button,
+.light-mode .rain-toggle,
+.light-mode .music-taskbar-btn,
+.light-mode .weather-taskbar-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+.light-mode .taskbar-date,
+.light-mode .taskbar-clock {
+  color: #333;
+}
+.light-mode .bg-layer {
+  opacity: 0;
+}
+.light-mode .music-popup-taskbar,
+.light-mode .weather-popup-taskbar {
+  background: rgba(240, 240, 245, 0.98);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-mode .music-popup-header,
+.light-mode .weather-popup-header {
+  color: #333;
+}
+.light-mode .music-track-btn,
+.light-mode .weather-popup-input {
+  background: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+.light-mode .theme-toggle {
+  background: rgba(0, 0, 0, 0.05);
+}
+.light-mode .theme-toggle:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.1);
+}
+.light-mode .os-window {
+  --win-bg: rgba(245, 245, 250, 0.98);
+  background: rgba(245, 245, 250, 0.98);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-mode .window-header {
+  background: linear-gradient(180deg, rgba(230, 230, 235, 0.98), rgba(220, 220, 225, 0.95));
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.light-mode .window-title {
+  color: #333;
+}
+.light-mode .start-menu {
+  background: rgba(240, 240, 245, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-mode .start-menu-logo,
+.light-mode .start-menu span {
+  color: #333;
+}

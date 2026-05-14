@@ -80,6 +80,7 @@ export default function Intro() {
   const [selectedTrack, setSelectedTrack] = useState('piano')
   const [selectedProject, setSelectedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
+  const [lightMode, setLightMode] = useState(false)
   const rainModeRef = useRef(false)
   const [typedName, setTypedName] = useState('')
   const fullName = 'ALEX PASEKA'
@@ -329,7 +330,7 @@ export default function Intro() {
   }
 
   return (
-    <div className="os-container">
+    <div className={`os-container${lightMode ? ' light-mode' : ''}`}>
       {/* Particle Canvas */}
       <canvas ref={canvasRef} className="particle-canvas" />
       <audio ref={audioRef} src={`/${selectedTrack === 'jazz' ? 'sax-jazz' : selectedTrack === 'piano' ? 'piano-v2' : 'rain-sounds'}.mp3`} loop volume={musicVolume} />
@@ -731,6 +732,9 @@ export default function Intro() {
           </div>
           <span className="taskbar-date">{formatDate(time)}</span>
           <span className="taskbar-clock">{formatTime(time)}</span>
+          <button className="theme-toggle" onClick={() => setLightMode(!lightMode)} title={lightMode ? 'Dark Mode' : 'Light Mode'}>
+            {lightMode ? '🌙' : '☀️'}
+          </button>
         </div>
       </div>
     </div>
