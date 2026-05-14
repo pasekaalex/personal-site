@@ -856,7 +856,7 @@ export default function Intro() {
             </button>
             <div className="music-popup-taskbar">
               <div className="music-popup-header">🎵 Music</div>
-              <div className="music-popup-track">{selectedTrack === 'jazz' ? 'Sax Jazz' : selectedTrack === 'piano' ? 'Piano Dreams' : 'Rain Sounds'}</div>
+              <div className="music-popup-track">{selectedTrack === 'jazz' ? 'Sax Jazz' : 'Piano Dreams'}</div>
               <div className="music-popup-controls">
                 <button className="music-playpause-btn" onClick={() => { if (audioRef.current) { if (musicPlaying) { audioRef.current.pause() } else { audioRef.current.play().catch(()=>{}) }; setMusicPlaying(!musicPlaying) } }}>
                   {musicPlaying ? '⏸️' : '▶️'}
@@ -865,7 +865,6 @@ export default function Intro() {
               <div className="music-popup-tracks">
                 <button className={`music-track-btn ${selectedTrack === 'jazz' ? 'active' : ''}`} onClick={() => { setSelectedTrack('jazz'); if (audioRef.current) { audioRef.current.src = '/sax-jazz.mp3'; audioRef.current.load(); audioRef.current.play().catch(()=>{}); setMusicPlaying(true) } }}>🎷 Sax</button>
                 <button className={`music-track-btn ${selectedTrack === 'piano' ? 'active' : ''}`} onClick={() => { setSelectedTrack('piano'); if (audioRef.current) { audioRef.current.src = '/piano-v2.mp3'; audioRef.current.load(); audioRef.current.play().catch(()=>{}); setMusicPlaying(true) } }}>🎹 Piano</button>
-                <button className={`music-track-btn ${selectedTrack === 'rain' ? 'active' : ''}`} onClick={() => { setSelectedTrack('rain'); if (audioRef.current) { audioRef.current.src = '/rain-sounds.mp3'; audioRef.current.load(); audioRef.current.play().catch(()=>{}); setMusicPlaying(true) } }} disabled style={{opacity: 0.4}} title="Use rain toggle in taskbar instead">🌧️ Rain</button>
               </div>
               <div className="music-popup-vol">
                 <span>🔊</span>
