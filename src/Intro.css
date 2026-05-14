@@ -259,8 +259,8 @@ body {
 }
 
 .title-typed {
-  color: var(--lilac);
-  text-shadow: var(--lilac-glow), 0 0 80px rgba(155, 89, 182, 0.3);
+  color: #7b3db3;
+  text-shadow: 0 0 30px rgba(123, 61, 179, 0.6), 0 0 60px rgba(123, 61, 179, 0.3);
   animation: titleGlow 3s ease-in-out infinite;
 }
 
