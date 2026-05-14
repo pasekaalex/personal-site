@@ -768,37 +768,57 @@ export default function Intro() {
         <div className="start-menu">
           <div className="start-menu-header">
             <span className="start-menu-logo">◉</span>
-            <span>paseka.dev</span>
+            <div className="start-menu-title">
+              <span>paseka.dev</span>
+              <span className="start-menu-date">{formatDate(time)}</span>
+            </div>
           </div>
-          <div className="start-menu-stats">
-            <div className="start-menu-stat">
-              <span className="stat-icon">⏱️</span>
-              <span className="stat-label">Session</span>
-              <span className="stat-value">{formatSessionTime(sessionTime)}</span>
+          <div className="start-menu-section">
+            <div className="start-menu-section-title">System</div>
+            <div className="start-menu-quick-settings">
+              <button className={`start-menu-toggle ${raining ? 'active' : ''}`} onClick={() => { setRaining(!raining); rainModeRef.current = !raining; rainingRef.current = !raining; if (rainAudioRef.current) { if (!raining) rainAudioRef.current.play().catch(()=>{}); else rainAudioRef.current.pause(); } }} title="Toggle Rain">
+                🌧️ Rain
+              </button>
+              <button className={`start-menu-toggle ${lightMode ? 'active' : ''}`} onClick={() => setLightMode(!lightMode)} title="Toggle Theme">
+                {lightMode ? '🌙 Dark' : '☀️ Light'}
+              </button>
             </div>
-            <div className="start-menu-stat">
-              <span className="stat-icon">🕐</span>
-              <span className="stat-label">Time</span>
-              <span className="stat-value">{formatTime(time)}</span>
-            </div>
-            <div className="start-menu-stat click-counter" title="Total avatar clicks (hidden)">
-              <span className="stat-icon">🐭</span>
-              <span className="stat-label">Clicks</span>
-              <span className="stat-value">{totalClicks}</span>
+          </div>
+          <div className="start-menu-section">
+            <div className="start-menu-section-title">Stats</div>
+            <div className="start-menu-stats">
+              <div className="start-menu-stat">
+                <span className="stat-icon">⏱️</span>
+                <span className="stat-label">Session</span>
+                <span className="stat-value">{formatSessionTime(sessionTime)}</span>
+              </div>
+              <div className="start-menu-stat">
+                <span className="stat-icon">🕐</span>
+                <span className="stat-label">Time</span>
+                <span className="stat-value">{formatTime(time)}</span>
+              </div>
+              <div className="start-menu-stat click-counter" title="Total avatar clicks (hidden)">
+                <span className="stat-icon">🐭</span>
+                <span className="stat-label">Clicks</span>
+                <span className="stat-value">{totalClicks}</span>
+              </div>
             </div>
           </div>
           <div className="start-menu-divider"></div>
-          <div className="start-menu-apps">
-            {DESKTOP_ICONS.map(icon => (
-              <button
-                key={icon.id}
-                className="start-menu-item"
-                onClick={() => { openWindow(icon.id); setStartMenuOpen(false) }}
-              >
-                <img src={icon.icon} alt={icon.label} className="start-menu-icon" />
-                <span>{icon.label}</span>
-              </button>
-            ))}
+          <div className="start-menu-section">
+            <div className="start-menu-section-title">Apps</div>
+            <div className="start-menu-apps">
+              {DESKTOP_ICONS.map(icon => (
+                <button
+                  key={icon.id}
+                  className="start-menu-item"
+                  onClick={() => { openWindow(icon.id); setStartMenuOpen(false) }}
+                >
+                  <img src={icon.icon} alt={icon.label} className="start-menu-icon" />
+                  <span>{icon.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
