@@ -2544,14 +2544,15 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 50%, #0a0a14 100%);
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 40%, #0a0a0f 100%);
   font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
   font-size: 0.85rem;
   padding: 0;
   overflow: hidden;
   max-height: 500px;
   position: relative;
-  border-top: 1px solid rgba(155, 89, 182, 0.2);
+  border-top: 2px solid rgba(155, 89, 182, 0.4);
+  box-shadow: inset 0 0 60px rgba(155, 89, 182, 0.1);
 }
 
 .terminal-output {
@@ -2575,19 +2576,19 @@ body {
   font-family: inherit;
   font-size: inherit;
   white-space: pre-wrap;
-  text-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
-  color: #d4c4e8;
+  text-shadow: 0 0 6px rgba(212, 165, 232, 0.4);
+  color: #d4a5e8;
 }
 
 .terminal-input {
   flex: 1;
   background: transparent;
   border: none;
-  color: #d4c4e8;
+  color: #ffffff;
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  caret-color: #9b59b6;
+  caret-color: #bb77dd;
   min-width: 0;
   animation: terminalBlink 1s step-end infinite;
 }
@@ -2602,10 +2603,10 @@ body {
 }
 
 .terminal-prompt {
-  color: #9b59b6;
+  color: #bb77dd;
   white-space: nowrap;
   margin-right: 8px;
-  text-shadow: 0 0 10px rgba(155, 89, 182, 0.6);
+  text-shadow: 0 0 12px rgba(187, 119, 221, 0.8);
   font-weight: bold;
 }
 
@@ -2613,8 +2614,8 @@ body {
   display: flex;
   align-items: center;
   padding: 14px 18px;
-  border-top: 1px solid rgba(155, 89, 182, 0.3);
-  background: rgba(155, 89, 182, 0.08);
+  border-top: 1px solid rgba(155, 89, 182, 0.5);
+  background: linear-gradient(90deg, rgba(45, 27, 78, 0.5) 0%, rgba(15, 15, 26, 0.8) 100%);
 }
 
 .terminal-body::before {
@@ -2629,3 +2630,34 @@ body {
 .light-mode .terminal-body { background: #0d0d14; }
 .light-mode .terminal-prompt { color: #0af; }
 .light-mode .terminal-input { color: #0f0; }
+
+.terminal-output {
+  padding: 16px 18px;
+  flex: 1;
+  overflow: auto;
+}
+
+.terminal-line {
+  margin-bottom: 4px;
+}
+
+.terminal-error {
+  color: #ff6b6b;
+  text-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+}
+
+.terminal-success {
+  color: #90ee90;
+  text-shadow: 0 0 8px rgba(144, 238, 144, 0.5);
+}
+
+.terminal-info {
+  color: #87ceeb;
+  text-shadow: 0 0 8px rgba(135, 206, 235, 0.5);
+}
+
+.terminal-win {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
