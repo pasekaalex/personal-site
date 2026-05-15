@@ -137,7 +137,7 @@ export default function Intro() {
       'about': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'projects': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'contact': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
-      'terminal': { x: window.innerWidth / 2 - 320, y: window.innerHeight / 2 - 220 },
+      'terminal': { x: window.innerWidth / 2 - 350, y: window.innerHeight / 2 - 260 }
     }
     return defaults[windowId] || { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
   }
@@ -424,7 +424,7 @@ export default function Intro() {
 
     switch (command) {
       case 'help':
-        addOutput(`Available commands:\n  help, clear, date, whoami, echo, neofetch, calc,\n  roll, 8ball, coinflip, joke, matrix, history,
+        addOutput(`Available commands:\n  help, clear, date, whoami, echo, neofetch, calc,\n  roll, 8ball, coinflip, joke, history,
   guess, rps, poker`)
 
         break
@@ -471,17 +471,9 @@ export default function Intro() {
         addOutput(jokes[Math.floor(Math.random() * jokes.length)])
         break
       }
-      case 'matrix': {
-        const chars = 'ｦｱｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789'
-        let m = ''
-        for (let i = 0; i < 15; i++) {
-          let row = ''
-          for (let j = 0; j < 38; j++) row += chars[Math.floor(Math.random() * chars.length)]
-          m += row + '\n'
-        }
-        addOutput(m)
+      case 'matrix':
+        addOutput('matrix is disabled')
         break
-      }
       case 'history': {
         const cmds = terminalHistory.filter(h => h.type === 'input').map(h => h.text)
         addOutput(cmds.length > 0 ? cmds.join('\n') : 'No history yet')
@@ -560,9 +552,19 @@ export default function Intro() {
     setTerminalInput('')
   }
 
+  // Auto-scroll terminal output to bottom
   useEffect(() => {
-    if (terminalRef.current) terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+    }
   }, [terminalHistory])
+
+  // Focus input when terminal window opens
+  useEffect(() => {
+    if (openWindows.terminal && terminalInputRef.current) {
+      terminalInputRef.current.focus()
+    }
+  }, [openWindows.terminal])
 
   const fetchWeather = async (zip) => {
     if (!zip || zip.length !== 5) return
@@ -889,17 +891,17 @@ export default function Intro() {
             <span className="window-title">Terminal</span>
             <div className="window-spacer" />
           </div>
-          <div className="terminal-body" ref={terminalRef}>
+          <div className="terminal-body" ref={terminalRef} onClick={() => terminalInputRef.current?.focus()}>
             <div className="terminal-output">
               {terminalHistory.map((entry, i) => (
                 <div key={i} className={`terminal-line terminal-${entry.type}`}>
-                  {entry.type === 'input' && <span className="terminal-prompt">guest@paseka:~$ </span>}
+                  {entry.type === 'input' && <span className="terminal-prompt">> </span>}
                   <pre>{entry.text}</pre>
                 </div>
               ))}
             </div>
             <form className="terminal-input-line" onSubmit={handleTerminalSubmit}>
-              <span className="terminal-prompt">guest@paseka:~$ </span>
+              <span className="terminal-prompt">> </span>
               <input
                 ref={terminalInputRef}
                 className="terminal-input"
