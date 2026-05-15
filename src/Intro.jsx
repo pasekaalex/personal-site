@@ -77,13 +77,23 @@ export default function Intro() {
     about: false,
     projects: false,
     contact: false,
+    terminal: false,
   })
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(true)
   const [musicVolume, setMusicVolume] = useState(0.2)
   const [selectedTrack, setSelectedTrack] = useState('piano')
-  const [selectedProject, setSelectedProject] = useState(null)
   const [projectsView, setProjectsView] = useState('gallery')
+  const [selectedProject, setSelectedProject] = useState(null)
+  const [terminalHistory, setTerminalHistory] = useState([])
+  const [terminalInput, setTerminalInput] = useState('')
+  const [guessNumber, setGuessNumber] = useState(null)
+  const [guessAttempts, setGuessAttempts] = useState(0)
+  const [pokerDice, setPokerDice] = useState([1,1,1,1,1])
+  const [pokerKept, setPokerKept] = useState([false,false,false,false,false])
+  const [pokerRolls, setPokerRolls] = useState(0)
+  const terminalInputRef = useRef(null)
+  const terminalRef = useRef(null)
   const [embeddedProject, setEmbeddedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
   const [raining, setRaining] = useState(false)
@@ -127,6 +137,7 @@ export default function Intro() {
       'about': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'projects': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'contact': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
+      'terminal': { x: window.innerWidth / 2 - 320, y: window.innerHeight / 2 - 220 },
     }
     return defaults[windowId] || { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
   }
@@ -389,7 +400,265 @@ export default function Intro() {
     }
   }
 
-  const fetchWeather = async (zip) => {
+  const executeCommand = useCallback((cmd) => {
+    const input = cmd.trim().toLowerCase()
+    const parts = input.split(' ')
+    const command = parts[0]
+    const args = parts.slice(1).join(' ')
+
+    const addOutput = (text) => {
+      setTerminalHistory(prev => {
+        const newHist = [...prev, { type: 'output', text }]
+        return newHist.slice(-50)
+      })
+    }
+
+    const addInput = (text) => {
+      setTerminalHistory(prev => {
+        const newHist = [...prev, { type: 'input', text }]
+        return newHist.slice(-50)
+      })
+    }
+
+    addInput(cmd)
+
+    switch (command) {
+      case 'help':
+        addOutput('Available commands:\n' +
+          '  help     - Show this help\n' +
+          '  clear    - Clear terminal\n' +
+          '  date     - Show current date/time\n' +
+          '  whoami   - Show current user\n' +
+          '  echo     - Echo text back\n' +
+          '  neofetch - System info\n' +
+          '  calc     - Calculator\n' +
+          '  roll     - Roll dice (e.g. roll 2d6)\n' +
+          '  8ball    - Magic 8-ball\n' +
+          '  coinflip - Flip a coin\n' +
+          '  joke     - Random joke\n' +
+          '  matrix   - Matrix effect\n' +
+          '  history  - Show command history\n' +
+          '  guess    - Number guessing game\n' +
+          '  rps      - Rock paper scissors\n' +
+          '  poker    - Dice poker')
+        break
+
+      case 'clear':
+      case 'cls':
+        setTerminalHistory([])
+        break
+
+      case 'date':
+        addOutput(new Date().toString())
+        break
+
+      case 'whoami':
+        addOutput('guest')
+        break
+
+      case 'echo':
+        addOutput(args || '')
+        break
+
+      case 'neofetch':
+        addOutput(`
+  ██████╗ ███████╗██████╗ ███╗   ███╗
+  ██╔══██╗██╔════╝██╔══██╗████╗ ████║
+  ██████╔╝█████╗  ██████╔╝██╔████╔██║
+  ██╔═══╝ ██╔══╝  ██╔══██╗██║╚██╔╝██║
+  ██║     ███████╗██║  ██║██║ ╚═╝ ██║
+  ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝
+
+  OS: paseka.dev OS v1.0
+  Host: paseka.dev
+  Kernel: React 18.x
+  Shell: bash 5.1
+  Theme: Dark by default
+  Terminal: paseka-terminal
+  CPU: Human Brain @ 3GHz
+  Memory: 8192MB DDR5
+`)
+        break
+
+      case 'calc':
+        try {
+          // eslint-disable-next-line no-eval
+          const result = eval(args)
+          addOutput(`${args} = ${result}`)
+        } catch {
+          addOutput('Error: invalid expression')
+        }
+        break
+
+      case 'roll': {
+        const diceMatch = args.match(/(\d+)d(\d+)/)
+        if (diceMatch) {
+          const numDice = parseInt(diceMatch[1])
+          const sides = parseInt(diceMatch[2])
+          const rolls = []
+          for (let i = 0; i < numDice; i++) {
+            rolls.push(Math.floor(Math.random() * sides) + 1)
+          }
+          addOutput(`Rolling ${numDice}d${sides}... [${rolls.join(', ')}] = ${rolls.reduce((a,b)=>a+b,0)}`)
+        } else {
+          addOutput('Usage: roll XdY (e.g. roll 2d6)')
+        }
+        break
+      }
+
+      case '8ball':
+        const responses8ball = [
+          'It is certain.', 'Reply hazy, try again.', 'Don\'t count on it.',
+          'It is decidedly so.', 'Ask again later.', 'My reply is no.',
+          'Without a doubt.', 'Better not tell you now.', 'My sources say no.',
+          'Yes — definitely.', 'Cannot predict now.', 'Outlook not so good.',
+          'You may rely on it.', 'Concentrate and ask again.', 'Very doubtful.',
+          'As I see it, yes.', 'Ask again later.', 'Don\'t bet on it.',
+          'Most likely.'
+        ]
+        addOutput(`🎱 ${responses8ball[Math.floor(Math.random() * responses8ball.length)]}`)
+        break
+
+      case 'coinflip':
+        addOutput(Math.random() > 0.5 ? '🪙 Heads' : '🪙 Tails')
+        break
+
+      case 'joke':
+        const jokes = [
+          'Why do developers prefer dark mode? Because light attracts bugs.',
+          'There are only 10 types of people in the world: those who understand binary and those who don\'t.',
+          'I\'m not lazy, I\'m just on energy-saving mode.',
+          'Why do JavaScript devs wear glasses? Because they can\'t C#.',
+          'A SQL query walks into a bar, walks up to two tables and asks... "Can I join you?"'
+        ]
+        addOutput(jokes[Math.floor(Math.random() * jokes.length)])
+        break
+
+      case 'matrix': {
+        const chars = 'ｦｱｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789'
+        let matrix = ''
+        for (let i = 0; i < 20; i++) {
+          let row = ''
+          for (let j = 0; j < 40; j++) {
+            row += chars[Math.floor(Math.random() * chars.length)]
+          }
+          matrix += row + '\n'
+        }
+        addOutput(matrix)
+        break
+      }
+
+      case 'history': {
+        const cmds = terminalHistory.filter(h => h.type === 'input').map(h => h.text)
+        addOutput(cmds.length > 0 ? cmds.join('\n') : 'No history yet')
+        break
+      }
+
+      case 'guess': {
+        if (!guessNumber) {
+          setGuessNumber(Math.floor(Math.random() * 100) + 1)
+          setGuessAttempts(0)
+          addOutput('I\'m thinking of a number 1-100. Start guessing!')
+        } else {
+          const guess = parseInt(args)
+          if (isNaN(guess)) {
+            addOutput('Enter a number: guess [number]')
+          } else if (guess < guessNumber) {
+            setGuessAttempts(prev => prev + 1)
+            addOutput('📈 Higher!')
+          } else if (guess > guessNumber) {
+            setGuessAttempts(prev => prev + 1)
+            addOutput('📉 Lower!')
+          } else {
+            setGuessAttempts(prev => prev + 1)
+            addOutput(`🎉 Correct! You got it in ${guessAttempts + 1} attempts!`)
+            setGuessNumber(null)
+            setGuessAttempts(0)
+          }
+        }
+        break
+      }
+
+      case 'rps': {
+        const choices = ['rock', 'paper', 'scissors']
+        const playerChoice = args.toLowerCase()
+        if (!choices.includes(playerChoice)) {
+          addOutput('Usage: rps [rock|paper|scissors]')
+        } else {
+          const computerChoice = choices[Math.floor(Math.random() * 3)]
+          let result
+          if (playerChoice === computerChoice) result = '🤝 TIE!'
+          else if (
+            (playerChoice === 'rock' && computerChoice === 'scissors') ||
+            (playerChoice === 'paper' && computerChoice === 'rock') ||
+            (playerChoice === 'scissors' && computerChoice === 'paper')
+          ) result = '🎉 YOU WIN!'
+          else result = '😢 YOU LOSE!'
+          addOutput(`You: ${playerChoice} vs Computer: ${computerChoice}\n${result}`)
+        }
+        break
+      }
+
+      case 'poker': {
+        if (pokerRolls === 0) {
+          const newDice = pokerDice.map(() => Math.floor(Math.random() * 6) + 1)
+          setPokerDice(newDice)
+          setPokerRolls(1)
+          setPokerKept([false,false,false,false,false])
+          addOutput(`Roll 1: [${newDice.join(', ')}]\nChoose dice to keep: keep [1-5]\nOr roll again: poker`)
+        } else if (pokerRolls === 1) {
+          const newDice = pokerDice.map((d, i) => pokerKept[i] ? d : Math.floor(Math.random() * 6) + 1)
+          setPokerDice(newDice)
+          setPokerRolls(2)
+          addOutput(`Roll 2: [${newDice.join(', ')}]`)
+        } else {
+          const counts = {}
+          pokerDice.forEach(d => { counts[d] = (counts[d] || 0) + 1 })
+          const values = Object.values(counts)
+          let hand = 'High Card'
+          if (values.includes(5)) hand = '🎰 FIVE OF A KIND!'
+          else if (values.includes(4)) hand = '🎰 FOUR OF A KIND!'
+          else if (values.includes(3) && values.includes(2)) hand = '🃏 FULL HOUSE!'
+          else if (values.includes(3)) hand = '🔱 THREE OF A KIND!'
+          else if (values.filter(v => v === 2).length === 2) hand = '✌️ TWO PAIR!'
+          else if (values.includes(2)) hand = '🎴 ONE PAIR!'
+          else {
+            const sorted = [...pokerDice].sort()
+            if (sorted[4] - sorted[0] === 4) hand = '📐 STRAIGHT!'
+          }
+          addOutput(`Final: [${pokerDice.join(', ')}] → ${hand}`)
+          setPokerRolls(0)
+          setPokerKept([false,false,false,false,false])
+        }
+        break
+      }
+
+      case 'keep': {
+        const indices = args.split('').map(n => parseInt(n) - 1).filter(n => n >= 0 && n < 5)
+        const newKept = [...pokerKept]
+        indices.forEach(i => { newKept[i] = !newKept[i] })
+        setPokerKept(newKept)
+        addOutput(`Kept: [${pokerDice.map((d,i) => newKept[i] ? d : '-').join(', ')}]`)
+        break
+      }
+
+      default:
+        addOutput(`Command not found: ${command}\nType 'help' for available commands.`)
+    }
+  }, [guessNumber, guessAttempts, pokerDice, pokerKept, pokerRolls, terminalHistory])
+
+  const handleTerminalSubmit = (e) => {
+    e.preventDefault()
+    if (!terminalInput.trim()) return
+    executeCommand(terminalInput)
+    setTerminalInput('')
+  }
+
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+    }
+  }, [terminalHistory])
     if (!zip || zip.length !== 5) return
 
     try {
@@ -685,6 +954,57 @@ export default function Intro() {
 
 
       {/* TERMINAL Window */}
+      {openWindows.terminal && (() => {
+        const pos = getWindowPosition('terminal')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window window-terminal ${openWindows.terminal ? 'open' : ''}`} 
+          onClick={() => setActiveWindow('terminal')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex,
+            transition: dragState.dragging && dragState.windowId === 'terminal' ? 'none' : undefined
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'terminal')}
+          >
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => closeWindow('terminal', e)}>×</button>
+            </div>
+            <span className="window-title">Terminal</span>
+            <div className="window-spacer" />
+          </div>
+          <div className="terminal-body" ref={terminalRef}>
+            <div className="terminal-output">
+              {terminalHistory.map((entry, i) => (
+                <div key={i} className={`terminal-line terminal-${entry.type}`}>
+                  {entry.type === 'input' && <span className="terminal-prompt">guest@paseka:~$ </span>}
+                  <pre>{entry.text}</pre>
+                </div>
+              ))}
+            </div>
+            <form className="terminal-input-line" onSubmit={handleTerminalSubmit}>
+              <span className="terminal-prompt">guest@paseka:~$ </span>
+              <input
+                ref={terminalInputRef}
+                className="terminal-input"
+                type="text"
+                value={terminalInput}
+                onChange={(e) => setTerminalInput(e.target.value)}
+                placeholder="type a command..."
+                autoFocus
+              />
+            </form>
+          </div>
+        </div>
+        )
+      })()}
 
 
       {/* CONTACT Window */}
@@ -795,6 +1115,13 @@ export default function Intro() {
                   <span>{icon.label}</span>
                 </button>
               ))}
+              <button
+                className="start-menu-item"
+                onClick={() => { openWindow('terminal'); setStartMenuOpen(false) }}
+              >
+                <span className="start-menu-icon" style={{fontSize: '1.2rem'}}>💻</span>
+                <span>Terminal</span>
+              </button>
               
             </div>
           </div>

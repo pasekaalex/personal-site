@@ -2527,3 +2527,130 @@ body {
     display: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   TERMINAL WINDOW
+═══════════════════════════════════════════════════════════════ */
+.window-terminal {
+  width: min(640px, 92vw);
+}
+
+.terminal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0f;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 0.85rem;
+  padding: 0;
+  overflow: hidden;
+  max-height: 440px;
+  position: relative;
+}
+
+.terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.terminal-line {
+  display: flex;
+  flex-wrap: wrap;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.terminal-line pre {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  white-space: pre-wrap;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #0f0;
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  caret-color: #0f0;
+  min-width: 0;
+}
+
+.terminal-input::placeholder {
+  color: rgba(0, 255, 0, 0.3);
+}
+
+.terminal-prompt {
+  color: #0ff;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(0, 255, 255, 0.1);
+  background: rgba(0, 255, 255, 0.02);
+}
+
+.terminal-output-command {
+  color: #0f0;
+}
+
+.terminal-output-command::before {
+  content: 'guest@paseka:~$ ';
+  color: #0ff;
+}
+
+/* Scanlines on terminal */
+.terminal-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes terminalBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.terminal-input:focus {
+  outline: none;
+}
+
+/* Light mode terminal */
+.light-mode .terminal-body {
+  background: #0d0d14;
+}
+
+.light-mode .terminal-prompt {
+  color: #0af;
+}
+
+.light-mode .terminal-input {
+  color: #0f0;
+}
+
+.light-mode .terminal-input::placeholder {
+  color: rgba(0, 255, 0, 0.3);
+}
