@@ -103,6 +103,12 @@ export default function Intro() {
   const [pokerDice, setPokerDice] = useState([1,1,1,1,1])
   const [pokerKept, setPokerKept] = useState([false,false,false,false,false])
   const [pokerRolls, setPokerRolls] = useState(0)
+  const [highLowCard, setHighLowCard] = useState(null)
+  const [highLowPrev, setHighLowPrev] = useState(null)
+  const [highLowWins, setHighLowWins] = useState(0)
+  const [wordleWord, setWordleWord] = useState(null)
+  const [wordleGuesses, setWordleGuesses] = useState([])
+  const [wordleDone, setWordleDone] = useState(false)
   const terminalInputRef = useRef(null)
   const terminalRef = useRef(null)
   const [projectsView, setProjectsView] = useState('gallery')
@@ -529,7 +535,9 @@ export default function Intro() {
         break
       }
       case 'games':
-        addOutput(`\n╔════════════════════════════════════╗\n║         ◉ AVAILABLE GAMES        ║\n╠════════════════════════════════════╣\n║  slots     - Slot machine           ║\n║  guess     - Number guessing (1-100) ║\n║  rps       - Rock paper scissors     ║\n║  poker     - Dice poker             ║\n║  8ball     - Magic 8-ball            ║\n║  coinflip  - Flip a coin            ║\n║  roll      - Roll dice (roll 2d6)    ║\n║  fortune   - Fortune cookie         ║\n╚════════════════════════════════════╝`, 'info')
+        addOutput(`\n╔════════════════════════════════════╗\n║         ◉ AVAILABLE GAMES        ║\n╠════════════════════════════════════╣\n║  slots     - Slot machine           ║\n║  guess     - Number guessing (1-100) ║\n║  rps       - Rock paper scissors     ║\n║  poker     - Dice poker             ║\n║  8ball     - Magic 8-ball            ║\n║  coinflip  - Flip a coin            ║\n║  roll      - Roll dice (roll 2d6)    ║\n║  fortune   - Fortune cookie         ║
+║  highlow   - High or low card game   ║
+║  wordle    - 5-letter word game       ║\n╚════════════════════════════════════╝`, 'info')
         break
       case 'history': {
         const cmds = terminalHistory.filter(h => h.type === 'input').map(h => h.text)
@@ -548,6 +556,57 @@ export default function Intro() {
       case 'fortune': {
         const fortunes = ['A beautiful journey awaits you.', 'Your hard work will pay off soon.', 'Trust your instincts — they are right.', 'Someone is thinking of you right now.', 'New opportunities are just around the corner.', 'Your creativity is at an all-time high.']
         addOutput(`🍀 ${fortunes[Math.floor(Math.random() * fortunes.length)]}`, 'success')
+        break
+      }
+      case 'highlow': {
+        const suits = ['♠','♥','♦','♣']
+        const values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+        const newCard = { v: values[Math.floor(Math.random()*13)], s: suits[Math.floor(Math.random()*4)] }
+        if (!highLowCard) {
+          setHighLowCard(newCard)
+          setHighLowPrev(null)
+          setHighLowWins(0)
+          addOutput(`First card: ${newCard.v}${newCard.s} — Higher or lower? (highlow high/low)`, 'info')
+        } else {
+          const prevVal = values.indexOf(highLowCard.v)
+          const newVal = values.indexOf(newCard.v)
+          const prev = args.toLowerCase().includes('high') ? 'high' : 'low'
+          const won = (prev === 'high' && newVal > prevVal) || (prev === 'low' && newVal < prevVal)
+          const wins = won ? highLowWins + 1 : 0
+          setHighLowWins(wins)
+          setHighLowPrev(highLowCard)
+          setHighLowCard(newCard)
+          addOutput(`Card: ${highLowCard.v}${highLowCard.s} → New: ${newCard.v}${newCard.s} | ${won ? `✅ WIN! Streak: ${wins}` : '❌ LOSE! Streak reset!'}`, won ? 'success' : 'error')
+        }
+        break
+      }
+      case 'wordle': {
+        if (wordleDone || wordleGuesses.length >= 6) {
+          const words5 = ['APPLE','BEACH','CRANE','DREAM','EAGLE','FLAME','GRAPE','HOUSE','JUICE','KNIFE','LEMON','MANGO','NIGHT','OCEAN','PIANO','QUEEN','ROBOT','SNAKE','TIGER','UNCLE','VOICE','WATER','YOUNG','ZEBRA']
+          const word = words5[Math.floor(Math.random() * words5.length)]
+          setWordleWord(word)
+          setWordleGuesses([])
+          setWordleDone(false)
+          addOutput('🎮 WORDLE — Guess a 5-letter word! (wordle [WORD])', 'info')
+        } else {
+          const guess = args.toUpperCase().slice(0,5)
+          if (guess.length !== 5) { addOutput('Enter a 5-letter word: wordle [WORD]', 'error'); break }
+          const word = wordleWord
+          let result = ''
+          for (let i = 0; i < 5; i++) {
+            if (guess[i] === word[i]) result += '🟩'
+            else if (word.includes(guess[i])) result += '🟨'
+            else result += '⬛'
+          }
+          const newGuesses = [...wordleGuesses, guess]
+          setWordleGuesses(newGuesses)
+          const won = guess === word
+          if (won) { setWordleDone(true); addOutput(`${result}
+🎉 CORRECT! Word was: ${word}`, 'success') }
+          else if (newGuesses.length >= 6) { setWordleDone(true); addOutput(`${result}
+💀 GAME OVER! Word was: ${word}`, 'error') }
+          else { addOutput(`${result} | Attempts: ${newGuesses.length}/6`, 'info') }
+        }
         break
       }
       case 'guess': {
@@ -614,7 +673,7 @@ export default function Intro() {
       default:
         addOutput(`Command not found: ${command}\nType 'help' for available commands.`, 'error')
     }
-  }, [guessNumber, guessAttempts, pokerDice, pokerKept, pokerRolls, terminalHistory])
+  }, [guessNumber, guessAttempts, pokerDice, pokerKept, pokerRolls, highLowCard, highLowWins, wordleWord, wordleGuesses, wordleDone, terminalHistory])
 
   const handleTerminalSubmit = (e) => {
     e.preventDefault()
