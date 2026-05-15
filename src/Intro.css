@@ -4,23 +4,187 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap');
 
 /* ═══════════════════════════════════════════════════════════════
-   CSS VARIABLES
+   CSS VARIABLES - DESIGN SYSTEM
 ═══════════════════════════════════════════════════════════════ */
 :root {
-  --bg-dark: #0a0a0f;
-  --bg-purple: #1a1a2e;
-  --purple-mid: #2d1b4e;
-  --lilac: #9b59b6;
-  --lilac-dim: rgba(155, 89, 182, 0.15);
-  --lilac-glow: 0 0 20px rgba(155, 89, 182, 0.4), 0 0 40px rgba(155, 89, 182, 0.2);
-  --glass-bg: rgba(26, 26, 46, 0.88);
-  --glass-border: rgba(155, 89, 182, 0.12);
+  /* Colors - Void & Surfaces */
+  --void: #050508;
+  --void-soft: #0a0a12;
+  --surface-0: #0f0f18;
+  --surface-1: #14141f;
+  --surface-2: #1a1a28;
+  --surface-3: #222238;
+  
+  /* Purple System */
+  --purple-deep: #2d1b4e;
+  --purple-dark: #4a2c7a;
+  --purple: #9b59b6;
+  --purple-bright: #bb77dd;
+  --purple-glow: #d4a5e8;
+  --purple-light: #e8d4f0;
+  
+  /* Text */
   --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.65);
-  --text-muted: rgba(255, 255, 255, 0.4);
-  --win-bg: rgba(10, 10, 15, 0.95);
-  --win-radius: 14px;
-  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --text-secondary: #d4c4e8;
+  --text-tertiary: #a89bc4;
+  --text-muted: #6b5f8a;
+  
+  /* Semantic */
+  --accent: var(--purple);
+  --accent-glow: rgba(155, 89, 182, 0.5);
+  --accent-subtle: rgba(155, 89, 182, 0.15);
+  --success: #00ff88;
+  --warning: #fbbf24;
+  --error: #ff6b6b;
+  --info: #60a5fa;
+  
+  /* Borders */
+  --border-subtle: rgba(155, 89, 182, 0.15);
+  --border-default: rgba(155, 89, 182, 0.25);
+  --border-strong: rgba(155, 89, 182, 0.4);
+  --border-glow: rgba(187, 119, 221, 0.6);
+  
+  /* Glass Effects */
+  --glass-bg: rgba(15, 15, 24, 0.85);
+  --glass-border: rgba(155, 89, 182, 0.12);
+  --glass-blur: blur(16px) saturate(180%);
+  
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  --shadow-window: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-subtle);
+  --shadow-glow-sm: 0 0 10px var(--accent-glow);
+  --shadow-glow-md: 0 0 20px var(--accent-glow);
+  --shadow-glow-lg: 0 0 30px var(--accent-glow), 0 0 60px rgba(155, 89, 182, 0.3);
+  
+  /* Animation */
+  --ease-instant: steps(1);
+  --ease-quick: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: cubic-bezier(0, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --duration-instant: 0ms;
+  --duration-fastest: 50ms;
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 400ms;
+  --duration-slowest: 500ms;
+  
+  /* Layout */
+  --taskbar-height: 46px;
+  --dock-height: 70px;
+  --menubar-height: 28px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KEYFRAME ANIMATIONS
+═══════════════════════════════════════════════════════════════ */
+@keyframes windowOpen {
+  from { opacity: 0; transform: scale(0.92) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes windowClose {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.92) translateY(10px); }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse1 {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+@keyframes glowPulse2 {
+  0%, 100% { opacity: 0.7; transform: scale(1.02); }
+  50% { opacity: 1; transform: scale(0.98); }
+}
+
+@keyframes avatarFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes avatarGlow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.6; }
+}
+
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes crazySpin {
+  0% { transform: rotate(0deg) scale(1.1); }
+  25% { transform: rotate(90deg) scale(1.2); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  75% { transform: rotate(270deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1.1); }
+}
+
+@keyframes crazyPulse {
+  from { box-shadow: 0 0 30px #9b59b6, 0 0 60px #9b59b6; }
+  to { box-shadow: 0 0 60px #ff00ff, 0 0 100px #ff00ff, 0 0 150px #9b59b6; }
+}
+
+@keyframes promptPulse {
+  0%, 100% { text-shadow: 0 0 18px rgba(187, 119, 221, 1), 0 0 30px rgba(187, 119, 221, 0.6); }
+  50% { text-shadow: 0 0 24px rgba(187, 119, 221, 1), 0 0 45px rgba(187, 119, 221, 0.8); }
+}
+
+@keyframes menuSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popupSlideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -70,7 +234,7 @@ a, button, .desktop-icon, .dock-item, .start-button,
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  background: #0a0a12;
+  background: var(--void-soft);
   background-image:
     radial-gradient(ellipse 80% 60% at 50% 40%, rgba(45, 27, 78, 0.25) 0%, transparent 60%),
     radial-gradient(ellipse 60% 40% at 20% 80%, rgba(20, 10, 40, 0.4) 0%, transparent 50%),
@@ -205,17 +369,17 @@ a, button, .desktop-icon, .dock-item, .start-button,
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--lilac);
-  box-shadow: var(--lilac-glow), 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 3px solid var(--purple);
+  box-shadow: var(--shadow-glow-md), 0 8px 32px rgba(0, 0, 0, 0.5);
   z-index: 1;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--duration-slow) var(--ease-default);
   cursor: pointer;
 }
 
 .main-avatar:hover {
   transform: scale(1.08);
-  border-color: #c77ddb;
-  box-shadow: 0 0 35px var(--lilac), 0 0 70px rgba(155, 89, 182, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  border-color: var(--purple-bright);
+  box-shadow: 0 0 35px var(--purple), 0 0 70px rgba(155, 89, 182, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
   filter: brightness(1.15);
 }
 
@@ -352,11 +516,11 @@ a, button, .desktop-icon, .dock-item, .start-button,
   padding: 18px 20px;
   background: rgba(15, 15, 25, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   cursor: pointer;
   color: var(--text-primary);
   backdrop-filter: blur(20px);
-  transition: all var(--transition);
+  transition: all var(--duration-slow) var(--ease-bounce);
   min-width: 90px;
 }
 
@@ -434,53 +598,35 @@ a, button, .desktop-icon, .dock-item, .start-button,
   transform: none !important;
   width: min(560px, 92vw);
   max-height: 80vh;
-  background: var(--win-bg);
-  backdrop-filter: blur(60px) saturate(1.2);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--win-radius);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    0 30px 100px rgba(0, 0, 0, 0.7),
-    0 0 60px rgba(155, 89, 182, 0.05);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-window);
   z-index: 500;
   display: none;
   flex-direction: column;
   overflow: hidden;
   opacity: 0;
-  transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity var(--duration-slow) var(--ease-smooth);
 }
 
 .os-window.open {
   display: flex;
   opacity: 1;
   transform: none !important;
-  animation: windowOpen 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: windowOpen var(--duration-slow) var(--ease-spring) forwards;
+  box-shadow: var(--shadow-window), 0 0 0 1px var(--border-subtle);
 }
 
-@keyframes windowOpen {
-  from {
-    opacity: 0;
-    transform: scale(0.92) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+.os-window.open:focus-within,
+.os-window.focused {
+  box-shadow: var(--shadow-window), 0 0 0 2px var(--purple-bright), var(--shadow-glow-sm);
 }
 
 .os-window.closing {
-  animation: windowClose 0.25s ease-in forwards;
-}
-
-@keyframes windowClose {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.92) translateY(10px);
-  }
+  animation: windowClose var(--duration-fast) var(--ease-exit) forwards;
 }
 
 .window-projects {
@@ -490,11 +636,11 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .window-header {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: var(--space-3) var(--space-4);
   background: linear-gradient(180deg, rgba(26, 26, 46, 0.98), rgba(15, 15, 30, 0.95));
-  border-bottom: 1px solid rgba(155, 89, 182, 0.08);
-  border-radius: var(--win-radius) var(--win-radius) 0 0;
-  gap: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  gap: var(--space-2);
   flex-shrink: 0;
 }
 
@@ -537,7 +683,7 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .win-close:hover {
   background: #ff3b30;
   transform: scale(1.2);
-  box-shadow: 0 0 12px rgba(255, 60, 50, 0.6);
+  box-shadow: 0 0 12px rgba(255, 60, 50, 0.8);
 }
 
 .win-close:hover::after {
@@ -844,18 +990,16 @@ a, button, .desktop-icon, .dock-item, .start-button,
   bottom: 55px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(26, 26, 46, 0.85);
+  background: var(--glass-bg);
   backdrop-filter: blur(40px) saturate(1.5);
-  border: 1px solid rgba(155, 89, 182, 0.12);
-  border-radius: 20px;
+  -webkit-backdrop-filter: blur(40px) saturate(1.5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-2xl);
   padding: 10px 18px;
   z-index: 600;
   display: flex;
   gap: 6px;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 40px rgba(155, 89, 182, 0.05);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(155, 89, 182, 0.05);
 }
 
 .dock-item {
@@ -866,10 +1010,10 @@ a, button, .desktop-icon, .dock-item, .start-button,
   justify-content: center;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
   font-size: 1.7rem;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all var(--duration-normal) var(--ease-bounce);
   position: relative;
 }
 
@@ -882,21 +1026,21 @@ a, button, .desktop-icon, .dock-item, .start-button,
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--lilac);
-  box-shadow: 0 0 10px var(--lilac);
-  transition: transform 0.3s;
+  background: var(--purple);
+  box-shadow: var(--shadow-glow-sm);
+  transition: transform var(--duration-normal) var(--ease-bounce);
 }
 
 .dock-item.open::before { transform: translateX(-50%) scale(1); }
-.dock-item.open { border-color: rgba(155, 89, 182, 0.3); }
+.dock-item.open { border-color: var(--border-default); }
 
-.dock-icon { width: 32px; height: 32px; object-fit: cover; border-radius: 12px; transition: transform 0.3s; }
+.dock-icon { width: 32px; height: 32px; object-fit: cover; border-radius: var(--radius-lg); transition: transform var(--duration-normal) var(--ease-bounce); }
 
 .dock-item:hover {
   background: rgba(155, 89, 182, 0.12);
-  border-color: rgba(155, 89, 182, 0.25);
+  border-color: var(--border-default);
   transform: translateY(-12px) scale(1.15);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3), 0 0 30px rgba(155, 89, 182, 0.15);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-sm);
 }
 
 .dock-item:hover .dock-icon { transform: scale(1.1); }
@@ -909,10 +1053,11 @@ a, button, .desktop-icon, .dock-item, .start-button,
   bottom: 0;
   left: 0;
   right: 0;
-  height: 46px;
-  background: rgba(10, 10, 15, 0.96);
-  backdrop-filter: blur(40px) saturate(1.3);
-  border-top: 1px solid rgba(155, 89, 182, 0.15);
+  height: var(--taskbar-height);
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1179,15 +1324,16 @@ a, button, .desktop-icon, .dock-item, .start-button,
   position: fixed;
   bottom: 50px;
   left: 10px;
-  background: rgba(26, 26, 46, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(155, 89, 182, 0.3);
-  border-radius: 12px;
-  padding: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: var(--space-3);
   min-width: 200px;
   z-index: 1000;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  animation: menuSlideIn 0.2s ease-out;
+  box-shadow: var(--shadow-xl);
+  animation: menuSlideIn var(--duration-normal) var(--ease-smooth);
 }
 
 @keyframes menuSlideIn {
@@ -1610,9 +1756,9 @@ a, button, .desktop-icon, .dock-item, .start-button,
 
 .rain-toggle:hover, .music-taskbar-btn:hover, .weather-taskbar-btn:hover, .theme-toggle:hover {
   background: rgba(155, 89, 182, 0.3);
-  border-color: rgba(155, 89, 182, 0.5);
+  border-color: var(--border-strong);
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 16px rgba(155, 89, 182, 0.2), 0 0 12px rgba(155, 89, 182, 0.1);
+  box-shadow: var(--shadow-glow-sm);
 }
 
 /* Music Popup */

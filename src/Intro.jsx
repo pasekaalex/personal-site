@@ -774,7 +774,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window ${openWindows.about ? 'open' : ''}`} 
+          className={`os-window ${openWindows.about ? 'open' : ''}${activeWindow === 'about' ? ' focused' : ''}`} 
           onClick={() => setActiveWindow('about')}
           style={{
             transform: 'none',
@@ -839,7 +839,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window window-projects open`} 
+          className={`os-window window-projects open${activeWindow === 'projects' ? ' focused' : ''}`} 
           onClick={() => setActiveWindow('projects')}
           style={{
             transform: 'none',
@@ -919,7 +919,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window window-terminal ${openWindows.terminal ? 'open' : ''}`} 
+          className={`os-window window-terminal ${openWindows.terminal ? 'open' : ''}${activeWindow === 'terminal' ? ' focused' : ''}`} 
           onClick={() => setActiveWindow('terminal')}
           style={{
             transform: 'none',
@@ -972,7 +972,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window ${openWindows.contact ? 'open' : ''}`} 
+          className={`os-window ${openWindows.contact ? 'open' : ''}${activeWindow === 'contact' ? ' focused' : ''}`} 
           onClick={() => setActiveWindow('contact')}
           style={{
             transform: 'none',
