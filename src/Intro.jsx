@@ -984,16 +984,11 @@ export default function Intro() {
             style={{ cursor: 'move' }}
             onMouseDown={(e) => handleWindowMouseDown(e, 'projects')}
           >
-            <div className="window-controls">
-              <button className="win-minimize" onClick={(e) => e.stopPropagation()}>
-              </button>
-              <button className="win-maximize" onClick={(e) => e.stopPropagation()}>
-              </button>
-              <button className="win-close" onClick={(e) => closeWindow('projects', e)}>
-              </button>
-            </div>
-            <span className="window-title">Projects</span>
             <div className="window-spacer" />
+            <span className="window-title">Projects</span>
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => closeWindow('projects', e)}>×</button>
+            </div>
           </div>
           <div className="window-content" style={{padding: projectsView === 'detail' ? '20px' : '0'}}>
             {projectsView === 'gallery' ? (
@@ -1069,16 +1064,11 @@ export default function Intro() {
             style={{ cursor: 'move' }}
             onMouseDown={(e) => handleWindowMouseDown(e, 'terminal')}
           >
-            <div className="window-controls">
-              <button className="win-minimize" onClick={(e) => e.stopPropagation()}>
-              </button>
-              <button className="win-maximize" onClick={(e) => e.stopPropagation()}>
-              </button>
-              <button className="win-close" onClick={(e) => closeWindow('terminal', e)}>
-              </button>
-            </div>
-            <span className="window-title">Terminal</span>
             <div className="window-spacer" />
+            <span className="window-title">Terminal</span>
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => closeWindow('terminal', e)}>×</button>
+            </div>
           </div>
           <div className="terminal-body" ref={terminalRef} onClick={() => terminalInputRef.current?.focus()}>
             <div className="terminal-output">
