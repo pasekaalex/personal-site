@@ -906,7 +906,6 @@ export default function Intro() {
             <div className="terminal-output">
               {terminalHistory.map((entry, i) => (
                 <div key={i} className={`terminal-line terminal-${entry.type}`}>
-                  {entry.type === 'input' && <span className="terminal-prompt">> </span>}
                   <pre>{entry.text}</pre>
                 </div>
               ))}
