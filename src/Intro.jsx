@@ -137,7 +137,7 @@ export default function Intro() {
       'about': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'projects': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'contact': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
-      'terminal': { x: window.innerWidth / 2 - 350, y: window.innerHeight / 2 - 260 }
+      'terminal': { x: window.innerWidth / 2 - 400, y: window.innerHeight / 2 - 300 }
     }
     return defaults[windowId] || { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
   }
@@ -908,7 +908,8 @@ export default function Intro() {
                 type="text"
                 value={terminalInput}
                 onChange={(e) => setTerminalInput(e.target.value)}
-                placeholder="type a command..."
+                placeholder="guest@paseka:~$ "
+          style={{ color: '#00ffaa' }}
                 autoFocus
               />
             </form>

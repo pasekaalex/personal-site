@@ -2532,7 +2532,12 @@ body {
    TERMINAL WINDOW
 ═══════════════════════════════════════════════════════════════ */
 .window-terminal {
-  width: min(680px, 92vw);
+  width: min(700px, 92vw);
+  height: min(560px, 85vh);
+}
+
+.window-terminal .terminal-body {
+  max-height: 480px !important;
 }
 
 .terminal-body {
