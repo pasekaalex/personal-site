@@ -860,6 +860,7 @@ export default function Intro() {
               key={icon.id}
               className={`desktop-icon ${openWindows[icon.id] ? 'active' : ''}`}
               onClick={() => openWindow(icon.id)}
+              onDoubleClick={() => openWindow(icon.id)}
             >
               <span className="icon-glow" />
               <img src={icon.icon} alt={icon.label} className="icon-img" />
