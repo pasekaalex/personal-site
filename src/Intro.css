@@ -44,6 +44,12 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: default;
+}
+
+a, button, .desktop-icon, .dock-item, .start-button,
+.start-menu-item, .project-card, .contact-link, .about-link {
+  cursor: pointer;
 }
 
 /* Custom Scrollbar */
@@ -686,9 +692,10 @@ body {
 .about-link span { font-size: 0.9rem; }
 
 .about-link:hover {
-  background: rgba(155, 89, 182, 0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(155, 89, 182, 0.15);
+  background: rgba(155, 89, 182, 0.2);
+  border-color: rgba(155, 89, 182, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(155, 89, 182, 0.25), 0 0 20px rgba(155, 89, 182, 0.15);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -800,9 +807,10 @@ body {
 }
 
 .contact-link:hover {
-  background: rgba(155, 89, 182, 0.06);
-  border-color: rgba(155, 89, 182, 0.2);
-  transform: translateX(6px);
+  background: rgba(155, 89, 182, 0.08);
+  border-color: rgba(155, 89, 182, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(155, 89, 182, 0.12);
 }
 
 .contact-icon {
