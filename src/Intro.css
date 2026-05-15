@@ -2544,13 +2544,14 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #0a0a12 0%, #0a0a0f 50%, #080810 100%);
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 50%, #0a0a14 100%);
   font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
   font-size: 0.85rem;
   padding: 0;
   overflow: hidden;
   max-height: 500px;
   position: relative;
+  border-top: 1px solid rgba(155, 89, 182, 0.2);
 }
 
 .terminal-output {
@@ -2574,18 +2575,19 @@ body {
   font-family: inherit;
   font-size: inherit;
   white-space: pre-wrap;
-  text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+  text-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
+  color: #d4c4e8;
 }
 
 .terminal-input {
   flex: 1;
   background: transparent;
   border: none;
-  color: #0f0;
+  color: #d4c4e8;
   font-family: inherit;
   font-size: inherit;
   outline: none;
-  caret-color: #0f0;
+  caret-color: #9b59b6;
   min-width: 0;
   animation: terminalBlink 1s step-end infinite;
 }
@@ -2600,18 +2602,19 @@ body {
 }
 
 .terminal-prompt {
-  color: #00ffaa;
+  color: #9b59b6;
   white-space: nowrap;
   margin-right: 8px;
-  text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+  text-shadow: 0 0 10px rgba(155, 89, 182, 0.6);
+  font-weight: bold;
 }
 
 .terminal-input-line {
   display: flex;
   align-items: center;
   padding: 14px 18px;
-  border-top: 1px solid rgba(0, 255, 170, 0.15);
-  background: rgba(0, 255, 170, 0.03);
+  border-top: 1px solid rgba(155, 89, 182, 0.3);
+  background: rgba(155, 89, 182, 0.08);
 }
 
 .terminal-body::before {
