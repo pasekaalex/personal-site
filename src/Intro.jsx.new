@@ -1,0 +1,28 @@
+
+// Snake game functions
+const resetSnake = useCallback(() => {
+  setSnakePos([{ x: 10, y: 10 }])
+  setFoodPos({ x: Math.floor(Math.random() * 18) + 1, y: Math.floor(Math.random() * 18) + 1 })
+  setDirection('right')
+  setSnakeSpeed(150)
+  setGameStarted(false)
+  setGameOver(false)
+}, [])
+
+const startSnake = useCallback(() => {
+  setGameStarted(true)
+  setGameOver(false)
+}, [])
+
+// Memory game functions
+const initMemory = useCallback(() => {
+  const emojis = ['🎮', '🎲', '🎯', '🎪', '🎨', '🎭', '🎸', '🎺']
+  const shuffled = [...emojis, ...emojis].sort(() => Math.random() - 0.5)
+  setCards(shuffled.map((e, i) => ({ id: i, emoji: e })))
+  setFlipped([])
+  setMatched([])
+  setMemoryMoves(0)
+  setMemoryTime(0)
+  setMemoryDone(false)
+}, [])
+

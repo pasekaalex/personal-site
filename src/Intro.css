@@ -3017,3 +3017,184 @@ button:active:not(:disabled) {
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   ARCADE WINDOW STYLES
+═══════════════════════════════════════════════════════════════ */
+.arcade-body {
+  padding: 20px;
+  background: var(--void);
+}
+.arcade-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 15px;
+}
+.arcade-menu h2 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--purple-bright);
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px var(--purple);
+}
+.arcade-game-btn {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--purple);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+.arcade-game-btn:hover {
+  background: var(--purple);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
+}
+.snake-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.snake-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin: 15px 0;
+  background: var(--void);
+  padding: 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+}
+.snake-row {
+  display: flex;
+  gap: 2px;
+}
+.snake-cell {
+  width: 18px;
+  height: 18px;
+  background: var(--surface-1);
+  border-radius: 2px;
+}
+.snake-cell.snake { background: var(--purple); }
+.snake-cell.food { background: #ff6b6b; border-radius: 50%; }
+.snake-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.snake-header button {
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 6px;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.snake-header button:hover {
+  background: rgba(155, 89, 182, 0.4);
+}
+.snake-start-btn, .snake-gameover button {
+  padding: 10px 20px;
+  background: var(--purple);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.snake-start-btn:hover, .snake-gameover button:hover {
+  background: var(--purple-bright);
+  box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+}
+.snake-gameover {
+  text-align: center;
+  padding: 20px;
+}
+.snake-gameover p {
+  font-size: 1.2rem;
+  color: var(--error);
+  margin-bottom: 10px;
+}
+.memory-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.memory-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.memory-header button {
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 6px;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.memory-header button:hover {
+  background: rgba(155, 89, 182, 0.4);
+}
+.memory-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: 300px;
+  margin: 15px auto;
+}
+.memory-card {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: var(--surface-2);
+  border: 2px solid var(--purple);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.memory-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+}
+.memory-card.flipped {
+  background: var(--surface-3);
+}
+.memory-win {
+  text-align: center;
+  padding: 20px;
+}
+.memory-win p {
+  font-size: 1.2rem;
+  color: var(--success);
+  margin-bottom: 10px;
+}
+.memory-win button {
+  padding: 10px 20px;
+  background: var(--purple);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.memory-win button:hover {
+  background: var(--purple-bright);
+}

@@ -78,6 +78,7 @@ export default function Intro() {
     projects: false,
     contact: false,
     terminal: false,
+    arcade: false,
   })
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [weatherPopupOpen, setWeatherPopupOpen] = useState(false)
@@ -98,6 +99,22 @@ export default function Intro() {
     { type: 'output', text: '' },
   ])
   const [terminalInput, setTerminalInput] = useState('')
+  const [arcadeGame, setArcadeGame] = useState(null) // null | 'snake' | 'memory'
+  const [arcadeHiScore, setArcadeHiScore] = useState(() => parseInt(localStorage.getItem('arcadeHiScore') || '0'))
+
+  // Snake state
+  const [snake, setSnake] = useState([{x: 10, y: 10}])
+  const [food, setFood] = useState({x: 15, y: 15})
+  const [dir, setDir] = useState('right')
+  const [gameRunning, setGameRunning] = useState(false)
+  const [gameOver, setGameOver] = useState(false)
+
+  // Memory state
+  const [memCards, setMemCards] = useState([])
+  const [memFlipped, setMemFlipped] = useState([])
+  const [memMatched, setMemMatched] = useState([])
+  const [memMoves, setMemMoves] = useState(0)
+
   const [terminalHistoryIndex, setTerminalHistoryIndex] = useState(-1)
   const [terminalCommandHistory, setTerminalCommandHistory] = useState([])
   const [guessNumber, setGuessNumber] = useState(null)
@@ -157,7 +174,8 @@ export default function Intro() {
       'about': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'projects': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'contact': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
-      'terminal': { x: window.innerWidth / 2 - 400, y: window.innerHeight / 2 - 300 }
+      'terminal': { x: window.innerWidth / 2 - 400, y: window.innerHeight / 2 - 300 },
+      'arcade': { x: window.innerWidth / 2 - 250, y: window.innerHeight / 2 - 225 }
     }
     return defaults[windowId] || { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
   }
@@ -802,6 +820,44 @@ export default function Intro() {
     }
   }
 
+  // Arcade game functions
+  const startSnakeGame = useCallback(() => {
+    setGameRunning(true)
+    setGameOver(false)
+  }, [])
+
+  const resetSnakeGame = useCallback(() => {
+    setSnake([{x: 10, y: 10}])
+    setFood({x: Math.floor(Math.random() * 18) + 1, y: Math.floor(Math.random() * 18) + 1})
+    setDir('right')
+    setGameRunning(true)
+    setGameOver(false)
+  }, [])
+
+  const initMemoryGame = useCallback(() => {
+    const emojis = ['🎮', '🎲', '🎯', '🎪', '🎨', '🎭', '🎸', '🎺']
+    const deck = [...emojis, ...emojis].sort(() => Math.random() - 0.5)
+    setMemCards(deck.map((e, i) => ({ id: i, emoji: e })))
+    setMemFlipped([])
+    setMemMatched([])
+    setMemMoves(0)
+  }, [])
+
+  const flipCard = useCallback((index) => {
+    if (memFlipped.length === 2) return
+    if (memMatched.includes(index)) return
+    const newFlipped = [...memFlipped, index]
+    setMemFlipped(newFlipped)
+    if (newFlipped.length === 2) {
+      setMemMoves(m => m + 1)
+      const [a, b] = newFlipped
+      if (memCards[a].emoji === memCards[b].emoji) {
+        setMemMatched(m => [...m, a, b])
+      }
+      setTimeout(() => setMemFlipped([]), 800)
+    }
+  }, [memFlipped, memMatched, memCards])
+
   return (
     <Fragment>
       <div className="mobile-message">
@@ -1155,6 +1211,101 @@ export default function Intro() {
         </div>
         )})()}
 
+      {/* ARCADE Window */}
+      {openWindows.arcade && (() => {
+        const pos = getWindowPosition('arcade')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window ${openWindows.arcade ? 'open' : ''}${activeWindow === 'arcade' ? ' focused' : ''}${dragState.dragging && dragState.windowId === 'arcade' ? ' dragging' : ''}`} 
+          onClick={() => setActiveWindow('arcade')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'arcade')}
+          >
+            <div className="window-spacer" />
+            <span className="window-title">🎮 Arcade</span>
+            <div className="window-controls">
+              <button className="win-close" onClick={(e) => closeWindow('arcade', e)}>×</button>
+            </div>
+          </div>
+          <div className="window-body arcade-body">
+            {!arcadeGame && (
+              <div className="arcade-menu">
+                <h2>Select Game</h2>
+                <button className="arcade-game-btn" onClick={() => setArcadeGame('snake')}>
+                  🐍 Snake
+                </button>
+                <button className="arcade-game-btn" onClick={() => setArcadeGame('memory')}>
+                  🧠 Memory
+                </button>
+                <p style={{marginTop: '20px', color: 'var(--text-muted)'}}>High Score: {arcadeHiScore}</p>
+              </div>
+            )}
+            {arcadeGame === 'snake' && (
+              <div className="snake-game">
+                <div className="snake-header">
+                  <span>Score: {snake.length - 1}</span>
+                  <button onClick={() => {setArcadeGame(null); setGameRunning(false)}}>← Back</button>
+                </div>
+                <div className="snake-board">
+                  {Array.from({length: 20}).map((_, y) => (
+                    <div key={y} className="snake-row">
+                      {Array.from({length: 20}).map((_, x) => {
+                        const isSnake = snake.some(s => s.x === x && s.y === y)
+                        const isFood = food.x === x && food.y === y
+                        return (
+                          <div key={x} className={`snake-cell ${isSnake ? 'snake' : ''} ${isFood ? 'food' : ''}`} />
+                        )
+                      })}
+                    </div>
+                  ))}
+                </div>
+                {!gameRunning && !gameOver && (
+                  <button className="snake-start-btn" onClick={() => startSnakeGame()}>Press to Start</button>
+                )}
+                {gameOver && (
+                  <div className="snake-gameover">
+                    <p>GAME OVER! Score: {snake.length - 1}</p>
+                    <button onClick={resetSnakeGame}>Play Again</button>
+                  </div>
+                )}
+              </div>
+            )}
+            {arcadeGame === 'memory' && (
+              <div className="memory-game">
+                <div className="memory-header">
+                  <span>Moves: {memMoves}</span>
+                  <button onClick={() => {setArcadeGame(null)}}>← Back</button>
+                </div>
+                <div className="memory-board">
+                  {memCards.map((card, i) => (
+                    <div key={i} className={`memory-card ${memFlipped.includes(i) || memMatched.includes(i) ? 'flipped' : ''}`}
+                         onClick={() => flipCard(i)}>
+                      {(memFlipped.includes(i) || memMatched.includes(i)) ? card.emoji : '?'}
+                    </div>
+                  ))}
+                </div>
+                {memMatched.length === memCards.length && memCards.length > 0 && (
+                  <div className="memory-win">
+                    <p>YOU WIN! Moves: {memMoves}</p>
+                    <button onClick={initMemoryGame}>Play Again</button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        )})()}
+
       {/* Start Menu */}
       {startMenuOpen && (
         <div className="start-menu">
@@ -1213,6 +1364,13 @@ export default function Intro() {
               >
                 <span className="start-menu-icon" style={{fontSize: '1.2rem'}}>💻</span>
                 <span>Terminal</span>
+              </button>
+              <button
+                className="start-menu-item"
+                onClick={() => { openWindow('arcade'); setStartMenuOpen(false) }}
+              >
+                <span className="start-menu-icon" style={{fontSize: '1.2rem'}}>🎮</span>
+                <span>Arcade</span>
               </button>
               
             </div>
