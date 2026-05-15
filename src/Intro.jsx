@@ -434,9 +434,37 @@ export default function Intro() {
 
     switch (command) {
       case 'help':
-        addOutput(`Available commands:\n  help, clear, date, whoami, echo, neofetch, calc,\n  roll, 8ball, coinflip, joke, history,
-  guess, rps, poker`)
-
+        addOutput(`
+╔══════════════════════════════════════════════════╗
+║           ◉  TERMINAL COMMANDS  ◉                ║
+╠══════════════════════════════════════════════════╣
+║  GENERAL                                        ║
+║  ───────────────────────────────────────────    ║
+║  help      - show this help                     ║
+║  clear     - clear terminal                     ║
+║  date      - show current date/time             ║
+║  whoami    - display user info                  ║
+║  echo      - echo text (echo hello)             ║
+║  neofetch  - system info + ASCII art            ║
+║  calc      - calculator (calc 2+2)              ║
+║  history   - show command history               ║
+║                                                    ║
+║  FUN                                            ║
+║  ───────────────────────────────────────────    ║
+║  8ball     - magic 8-ball (8ball question)      ║
+║  joke      - random joke                        ║
+║  coinflip  - flip a coin                        ║
+║  roll      - roll dice (roll 2d6)               ║
+║  fortune   - fortune cookie message              ║
+║                                                    ║
+║  GAMES                                          ║
+║  ───────────────────────────────────────────    ║
+║  games     - show available games               ║
+║  slots     - slot machine game                   ║
+║  guess     - number guessing game                ║
+║  rps       - rock paper scissors                 ║
+║  poker     - dice poker                         ║
+╚══════════════════════════════════════════════════╝`)
         break
       case 'clear':
       case 'cls':
