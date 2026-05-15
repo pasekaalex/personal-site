@@ -564,8 +564,9 @@ export default function Intro() {
 
   // Auto-scroll terminal output to bottom
   useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+    const output = terminalRef.current?.querySelector('.terminal-output')
+    if (output) {
+      output.scrollTop = output.scrollHeight
     }
   }, [terminalHistory])
 
@@ -911,7 +912,7 @@ export default function Intro() {
               ))}
             </div>
             <form className="terminal-input-line" onSubmit={handleTerminalSubmit}>
-              <span className="terminal-prompt">> </span>
+              <span className="terminal-prompt" style={{ color: '#bb77dd', marginRight: '8px' }}>guest@paseka:~$ </span>
               <input
                 ref={terminalInputRef}
                 className="terminal-input"
