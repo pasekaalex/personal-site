@@ -79,6 +79,7 @@ export default function Intro() {
     contact: false,
     terminal: false,
     arcade: false,
+    chess: false,
   })
   const [startMenuOpen, setStartMenuOpen] = useState(false)
   const [weatherPopupOpen, setWeatherPopupOpen] = useState(false)
@@ -115,19 +116,593 @@ export default function Intro() {
   const [memMatched, setMemMatched] = useState([])
   const [memMoves, setMemMoves] = useState(0)
 
-  const [terminalHistoryIndex, setTerminalHistoryIndex] = useState(-1)
-  const [terminalCommandHistory, setTerminalCommandHistory] = useState([])
-  const [guessNumber, setGuessNumber] = useState(null)
-  const [guessAttempts, setGuessAttempts] = useState(0)
-  const [pokerDice, setPokerDice] = useState([1,1,1,1,1])
-  const [pokerKept, setPokerKept] = useState([false,false,false,false,false])
-  const [pokerRolls, setPokerRolls] = useState(0)
-  const [highLowCard, setHighLowCard] = useState(null)
-  const [highLowPrev, setHighLowPrev] = useState(null)
-  const [highLowWins, setHighLowWins] = useState(0)
-  const [wordleWord, setWordleWord] = useState(null)
-  const [wordleGuesses, setWordleGuesses] = useState([])
-  const [wordleDone, setWordleDone] = useState(false)
+  // Chess state
+  const [chessBoard, setChessBoard] = useState([])
+  const [chessTurn, setChessTurn] = useState('white')
+  const [chessSelected, setChessSelected] = useState(null)
+  const [chessValidMoves, setChessValidMoves] = useState([])
+  const [chessGameOver, setChessGameOver] = useState(null)
+  const [chessHistory, setChessHistory] = useState([])
+  const [chessMoveList, setChessMoveList] = useState([])
+  const [chessAiThinking, setChessAiThinking] = useState(false)
+  const [chessDifficulty, setChessDifficulty] = useState(2)
+  const [chessFlipped, setChessFlipped] = useState(false)
+  const [chessLastMove, setChessLastMove] = useState(null)
+  const [chessPawnPromoting, setChessPawnPromoting] = useState(null)
+  const [chessAiPlayer, setChessAiPlayer] = useState('black')
+  const [chessSound, setChessSound] = useState(true)
+
+  // Initialize chess board
+  const initChessBoard = useCallback(() => {
+    const board = [
+      ['r','n','b','q','k','b','n','r'],
+      ['p','p','p','p','p','p','p','p'],
+      [null,null,null,null,null,null,null,null],
+      [null,null,null,null,null,null,null,null],
+      [null,null,null,null,null,null,null,null],
+      [null,null,null,null,null,null,null,null],
+      ['P','P','P','P','P','P','P','P'],
+      ['R','N','B','Q','K','B','N','R'],
+    ]
+    setChessBoard(board)
+    setChessTurn('white')
+    setChessSelected(null)
+    setChessValidMoves([])
+    setChessGameOver(null)
+    setChessHistory([])
+    setChessMoveList([])
+    setChessAiThinking(false)
+    setChessLastMove(null)
+    setChessPawnPromoting(null)
+  }, [])
+
+
+  useEffect(() => {
+    initChessBoard()
+  }, [initChessBoard])
+
+  // Sound effects
+  const playChessSound = useCallback((type) => {
+    if (!chessSound) return
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+      const oscillator = audioContext.createOscillator()
+      const gainNode = audioContext.createGain()
+      oscillator.connect(gainNode)
+      gainNode.connect(audioContext.destination)
+      
+      if (type === 'move') {
+        oscillator.frequency.setValueAtTime(300, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1)
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1)
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + 0.1)
+      } else if (type === 'capture') {
+        oscillator.frequency.setValueAtTime(200, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.2)
+        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2)
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + 0.2)
+      } else if (type === 'check') {
+        oscillator.frequency.setValueAtTime(400, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1)
+        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.2)
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3)
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + 0.3)
+      } else if (type === 'castle') {
+        oscillator.frequency.setValueAtTime(300, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1)
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2)
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + 0.2)
+      }
+    } catch (e) {}
+  }, [chessSound])
+
+  // Chess helpers
+  const getPieceColor = (piece) => {
+    if (!piece) return null
+    return piece === piece.toUpperCase() ? 'white' : 'black'
+  }
+
+  const isValidPosition = (row, col) => row >= 0 && row < 8 && col >= 0 && col < 8
+
+  // Get all legal moves for a piece
+  const getPieceMoves = (board, row, col, includeSpecial = true) => {
+    const piece = board[row][col]
+    if (!piece) return []
+    const color = getPieceColor(piece)
+    const type = piece.toLowerCase()
+    const moves = []
+    const piecePos = { row, col }
+
+    const addMove = (r, c, special = null) => {
+      if (isValidPosition(r, c)) {
+        const target = board[r][c]
+        if (!target || getPieceColor(target) !== color) {
+          moves.push({ row: r, col: c, special })
+        }
+      }
+    }
+
+    const addSlidingMoves = (directions) => {
+      directions.forEach(([dr, dc]) => {
+        let r = row + dr, c = col + dc
+        while (isValidPosition(r, c)) {
+          const target = board[r][c]
+          if (!target) {
+            moves.push({ row: r, col: c })
+          } else {
+            if (getPieceColor(target) !== color) {
+              moves.push({ row: r, col: c })
+            }
+            break
+          }
+          r += dr
+          c += dc
+        }
+      })
+    }
+
+    switch (type) {
+      case 'p': {
+        const dir = color === 'white' ? -1 : 1
+        const startRow = color === 'white' ? 6 : 1
+        // Forward move
+        if (isValidPosition(row + dir, col) && !board[row + dir][col]) {
+          moves.push({ row: row + dir, col })
+          // Double move from start
+          if (row === startRow && !board[row + 2 * dir][col]) {
+            moves.push({ row: row + 2 * dir, col })
+          }
+        }
+        // Captures
+        [-1, 1].forEach(dc => {
+          const nr = row + dir, nc = col + dc
+          if (isValidPosition(nr, nc)) {
+            const target = board[nr][nc]
+            if (target && getPieceColor(target) !== color) {
+              moves.push({ row: nr, col: nc })
+            }
+            // En passant
+            if (includeSpecial && chessLastMove) {
+              const lastMove = chessLastMove
+              const lastPiece = board[lastMove.to.row][lastMove.to.col]
+              if (lastPiece?.toLowerCase() === 'p') {
+                const lastStartRow = getPieceColor(lastPiece) === 'white' ? 6 : 1
+                if (lastMove.from.row === lastStartRow && lastMove.to.row === lastStartRow + 2 * (getPieceColor(lastPiece) === 'white' ? -1 : 1)) {
+                  if (nr === lastMove.to.row && (nc === lastMove.to.col - 1 || nc === lastMove.to.col + 1)) {
+                    if (row + dir === lastMove.to.row) {
+                      moves.push({ row: nr, col: nc, enPassant: true })
+                    }
+                  }
+                }
+              }
+            }
+          }
+        })
+        break
+      }
+      case 'n':
+        [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr,dc]) => addMove(row+dr, col+dc))
+        break
+      case 'b':
+        addSlidingMoves([[-1,-1],[-1,1],[1,-1],[1,1]])
+        break
+      case 'r':
+        addSlidingMoves([[-1,0],[1,0],[0,-1],[0,1]])
+        break
+      case 'q':
+        addSlidingMoves([[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]])
+        break
+      case 'k':
+        [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc]) => addMove(row+dr, col+dc))
+        // Castling
+        if (includeSpecial) {
+          const kingRow = color === 'white' ? 7 : 0
+          if (row === kingRow && col === 4) {
+            // Kingside
+            if (board[kingRow][5] === null && board[kingRow][6] === null) {
+              if (board[kingRow][7]?.toLowerCase() === 'r') {
+                moves.push({ row: kingRow, col: 6, castle: 'kingside' })
+              }
+            }
+            // Queenside
+            if (board[kingRow][3] === null && board[kingRow][2] === null && board[kingRow][1] === null) {
+              if (board[kingRow][0]?.toLowerCase() === 'r') {
+                moves.push({ row: kingRow, col: 2, castle: 'queenside' })
+              }
+            }
+          }
+        }
+        break
+    }
+    return moves
+  }
+
+  // Check if a color is in check
+  const isInCheck = (board, color) => {
+    let kingPos = null
+    // Find king
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c]
+        if (piece?.toLowerCase() === 'k' && getPieceColor(piece) === color) {
+          kingPos = { row: r, col: c }
+          break
+        }
+      }
+      if (kingPos) break
+    }
+    if (!kingPos) return false
+
+    // Check if any opponent piece can capture king
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c]
+        if (piece && getPieceColor(piece) !== color) {
+          const moves = getPieceMoves(board, r, c, false)
+          if (moves.some(m => m.row === kingPos.row && m.col === kingPos.col)) {
+            return true
+          }
+        }
+      }
+    }
+    return false
+  }
+
+  // Get all legal moves for a color (considering check)
+  const getLegalMoves = (board, color) => {
+    const legalMoves = []
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c]
+        if (piece && getPieceColor(piece) === color) {
+          const moves = getPieceMoves(board, r, c)
+          moves.forEach(move => {
+            // Simulate move
+            const newBoard = board.map(row => [...row])
+            const captured = newBoard[move.row][move.col]
+            newBoard[move.row][move.col] = piece
+            newBoard[r][c] = null
+            
+            // Handle en passant capture
+            if (move.enPassant) {
+              const captureRow = color === 'white' ? move.row + 1 : move.row - 1
+              newBoard[captureRow][move.col] = null
+            }
+
+            // Check if this move leaves king in check
+            if (!isInCheck(newBoard, color)) {
+              legalMoves.push({ from: { row: r, col: c }, to: move })
+            }
+          })
+        }
+      }
+    }
+    return legalMoves
+  }
+
+  // Make a move
+  const makeMove = useCallback((fromRow, fromCol, toRow, toCol, promotionPiece = null) => {
+    if (chessGameOver) return
+    const board = chessBoard.map(row => [...row])
+    const piece = board[fromRow][fromCol]
+    const color = getPieceColor(piece)
+    const captured = board[toRow][toCol]
+    const move = { from: { row: fromRow, col: fromCol }, to: { row: toRow, col: toCol } }
+
+
+    // Check for pawn promotion
+    if (piece?.toLowerCase() === 'p') {
+      if ((color === 'white' && toRow === 0) || (color === 'black' && toRow === 7)) {
+        if (!promotionPiece) {
+          setChessPawnPromoting({ row: fromRow, col: fromCol, toRow, toCol })
+          return
+        }
+      }
+    }
+
+    // Handle castling
+    const moves = getPieceMoves(chessBoard, fromRow, fromCol)
+    const castleMove = moves.find(m => m.row === toRow && m.col === toCol && m.castle)
+    if (castleMove) {
+      const kingRow = color === 'white' ? 7 : 0
+      if (castleMove.castle === 'kingside') {
+        board[kingRow][5] = board[kingRow][7]
+        board[kingRow][7] = null
+      } else {
+        board[kingRow][3] = board[kingRow][0]
+        board[kingRow][0] = null
+      }
+      playChessSound('castle')
+    }
+
+    // Handle en passant
+    if (piece?.toLowerCase() === 'p' && fromCol !== toCol && !captured) {
+      const captureRow = color === 'white' ? toRow + 1 : toRow - 1
+      board[captureRow][toCol] = null
+    }
+
+    // Make the move
+    const promotion = promotionPiece || (piece?.toLowerCase() === 'p' && ((color === 'white' && toRow === 0) || (color === 'black' && toRow === 7)) ? (color === 'white' ? 'Q' : 'q') : null)
+    board[toRow][toCol] = promotion || piece
+    board[fromRow][fromCol] = null
+
+    // Record history
+    const newHistory = [...chessHistory, { board: chessBoard.map(r => [...r]), captured, castling: castleMove?.castle, enPassant: move.enPassant }]
+    setChessHistory(newHistory)
+
+    // Update move list
+    const pieceSymbol = piece?.toUpperCase()
+    const toAlgebraic = `${'abcdefgh'[toCol]}${8 - toRow}`
+    const fromAlgebraic = `${'abcdefgh'[fromCol]}${8 - fromRow}`
+    let moveNotation = ''
+    if (castleMove) {
+      moveNotation = castleMove.castle === 'kingside' ? 'O-O' : 'O-O-O'
+    } else {
+      if (pieceSymbol !== 'P') moveNotation += pieceSymbol
+      if (captured || move.enPassant) moveNotation += fromCol !== toCol ? 'x' : 'x'
+      moveNotation += toAlgebraic
+      if (promotion) moveNotation += `=${promotionPiece || 'Q'}`
+    }
+    
+    const newMoveList = [...chessMoveList, { notation: moveNotation, color }]
+    setChessMoveList(newMoveList)
+    setChessLastMove(move)
+
+    setChessBoard(board)
+    setChessSelected(null)
+    setChessValidMoves([])
+
+    // Play sound
+    if (castleMove) {
+      playChessSound('castle')
+    } else if (captured || move.enPassant) {
+      playChessSound('capture')
+    } else {
+      playChessSound('move')
+    }
+
+    // Check for check/checkmate/stalemate
+    const nextColor = color === 'white' ? 'black' : 'white'
+    const inCheck = isInCheck(board, nextColor)
+    
+    if (inCheck) {
+      playChessSound('check')
+      const legalMoves = getLegalMoves(board, nextColor)
+      if (legalMoves.length === 0) {
+        setChessGameOver('checkmate')
+        return
+      }
+    } else {
+      const legalMoves = getLegalMoves(board, nextColor)
+      if (legalMoves.length === 0) {
+        setChessGameOver('stalemate')
+        return
+      }
+    }
+
+    setChessTurn(nextColor)
+
+    // AI move
+    if (nextColor === chessAiPlayer && !chessGameOver) {
+      setChessAiThinking(true)
+      setTimeout(() => {
+        const aiMove = getBestMove(board, nextColor)
+        if (aiMove) {
+          makeMove(aiMove.from.row, aiMove.from.col, aiMove.to.row, aiMove.to.col, aiMove.promotion)
+        }
+        setChessAiThinking(false)
+      }, 500)
+    }
+  }, [chessBoard, chessGameOver, chessHistory, chessMoveList, chessAiPlayer, chessLastMove, playChessSound])
+
+  // AI: Minimax algorithm
+  const getBestMove = (board, color) => {
+    const legalMoves = getLegalMoves(board, color)
+    if (legalMoves.length === 0) return null
+
+    // Random move for difficulty 0
+    if (chessDifficulty === 0) {
+      return legalMoves[Math.floor(Math.random() * legalMoves.length)]
+    }
+
+    let bestMove = null
+    let bestScore = color === 'black' ? -Infinity : Infinity
+
+    legalMoves.forEach(move => {
+      const newBoard = board.map(r => [...r])
+      const piece = newBoard[move.from.row][move.from.col]
+      
+      // Handle en passant
+      if (move.enPassant) {
+        const captureRow = color === 'white' ? move.to.row + 1 : move.to.row - 1
+        newBoard[captureRow][move.to.col] = null
+      }
+      
+      newBoard[move.to.row][move.to.col] = piece
+      newBoard[move.from.row][move.from.col] = null
+
+      const score = minimax(newBoard, chessDifficulty - 1, -Infinity, Infinity, color === 'black')
+      
+      if (color === 'black') {
+        if (score > bestScore) {
+          bestScore = score
+          bestMove = move
+        }
+      } else {
+        if (score < bestScore) {
+          bestScore = score
+          bestMove = move
+        }
+      }
+    })
+
+    return bestMove || legalMoves[Math.floor(Math.random() * legalMoves.length)]
+  }
+
+  const minimax = (board, depth, alpha, beta, isMaximizing) => {
+    if (depth === 0) {
+      return evaluateBoard(board)
+    }
+
+    const color = isMaximizing ? 'black' : 'white'
+    const legalMoves = getLegalMoves(board, color)
+
+    if (legalMoves.length === 0) {
+      if (isInCheck(board, color)) {
+        return isMaximizing ? 10000 + depth : -10000 - depth
+      }
+      return 0 // Stalemate
+    }
+
+    if (isMaximizing) {
+      let maxEval = -Infinity
+      for (const move of legalMoves) {
+        const newBoard = board.map(r => [...r])
+        const piece = newBoard[move.from.row][move.from.col]
+        newBoard[move.to.row][move.to.col] = piece
+        newBoard[move.from.row][move.from.col] = null
+        const eval_ = minimax(newBoard, depth - 1, alpha, beta, false)
+        maxEval = Math.max(maxEval, eval_)
+        alpha = Math.max(alpha, eval_)
+        if (beta <= alpha) break
+      }
+      return maxEval
+    } else {
+      let minEval = Infinity
+      for (const move of legalMoves) {
+        const newBoard = board.map(r => [...r])
+        const piece = newBoard[move.from.row][move.from.col]
+        newBoard[move.to.row][move.to.col] = piece
+        newBoard[move.from.row][move.from.col] = null
+        const eval_ = minimax(newBoard, depth - 1, alpha, beta, true)
+        minEval = Math.min(minEval, eval_)
+        beta = Math.min(beta, eval_)
+        if (beta <= alpha) break
+      }
+      return minEval
+    }
+  }
+
+  const evaluateBoard = (board) => {
+    const values = { p: -1, n: -3, b: -3, r: -5, q: -9, k: 0, P: 1, N: 3, B: 3, R: 5, Q: 9, K: 0 }
+    const positionBonus = {
+      p: [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]],
+      P: [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
+    }
+    let score = 0
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c]
+        if (piece) {
+          const pieceLower = piece.toLowerCase()
+          score += values[piece] || 0
+        }
+      }
+    }
+    return score
+  }
+
+  // Handle square click
+  const handleChessSquareClick = useCallback((row, col) => {
+    if (chessGameOver) return
+    if (chessAiThinking) return
+    if (chessTurn === chessAiPlayer) return
+    if (chessPawnPromoting) return
+
+    const piece = chessBoard[row][col]
+    const color = getPieceColor(piece)
+
+    if (chessSelected) {
+      // Check if clicking a valid move destination
+      const validMove = chessValidMoves.find(m => m.row === row && m.col === col)
+      if (validMove) {
+        makeMove(chessSelected.row, chessSelected.col, row, col)
+        return
+      }
+      // Select new piece
+      if (color === chessTurn) {
+        setChessSelected({ row, col })
+        const moves = getPieceMoves(chessBoard, row, col)
+        // Filter to only legal moves
+        const legalMoves = moves.filter(m => {
+          const newBoard = chessBoard.map(r => [...r])
+          newBoard[m.row][m.col] = piece
+          newBoard[row][col] = null
+          if (m.enPassant) {
+            const captureRow = chessTurn === 'white' ? m.row + 1 : m.row - 1
+            newBoard[captureRow][m.col] = null
+          }
+          return !isInCheck(newBoard, chessTurn)
+        })
+        setChessValidMoves(legalMoves)
+        return
+      }
+      // Deselect
+      setChessSelected(null)
+      setChessValidMoves([])
+    } else {
+      // Select piece
+      if (color === chessTurn) {
+        setChessSelected({ row, col })
+        const moves = getPieceMoves(chessBoard, row, col)
+        // Filter to only legal moves
+        const legalMoves = moves.filter(m => {
+          const newBoard = chessBoard.map(r => [...r])
+          newBoard[m.row][m.col] = piece
+          newBoard[row][col] = null
+          if (m.enPassant) {
+            const captureRow = chessTurn === 'white' ? m.row + 1 : m.row - 1
+            newBoard[captureRow][m.col] = null
+          }
+          return !isInCheck(newBoard, chessTurn)
+        })
+        setChessValidMoves(legalMoves)
+      }
+    }
+  }, [chessBoard, chessSelected, chessValidMoves, chessTurn, chessGameOver, chessAiThinking, chessPawnPromoting, makeMove])
+
+  // Undo move
+  const undoChessMove = useCallback(() => {
+    if (chessHistory.length === 0) return
+    if (chessAiThinking) return
+    
+    const lastState = chessHistory[chessHistory.length - 1]
+    setChessBoard(lastState.board)
+    setChessHistory(chessHistory.slice(0, -1))
+    setChessMoveList(chessMoveList.slice(0, -1))
+    setChessTurn(chessTurn === 'white' ? 'black' : 'white')
+    setChessGameOver(null)
+    setChessSelected(null)
+    setChessValidMoves([])
+    
+    // Undo AI move too
+    if (chessHistory.length > 1 && chessTurn === chessAiPlayer) {
+      const prevState = chessHistory[chessHistory.length - 2]
+      setChessBoard(prevState.board)
+      setChessHistory(chessHistory.slice(0, -2))
+      setChessMoveList(chessMoveList.slice(0, -2))
+      setChessTurn('white')
+    }
+  }, [chessHistory, chessMoveList, chessTurn, chessAiThinking])
+
+
+  const pieceEmoji = (piece) => {
+    if (!piece) return null
+    const emojis = {
+      K: '♔', Q: '♕', R: '♖', B: '♗', N: '♘', P: '♙',
+      k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟'
+    }
+    return emojis[piece] || piece
+  }
+
   const terminalInputRef = useRef(null)
   const terminalRef = useRef(null)
   const [projectsView, setProjectsView] = useState('gallery')
@@ -164,6 +739,17 @@ export default function Intro() {
   
   
   
+  // Chess window ref for auto-scroll
+  const chessMoveListRef = useRef(null)
+  
+  useEffect(() => {
+    if (chessMoveListRef.current) {
+      chessMoveListRef.current.scrollTop = chessMoveListRef.current.scrollHeight
+    }
+  }, [chessMoveList])
+  
+  
+  
   // Initialize window position when opened
   const getWindowPosition = (windowId) => {
     if (windowPositions[windowId]) return windowPositions[windowId]
@@ -175,7 +761,8 @@ export default function Intro() {
       'projects': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'contact': { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 },
       'terminal': { x: window.innerWidth / 2 - 400, y: window.innerHeight / 2 - 300 },
-      'arcade': { x: window.innerWidth / 2 - 250, y: window.innerHeight / 2 - 225 }
+      'arcade': { x: window.innerWidth / 2 - 250, y: window.innerHeight / 2 - 225 },
+      'chess': { x: window.innerWidth / 2 - 340, y: window.innerHeight / 2 - 260 }
     }
     return defaults[windowId] || { x: window.innerWidth / 2 - 280, y: window.innerHeight / 2 - 200 }
   }
@@ -1306,6 +1893,183 @@ export default function Intro() {
         </div>
         )})()}
 
+      {/* CHESS Window */}
+      {openWindows.chess && (() => {
+        const pos = getWindowPosition('chess')
+        const zIndex = highestZIndex.current
+        return (
+        <div 
+          className={`os-window window-chess ${openWindows.chess ? 'open' : ''}${activeWindow === 'chess' ? ' focused' : ''}${dragState.dragging && dragState.windowId === 'chess' ? ' dragging' : ''}`} 
+          onClick={() => setActiveWindow('chess')}
+          style={{
+            transform: 'none',
+            left: pos.x,
+            top: pos.y,
+            zIndex
+          }}
+        >
+          <div 
+            className="window-header"
+            style={{ cursor: 'move' }}
+            onMouseDown={(e) => handleWindowMouseDown(e, 'chess')}
+          >
+            <div className="window-controls">
+              <button className="win-minimize" onClick={(e) => e.stopPropagation()}></button>
+              <button className="win-maximize" onClick={(e) => e.stopPropagation()}></button>
+              <button className="win-close" onClick={(e) => closeWindow('chess', e)}>×</button>
+            </div>
+            <span className="window-title">♟️ Chess</span>
+            <div className="window-spacer" />
+          </div>
+          <div className="chess-window-body">
+            {/* Chess Board */}
+            <div className="chess-main">
+              <div className="chess-board-container">
+                <div className={`chess-turn-indicator ${chessTurn === 'white' ? 'white-turn' : 'black-turn'}`}>
+                  {chessGameOver ? (
+                    chessGameOver === 'checkmate' ? (
+                      <span>♔ Checkmate! {chessTurn === 'white' ? 'Black' : 'White'} wins!</span>
+                    ) : (
+                      <span>Stalemate! Draw!</span>
+                    )
+                  ) : chessAiThinking ? (
+                    <span>🤖 AI is thinking...</span>
+                  ) : (
+                    <span>{chessTurn === 'white' ? '♔' : '♚'} {chessTurn === 'white' ? 'White' : 'Black'}'s turn</span>
+                  )}
+                </div>
+                <div className="chess-board-wrapper">
+                  <div className="chess-board">
+                    {chessBoard.map((row, rowIndex) => (
+                      <div key={rowIndex} className="chess-row">
+                        {row.map((piece, colIndex) => {
+                          const displayRow = chessFlipped ? rowIndex : 7 - rowIndex
+                          const displayCol = chessFlipped ? 7 - colIndex : colIndex
+                          const isLight = (displayRow + displayCol) % 2 === 0
+                          const isSelected = chessSelected?.row === rowIndex && chessSelected?.col === colIndex
+                          const isValidMove = chessValidMoves.some(m => m.row === rowIndex && m.col === colIndex)
+                          const isLastMoveFrom = chessLastMove?.from.row === rowIndex && chessLastMove?.from.col === colIndex
+                          const isLastMoveTo = chessLastMove?.to.row === rowIndex && chessLastMove?.to.col === colIndex
+                          const isPawnPromoting = chessPawnPromoting?.row === rowIndex && chessPawnPromoting?.col === colIndex
+                          
+                          return (
+                            <div 
+                              key={colIndex}
+                              className={`chess-square ${isLight ? 'light' : 'dark'} ${isSelected ? 'selected' : ''} ${isValidMove ? 'valid-move' : ''} ${isLastMoveFrom || isLastMoveTo ? 'last-move' : ''} ${isPawnPromoting ? 'promoting' : ''}`}
+                              onClick={() => handleChessSquareClick(rowIndex, colIndex)}
+                            >
+                              <span className="chess-piece">
+                                {pieceEmoji(piece)}
+                              </span>
+                              {isValidMove && !piece && <div className="valid-move-dot" />}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Pawn Promotion Modal */}
+              {chessPawnPromoting && (
+                <div className="chess-promotion-modal">
+                  <div className="chess-promotion-content">
+                    <h3>Promote Pawn</h3>
+                    <div className="chess-promotion-pieces">
+                      {['Q','R','B','N'].map(p => (
+                        <button 
+                          key={p} 
+                          className="chess-promotion-piece"
+                          onClick={() => {
+                            makeMove(chessPawnPromoting.row, chessPawnPromoting.col, chessPawnPromoting.toRow, chessPawnPromoting.toCol, p)
+                            setChessPawnPromoting(null)
+                          }}
+                        >
+                          {pieceEmoji(chessTurn === 'white' ? p : p.toLowerCase())}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Chess Sidebar */}
+            <div className="chess-sidebar">
+              {/* Controls */}
+              <div className="chess-controls">
+                <button className="chess-btn" onClick={initChessBoard}>New Game</button>
+                <button className="chess-btn" onClick={() => setChessFlipped(!chessFlipped)}>
+                  {chessFlipped ? '⬜' : '⬛'} Flip
+                </button>
+                <button className="chess-btn" onClick={undoChessMove} disabled={chessHistory.length === 0 || chessAiThinking}>Undo</button>
+              </div>
+              
+              {/* AI Toggle */}
+              <div className="chess-ai-section">
+                <label className="chess-label-text">Play vs AI:</label>
+                <select 
+                  className="chess-select"
+                  value={chessAiPlayer}
+                  onChange={(e) => setChessAiPlayer(e.target.value)}
+                >
+                  <option value="none">2 Players</option>
+                  <option value="black">AI (Black)</option>
+                  <option value="white">AI (White)</option>
+                </select>
+              </div>
+              
+              {/* Difficulty */}
+              {chessAiPlayer !== 'none' && (
+                <div className="chess-difficulty-section">
+                  <label className="chess-label-text">Difficulty:</label>
+                  <select 
+                    className="chess-select"
+                    value={chessDifficulty}
+                    onChange={(e) => setChessDifficulty(parseInt(e.target.value))}
+                  >
+                    <option value="0">Easy (Random)</option>
+                    <option value="1">Medium (1-ply)</option>
+                    <option value="2">Hard (2-ply)</option>
+                    <option value="3">Expert (3-ply)</option>
+                  </select>
+                </div>
+              )}
+              
+              {/* Sound Toggle */}
+              <div className="chess-sound-section">
+                <label className="chess-checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    checked={chessSound} 
+                    onChange={(e) => setChessSound(e.target.checked)}
+                  />
+                  Sound Effects
+                </label>
+              </div>
+              
+              {/* Move History */}
+              <div className="chess-move-history">
+                <div className="chess-move-history-header">Move History</div>
+                <div className="chess-move-list" ref={chessMoveListRef}>
+                  {chessMoveList.length === 0 ? (
+                    <div className="chess-move-empty">No moves yet</div>
+                  ) : (
+                    chessMoveList.map((move, i) => (
+                      <div key={i} className={`chess-move ${move.color}`}>
+                        <span className="chess-move-number">{Math.ceil((i + 1) / 2)}.</span>
+                        <span className="chess-move-notation">{move.notation}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        )})()}
+
       {/* Start Menu */}
       {startMenuOpen && (
         <div className="start-menu">
@@ -1371,6 +2135,13 @@ export default function Intro() {
               >
                 <span className="start-menu-icon" style={{fontSize: '1.2rem'}}>🎮</span>
                 <span>Arcade</span>
+              </button>
+              <button
+                className="start-menu-item"
+                onClick={() => { openWindow('chess'); setStartMenuOpen(false) }}
+              >
+                <span className="start-menu-icon" style={{fontSize: '1.2rem'}}>♟️</span>
+                <span>Chess</span>
               </button>
               
             </div>
