@@ -2601,56 +2601,15 @@ body {
   background: rgba(0, 255, 255, 0.02);
 }
 
-.terminal-output-command {
-  color: #0f0;
-}
-
-.terminal-output-command::before {
-  content: 'guest@paseka:~$ ';
-  color: #0ff;
-}
-
-/* Scanlines on terminal */
 .terminal-body::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.08) 2px,
-    rgba(0, 0, 0, 0.08) 4px
-  );
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px);
   pointer-events: none;
   z-index: 1;
 }
 
-@keyframes terminalBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.terminal-input:focus {
-  outline: none;
-}
-
-/* Light mode terminal */
-.light-mode .terminal-body {
-  background: #0d0d14;
-}
-
-.light-mode .terminal-prompt {
-  color: #0af;
-}
-
-.light-mode .terminal-input {
-  color: #0f0;
-}
-
-.light-mode .terminal-input::placeholder {
-  color: rgba(0, 255, 0, 0.3);
-}
+.light-mode .terminal-body { background: #0d0d14; }
+.light-mode .terminal-prompt { color: #0af; }
+.light-mode .terminal-input { color: #0f0; }
