@@ -80,6 +80,8 @@ export default function Intro() {
     terminal: false,
   })
   const [startMenuOpen, setStartMenuOpen] = useState(false)
+  const [weatherPopupOpen, setWeatherPopupOpen] = useState(false)
+  const [musicPopupOpen, setMusicPopupOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(true)
   const [musicVolume, setMusicVolume] = useState(0.2)
   const [selectedTrack, setSelectedTrack] = useState('piano')
@@ -1250,10 +1252,10 @@ export default function Intro() {
             </div>
           </div>
           <div className="weather-taskbar" style={{position: 'relative'}}>
-            <button className="weather-taskbar-btn" onClick={() => document.querySelector('.weather-popup-taskbar').classList.toggle('show')} title="Weather">
+            <button className="weather-taskbar-btn" onClick={() => setWeatherPopupOpen(!weatherPopupOpen)} title="Weather">
               🌤️
             </button>
-            <div className="weather-popup-taskbar">
+            <div className={`weather-popup-taskbar ${weatherPopupOpen ? 'show' : ''}`}>
               <div className="weather-popup-header">Weather</div>
               <div className="weather-popup-input-row">
                 <input type="text" placeholder="Zip" className="weather-popup-input" id="weatherZipTaskbar" maxLength={5} />
