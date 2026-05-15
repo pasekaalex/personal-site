@@ -1072,10 +1072,10 @@ button:active:not(:disabled) {
 }
 
 .contact-link:hover {
-  background: rgba(155, 89, 182, 0.08);
-  border-color: rgba(155, 89, 182, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(155, 89, 182, 0.12);
+  background: rgba(155, 89, 182, 0.12);
+  border-color: rgba(155, 89, 182, 0.4);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(155, 89, 182, 0.2);
 }
 
 .contact-icon {
