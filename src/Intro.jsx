@@ -335,8 +335,18 @@ export default function Intro() {
 
   const closeWindow = useCallback((id, e) => {
     e?.stopPropagation()
-    setOpenWindows(prev => ({ ...prev, [id]: false }))
-    setActiveWindow(prev => prev === id ? null : prev)
+    // Add closing animation
+    const winEl = document.querySelector(`.os-window${id === 'terminal' ? '.window-terminal' : ''}[style*="z-index"]`)
+    if (winEl) {
+      winEl.classList.add('closing')
+      setTimeout(() => {
+        setOpenWindows(prev => ({ ...prev, [id]: false }))
+        setActiveWindow(prev => prev === id ? null : prev)
+      }, 240)
+    } else {
+      setOpenWindows(prev => ({ ...prev, [id]: false }))
+      setActiveWindow(prev => prev === id ? null : prev)
+    }
   }, [])
 
   // Window drag handlers
