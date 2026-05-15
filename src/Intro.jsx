@@ -341,6 +341,29 @@ export default function Intro() {
     setActiveWindow(id)
   }, [])
 
+  // Close popups when clicking outside
+  useEffect(() => {
+    const handleClick = (e) => {
+      // Close start menu if clicking outside
+      if (startMenuOpen && !e.target.closest('.start-menu') && !e.target.closest('.start-button')) {
+        setStartMenuOpen(false)
+      }
+      // Close music popup if clicking outside
+      const musicPopup = document.querySelector('.music-popup-taskbar')
+      if (musicPopup && !e.target.closest('.music-taskbar')) {
+        musicPopup.classList.remove('show')
+      }
+      // Close weather popup if clicking outside
+      const weatherPopup = document.querySelector('.weather-popup-taskbar')
+      if (weatherPopup && !e.target.closest('.weather-taskbar')) {
+        weatherPopup.classList.remove('show')
+      }
+    }
+    
+    window.addEventListener('click', handleClick)
+    return () => window.removeEventListener('click', handleClick)
+  }, [startMenuOpen])
+
   const closeWindow = useCallback((id, e) => {
     e?.stopPropagation()
     // Add closing animation
@@ -876,7 +899,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window ${openWindows.about ? 'open' : ''}${activeWindow === 'about' ? ' focused' : ''}`} 
+          className={`os-window ${openWindows.about ? 'open' : ''}${activeWindow === 'about' ? ' focused' : ''}${dragState.dragging && dragState.windowId === 'about' ? ' dragging' : ''}`} 
           onClick={() => setActiveWindow('about')}
           style={{
             transform: 'none',
@@ -946,7 +969,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window window-projects open${activeWindow === 'projects' ? ' focused' : ''}`} 
+          className={`os-window window-projects open${activeWindow === 'projects' ? ' focused' : ''}${dragState.dragging && dragState.windowId === 'projects' ? ' dragging' : ''}`} 
           onClick={() => setActiveWindow('projects')}
           style={{
             transform: 'none',
@@ -1031,7 +1054,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window window-terminal ${openWindows.terminal ? 'open' : ''}${activeWindow === 'terminal' ? ' focused' : ''}`} 
+          className={`os-window window-terminal ${openWindows.terminal ? 'open' : ''}${activeWindow === 'terminal' ? ' focused' : ''}${dragState.dragging && dragState.windowId === 'terminal' ? ' dragging' : ''}`} 
           onClick={() => setActiveWindow('terminal')}
           style={{
             transform: 'none',
@@ -1090,7 +1113,7 @@ export default function Intro() {
         const zIndex = highestZIndex.current
         return (
         <div 
-          className={`os-window ${openWindows.contact ? 'open' : ''}${activeWindow === 'contact' ? ' focused' : ''}`} 
+          className={`os-window ${openWindows.contact ? 'open' : ''}${activeWindow === 'contact' ? ' focused' : ''}${dragState.dragging && dragState.windowId === 'contact' ? ' dragging' : ''}`} 
           onClick={() => setActiveWindow('contact')}
           style={{
             transform: 'none',
