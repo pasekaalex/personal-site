@@ -1704,17 +1704,23 @@ a, button, .desktop-icon, .dock-item, .start-button,
 
 .weather-popup-taskbar {
   position: absolute;
-  bottom: 40px;
+  bottom: 46px;
   right: 0;
-  background: rgba(15, 15, 25, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(155, 89, 182, 0.3);
-  border-radius: 12px;
-  padding: 12px;
-  min-width: 160px;
+  background: rgba(20, 20, 40, 0.97);
+  backdrop-filter: blur(30px) saturate(1.3);
+  border: 1px solid rgba(155, 89, 182, 0.25);
+  border-radius: 14px;
+  padding: 14px;
+  min-width: 170px;
   display: none;
   z-index: 300;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(155, 89, 182, 0.08);
+  animation: popupSlideIn 0.2s ease-out;
+}
+
+@keyframes popupSlideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .weather-popup-taskbar.show {
@@ -1727,13 +1733,15 @@ a, button, .desktop-icon, .dock-item, .start-button,
   position: absolute;
   bottom: 100%;
   right: 0;
-  background: rgba(20, 20, 40, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(155, 89, 182, 0.3);
-  border-radius: 12px;
+  background: rgba(20, 20, 40, 0.97);
+  backdrop-filter: blur(30px) saturate(1.3);
+  border: 1px solid rgba(155, 89, 182, 0.25);
+  border-radius: 14px;
   padding: 16px;
-  min-width: 180px;
-  margin-bottom: 8px;
+  min-width: 185px;
+  margin-bottom: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(155, 89, 182, 0.08);
+  animation: popupSlideIn 0.2s ease-out;
 }
 .music-popup-taskbar.show { display: block; }
 .music-popup-header { font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; }
