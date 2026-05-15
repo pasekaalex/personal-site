@@ -537,7 +537,11 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .desktop-icon:hover {
   transform: translateY(-6px) scale(1.05);
   border-color: rgba(155, 89, 182, 0.25);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(155, 89, 182, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(155, 89, 182, 0.15), 0 0 20px rgba(155, 89, 182, 0.1);
+}
+.desktop-icon:active {
+  transform: translateY(-3px) scale(1.02);
+  transition-duration: 100ms;
 }
 
 .desktop-icon:hover::before { opacity: 1; }
@@ -642,6 +646,7 @@ a, button, .desktop-icon, .dock-item, .start-button,
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   gap: var(--space-2);
   flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .window-controls {
@@ -704,9 +709,10 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .window-spacer { width: 46px; }
 
 .window-content {
-  padding: 24px;
+  padding: 28px;
   overflow-y: auto;
   max-height: calc(80vh - 52px);
+  line-height: 1.6;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1471,10 +1477,17 @@ a, button, .desktop-icon, .dock-item, .start-button,
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  transform: translateX(0);
 }
 
 .start-menu-item:hover {
   background: rgba(155, 89, 182, 0.2);
+  transform: translateX(4px);
+  box-shadow: 0 0 15px rgba(155, 89, 182, 0.1);
+}
+
+.start-menu-item:active {
+  transform: translateX(6px) scale(0.98);
 }
 
 .start-menu-icon {
@@ -1756,8 +1769,8 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .rain-toggle:hover, .music-taskbar-btn:hover, .weather-taskbar-btn:hover, .theme-toggle:hover {
   background: rgba(155, 89, 182, 0.3);
   border-color: var(--border-strong);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: var(--shadow-glow-sm);
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), var(--shadow-glow-sm);
 }
 
 /* Music Popup */
@@ -2787,12 +2800,13 @@ a, button, .desktop-icon, .dock-item, .start-button,
   border: none;
   color: #ffffff;
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   outline: none;
   caret-color: #bb77dd;
   min-width: 0;
-  padding: 0 4px;
+  padding: 0 6px;
   letter-spacing: 0.02em;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }
 
 .terminal-input::placeholder {
@@ -2802,10 +2816,10 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .terminal-prompt {
   color: #bb77dd;
   white-space: nowrap;
-  margin-right: 6px;
-  text-shadow: 0 0 18px rgba(187, 119, 221, 1), 0 0 30px rgba(187, 119, 221, 0.6);
+  margin-right: 8px;
+  text-shadow: 0 0 20px rgba(187, 119, 221, 1), 0 0 40px rgba(187, 119, 221, 0.7);
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   animation: promptPulse 2s ease-in-out infinite;
 }
 
@@ -2817,10 +2831,11 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .terminal-input-line {
   display: flex;
   align-items: center;
-  padding: 16px 20px;
+  padding: 18px 24px;
   border-top: 1px solid rgba(155, 89, 182, 0.5);
   background: linear-gradient(90deg, rgba(45, 27, 78, 0.5) 0%, rgba(15, 15, 26, 0.8) 100%);
   gap: 4px;
+  box-shadow: 0 -4px 20px rgba(155, 89, 182, 0.05);
 }
 
 .terminal-body::before {
