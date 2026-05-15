@@ -84,17 +84,7 @@ export default function Intro() {
   const [musicVolume, setMusicVolume] = useState(0.2)
   const [selectedTrack, setSelectedTrack] = useState('piano')
   const [selectedProject, setSelectedProject] = useState(null)
-  const [terminalHistory, setTerminalHistory] = useState([
-    { type: 'output', text: '' },
-    { type: 'output', text: '╔═══════════════════════════════════════════════╗' },
-    { type: 'output', text: '║     ◉  Terminal v1.0  |  paseka.dev  |  2024   ║' },
-    { type: 'output', text: '╠═══════════════════════════════════════════════╣' },
-    { type: 'output', text: '║  help      - all commands                      ║' },
-    { type: 'output', text: '║  neofetch  - system info & ASCII art           ║' },
-    { type: 'output', text: '║  games     - list of games                     ║' },
-    { type: 'output', text: '╚═══════════════════════════════════════════════╝' },
-    { type: 'output', text: '' },
-  ])
+  const [terminalHistory, setTerminalHistory] = useState([])
   const [terminalInput, setTerminalInput] = useState('')
   const [guessNumber, setGuessNumber] = useState(null)
   const [guessAttempts, setGuessAttempts] = useState(0)
@@ -103,6 +93,36 @@ export default function Intro() {
   const [pokerRolls, setPokerRolls] = useState(0)
   const terminalInputRef = useRef(null)
   const terminalRef = useRef(null)
+
+  // Terminal stats tracking
+  const [terminalStats, setTerminalStats] = useState({ gamesPlayed: 0, wins: 0, losses: 0, streak: 0 })
+
+  // Terminal game states
+  const [slotsState, setSlotsState] = useState(null)
+  const [highLowState, setHighLowState] = useState(null)
+  const [wordleState, setWordleState] = useState(null)
+  const [mineState, setMineState] = useState(null)
+  const [wumpusState, setWumpusState] = useState(null)
+  const [riddleState, setRiddleState] = useState(null)
+
+  // Record win/loss for terminal games
+  const recordWin = useCallback(() => {
+    setTerminalStats(prev => ({
+      ...prev,
+      gamesPlayed: prev.gamesPlayed + 1,
+      wins: prev.wins + 1,
+      streak: prev.streak + 1
+    }))
+  }, [])
+
+  const recordLoss = useCallback(() => {
+    setTerminalStats(prev => ({
+      ...prev,
+      gamesPlayed: prev.gamesPlayed + 1,
+      losses: prev.losses + 1,
+      streak: 0
+    }))
+  }, [])
   const [projectsView, setProjectsView] = useState('gallery')
   const [embeddedProject, setEmbeddedProject] = useState(null)
   const [rainMode, setRainMode] = useState(false)
@@ -919,6 +939,7 @@ export default function Intro() {
                 value={terminalInput}
                 onChange={(e) => setTerminalInput(e.target.value)}
                 placeholder="guest@paseka:~$ "
+          style={{ color: '#bb77dd' }}
                 autoFocus
               />
             </form>

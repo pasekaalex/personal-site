@@ -2593,9 +2593,10 @@ body {
   animation: terminalBlink 1s step-end infinite;
 }
 
+/* Blinking caret handled by browser caret-color */
 @keyframes terminalBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 100% { caret-color: #bb77dd; }
+  50% { caret-color: transparent; }
 }
 
 .terminal-input::placeholder {
