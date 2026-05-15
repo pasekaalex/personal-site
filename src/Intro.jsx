@@ -96,6 +96,8 @@ export default function Intro() {
     { type: 'output', text: '' },
   ])
   const [terminalInput, setTerminalInput] = useState('')
+  const [terminalHistoryIndex, setTerminalHistoryIndex] = useState(-1)
+  const [terminalCommandHistory, setTerminalCommandHistory] = useState([])
   const [guessNumber, setGuessNumber] = useState(null)
   const [guessAttempts, setGuessAttempts] = useState(0)
   const [pokerDice, setPokerDice] = useState([1,1,1,1,1])
@@ -426,9 +428,9 @@ export default function Intro() {
     const command = parts[0]
     const args = parts.slice(1).join(' ')
 
-    const addOutput = (text) => {
+    const addOutput = (text, msgType = 'output') => {
       setTerminalHistory(prev => {
-        const newHist = [...prev, { type: 'output', text }]
+        const newHist = [...prev, { type: msgType, text }]
         return newHist.slice(-50)
       })
     }
@@ -438,10 +440,16 @@ export default function Intro() {
         const newHist = [...prev, { type: 'input', text }]
         return newHist.slice(-50)
       })
+      // Add to command history
+      setTerminalCommandHistory(prev => {
+        const newHistory = [cmd, ...prev.filter(c => c !== cmd)].slice(0, 50)
+        return newHistory
+      })
+      setTerminalHistoryIndex(-1)
     }
 
-    addInput(cmd)
-
+    // Execute the command
+    let outputType = 'output'
     switch (command) {
       case 'help':
         addOutput(`
@@ -490,68 +498,83 @@ export default function Intro() {
         addOutput(args || '')
         break
       case 'neofetch':
-        addOutput('\n  ██████╗ ███████╗\n  ██╔══██╗██╔════╝\n  ██████╔╝█████╗  \n  ██╔═══╝ ██╔══╝  \n  ██║     ███████╗\n  ╚═╝     ╚══════╝\n\n  OS: paseka.dev OS v1.0\n  Host: paseka.dev\n  Kernel: React 18.x\n  Shell: bash 5.1\n  Terminal: paseka-terminal')
+        addOutput('\n  ██████╗ ███████╗\n  ██╔══██╗██╔════╝\n  ██████╔╝█████╗  \n  ██╔═══╝ ██╔══╝  \n  ██║     ███████╗\n  ╚═╝     ╚══════╝\n\n  OS: paseka.dev OS v1.0\n  Host: paseka.dev\n  Kernel: React 18.x\n  Shell: bash 5.1\n  Terminal: paseka-terminal', 'success')
         break
       case 'calc':
-        try { addOutput(`${args} = ${eval(args)}`) } catch { addOutput('Error: invalid expression') }
+        try { addOutput(`${args} = ${eval(args)}`, 'success') } catch { addOutput('Error: invalid expression', 'error') }
         break
       case 'roll': {
         const diceMatch = args.match(/(\d+)d(\d+)/)
         if (diceMatch) {
           const numDice = parseInt(diceMatch[1])
           const sides = parseInt(diceMatch[2])
+          if (numDice > 20 || sides > 100) { addOutput('Too many dice/sides!', 'error'); break }
           const rolls = []
           for (let i = 0; i < numDice; i++) rolls.push(Math.floor(Math.random() * sides) + 1)
-          addOutput(`Rolling ${numDice}d${sides}... [${rolls.join(', ')}] = ${rolls.reduce((a,b)=>a+b,0)}`)
-        } else { addOutput('Usage: roll XdY (e.g. roll 2d6)') }
+          addOutput(`Rolling ${numDice}d${sides}... [${rolls.join(', ')}] = ${rolls.reduce((a,b)=>a+b,0)}`, 'info')
+        } else { addOutput('Usage: roll XdY (e.g. roll 2d6)', 'error') }
         break
       }
       case '8ball': {
         const r8 = ['It is certain.','Reply hazy, try again.','Don\'t count on it.','It is decidedly so.','Ask again later.','My reply is no.','Without a doubt.','Better not tell you now.','My sources say no.','Yes — definitely.']
-        addOutput(`🎱 ${r8[Math.floor(Math.random() * r8.length)]}`)
+        addOutput(`🎱 ${r8[Math.floor(Math.random() * r8.length)]}`, 'success')
         break
       }
       case 'coinflip':
-        addOutput(Math.random() > 0.5 ? '🪙 Heads' : '🪙 Tails')
+        addOutput(Math.random() > 0.5 ? '🪙 Heads' : '🪙 Tails', 'success')
         break
       case 'joke': {
         const jokes = ['Why do developers prefer dark mode? Because light attracts bugs.','There are only 10 types of people: those who understand binary and those who don\'t.','I\'m not lazy, I\'m just on energy-saving mode.','Why do JavaScript devs wear glasses? Because they can\'t C#.']
-        addOutput(jokes[Math.floor(Math.random() * jokes.length)])
+        addOutput(jokes[Math.floor(Math.random() * jokes.length)], 'info')
         break
       }
-      case 'matrix':
-        addOutput('matrix is disabled')
+      case 'games':
+        addOutput(`\n╔════════════════════════════════════╗\n║         ◉ AVAILABLE GAMES        ║\n╠════════════════════════════════════╣\n║  slots     - Slot machine           ║\n║  guess     - Number guessing (1-100) ║\n║  rps       - Rock paper scissors     ║\n║  poker     - Dice poker             ║\n║  8ball     - Magic 8-ball            ║\n║  coinflip  - Flip a coin            ║\n║  roll      - Roll dice (roll 2d6)    ║\n║  fortune   - Fortune cookie         ║\n╚════════════════════════════════════╝`, 'info')
         break
       case 'history': {
         const cmds = terminalHistory.filter(h => h.type === 'input').map(h => h.text)
-        addOutput(cmds.length > 0 ? cmds.join('\n') : 'No history yet')
+        addOutput(cmds.length > 0 ? cmds.join('\n') : 'No history yet', 'info')
+        break
+      }
+      case 'slots': {
+        const emojis = ['🍒', '🍋', '🍇', '⭐', '🔔', '💎']
+        const spin = () => emojis[Math.floor(Math.random() * emojis.length)]
+        const r1 = spin(), r2 = spin(), r3 = spin()
+        const isJackpot = r1 === r2 && r2 === r3
+        const isDouble = r1 === r2 || r2 === r3 || r1 === r3
+        addOutput(`┌─────────────────┐\n│  ${r1} │ ${r2} │ ${r3}  │\n└─────────────────┘\n${isJackpot ? '🎰 JACKPOT!!! 🎰' : isDouble ? '✨ Two of a kind!' : 'Try again...'}`, isJackpot ? 'success' : isDouble ? 'info' : 'error')
+        break
+      }
+      case 'fortune': {
+        const fortunes = ['A beautiful journey awaits you.', 'Your hard work will pay off soon.', 'Trust your instincts — they are right.', 'Someone is thinking of you right now.', 'New opportunities are just around the corner.', 'Your creativity is at an all-time high.']
+        addOutput(`🍀 ${fortunes[Math.floor(Math.random() * fortunes.length)]}`, 'success')
         break
       }
       case 'guess': {
         if (!guessNumber) {
           setGuessNumber(Math.floor(Math.random() * 100) + 1)
           setGuessAttempts(0)
-          addOutput('I\'m thinking of a number 1-100. Start guessing!')
+          addOutput('I\'m thinking of a number 1-100. Start guessing!', 'info')
         } else {
           const guess = parseInt(args)
-          if (isNaN(guess)) { addOutput('Enter a number: guess [number]') }
-          else if (guess < guessNumber) { setGuessAttempts(p => p + 1); addOutput('📈 Higher!') }
-          else if (guess > guessNumber) { setGuessAttempts(p => p + 1); addOutput('📉 Lower!') }
-          else { setGuessAttempts(p => p + 1); addOutput(`🎉 Correct! You got it in ${guessAttempts + 1} attempts!`); setGuessNumber(null); setGuessAttempts(0) }
+          if (isNaN(guess)) { addOutput('Enter a number: guess [number]', 'error') }
+          else if (guess < guessNumber) { setGuessAttempts(p => p + 1); addOutput('📈 Higher!', 'error') }
+          else if (guess > guessNumber) { setGuessAttempts(p => p + 1); addOutput('📉 Lower!', 'error') }
+          else { setGuessAttempts(p => p + 1); addOutput(`🎉 Correct! You got it in ${guessAttempts + 1} attempts!`, 'success'); setGuessNumber(null); setGuessAttempts(0) }
         }
         break
       }
       case 'rps': {
         const choices = ['rock','paper','scissors']
         const player = args.toLowerCase()
-        if (!choices.includes(player)) { addOutput('Usage: rps [rock|paper|scissors]') }
+        if (!choices.includes(player)) { addOutput('Usage: rps [rock|paper|scissors]', 'error') }
         else {
           const comp = choices[Math.floor(Math.random() * 3)]
           let result
           if (player === comp) result = '🤝 TIE!'
           else if ((player === 'rock' && comp === 'scissors') || (player === 'paper' && comp === 'rock') || (player === 'scissors' && comp === 'paper')) result = '🎉 YOU WIN!'
           else result = '😢 YOU LOSE!'
-          addOutput(`You: ${player} vs Computer: ${comp}\n${result}`)
+          addOutput(`You: ${player} vs Computer: ${comp}\n${result}`, result.includes('WIN') ? 'success' : result.includes('LOSE') ? 'error' : 'info')
         }
         break
       }
@@ -559,10 +582,10 @@ export default function Intro() {
         if (pokerRolls === 0) {
           const nd = [1,2,3,4,5].map(() => Math.floor(Math.random() * 6) + 1)
           setPokerDice(nd); setPokerRolls(1); setPokerKept([false,false,false,false,false])
-          addOutput(`Roll 1: [${nd.join(', ')}]\nChoose keep [1-5] or run 'poker' again`)
+          addOutput(`Roll 1: [${nd.join(', ')}]\nChoose keep [1-5] or run 'poker' again`, 'info')
         } else if (pokerRolls === 1) {
           const nd = pokerDice.map((d,i) => pokerKept[i] ? d : Math.floor(Math.random() * 6) + 1)
-          setPokerDice(nd); setPokerRolls(2); addOutput(`Roll 2: [${nd.join(', ')}]`)
+          setPokerDice(nd); setPokerRolls(2); addOutput(`Roll 2: [${nd.join(', ')}]`, 'info')
         } else {
           const counts = {}
           pokerDice.forEach(d => { counts[d] = (counts[d]||0) + 1 })
@@ -575,7 +598,7 @@ export default function Intro() {
           else if (vals.filter(v=>v===2).length===2) hand = '✌️ TWO PAIR!'
           else if (vals.includes(2)) hand = '🎴 ONE PAIR!'
           else { const s=[...pokerDice].sort(); if (s[4]-s[0]===4) hand='📐 STRAIGHT!' }
-          addOutput(`Final: [${pokerDice.join(', ')}] → ${hand}`)
+          addOutput(`Final: [${pokerDice.join(', ')}] → ${hand}`, 'info')
           setPokerRolls(0); setPokerKept([false,false,false,false,false])
         }
         break
@@ -585,11 +608,11 @@ export default function Intro() {
         const nk = [...pokerKept]
         idxs.forEach(i=>{ nk[i]=!nk[i] })
         setPokerKept(nk)
-        addOutput(`Kept: [${pokerDice.map((d,i)=>nk[i]?d:'-').join(', ')}]`)
+        addOutput(`Kept: [${pokerDice.map((d,i)=>nk[i]?d:'-').join(', ')}]`, 'info')
         break
       }
       default:
-        addOutput(`Command not found: ${command}\nType 'help' for available commands.`)
+        addOutput(`Command not found: ${command}\nType 'help' for available commands.`, 'error')
     }
   }, [guessNumber, guessAttempts, pokerDice, pokerKept, pokerRolls, terminalHistory])
 
@@ -598,6 +621,25 @@ export default function Intro() {
     if (!terminalInput.trim()) return
     executeCommand(terminalInput)
     setTerminalInput('')
+  }
+
+  // Arrow key history navigation
+  const handleTerminalKeyDown = (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      const newIndex = terminalHistoryIndex + 1
+      if (newIndex < terminalCommandHistory.length) {
+        setTerminalHistoryIndex(newIndex)
+        setTerminalInput(terminalCommandHistory[newIndex] || '')
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      const newIndex = terminalHistoryIndex - 1
+      if (newIndex >= -1) {
+        setTerminalHistoryIndex(newIndex)
+        setTerminalInput(newIndex === -1 ? '' : terminalCommandHistory[newIndex] || '')
+      }
+    }
   }
 
   // Auto-scroll terminal output to bottom
@@ -790,7 +832,12 @@ export default function Intro() {
             onMouseDown={(e) => handleWindowMouseDown(e, 'about')}
           >
             <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('about', e)}>×</button>
+              <button className="win-minimize" onClick={(e) => e.stopPropagation()}>
+              </button>
+              <button className="win-maximize" onClick={(e) => e.stopPropagation()}>
+              </button>
+              <button className="win-close" onClick={(e) => closeWindow('about', e)}>
+              </button>
             </div>
             <span className="window-title">About Me</span>
             <div className="window-spacer" />
@@ -855,7 +902,12 @@ export default function Intro() {
             onMouseDown={(e) => handleWindowMouseDown(e, 'projects')}
           >
             <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('projects', e)}>×</button>
+              <button className="win-minimize" onClick={(e) => e.stopPropagation()}>
+              </button>
+              <button className="win-maximize" onClick={(e) => e.stopPropagation()}>
+              </button>
+              <button className="win-close" onClick={(e) => closeWindow('projects', e)}>
+              </button>
             </div>
             <span className="window-title">Projects</span>
             <div className="window-spacer" />
@@ -935,7 +987,12 @@ export default function Intro() {
             onMouseDown={(e) => handleWindowMouseDown(e, 'terminal')}
           >
             <div className="window-controls">
-              <button className="win-close" onClick={(e) => closeWindow('terminal', e)}>×</button>
+              <button className="win-minimize" onClick={(e) => e.stopPropagation()}>
+              </button>
+              <button className="win-maximize" onClick={(e) => e.stopPropagation()}>
+              </button>
+              <button className="win-close" onClick={(e) => closeWindow('terminal', e)}>
+              </button>
             </div>
             <span className="window-title">Terminal</span>
             <div className="window-spacer" />
@@ -956,6 +1013,7 @@ export default function Intro() {
                 type="text"
                 value={terminalInput}
                 onChange={(e) => setTerminalInput(e.target.value)}
+                onKeyDown={handleTerminalKeyDown}
                 placeholder="guest@paseka:~$ "
                 autoFocus
               />
