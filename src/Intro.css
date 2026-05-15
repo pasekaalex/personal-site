@@ -2373,6 +2373,8 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .light-mode .desktop-icon:hover {
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(155, 89, 182, 0.3);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15), 0 0 20px rgba(155, 89, 182, 0.1);
 }
 .light-mode .desktop-icon .icon-label {
   color: #333;
@@ -2382,6 +2384,8 @@ a, button, .desktop-icon, .dock-item, .start-button,
 }
 .light-mode .start-menu-item:hover {
   background: rgba(255, 255, 255, 0.8);
+  transform: translateX(4px);
+  box-shadow: 0 0 12px rgba(155, 89, 182, 0.08);
 }
 
 .light-mode .os-container {
@@ -2464,6 +2468,8 @@ a, button, .desktop-icon, .dock-item, .start-button,
 .light-mode .desktop-icon:hover {
   background: rgba(255, 255, 255, 0.9);
   border-color: rgba(155, 89, 182, 0.3);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15), 0 0 20px rgba(155, 89, 182, 0.1);
 }
 .light-mode .desktop-icon .icon-label {
   color: #333;
@@ -2474,6 +2480,8 @@ a, button, .desktop-icon, .dock-item, .start-button,
 
 .light-mode .start-menu-item:hover {
   background: rgba(255, 255, 255, 0.8);
+  transform: translateX(4px);
+  box-shadow: 0 0 12px rgba(155, 89, 182, 0.08);
 }
 
 .light-mode .os-container {
