@@ -942,18 +942,23 @@ a, button, .desktop-icon, .dock-item, .start-button,
   font-family: 'Orbitron', monospace;
   font-size: 0.75rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.05em;
+  padding-right: 4px;
 }
 
 .taskbar-clock {
   font-family: 'Orbitron', monospace;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #fff;
-  letter-spacing: 0.1em;
-  text-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
-  min-width: 60px;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 14px rgba(155, 89, 182, 0.6), 0 0 28px rgba(155, 89, 182, 0.3);
+  min-width: 80px;
+  padding: 2px 8px;
+  background: rgba(155, 89, 182, 0.08);
+  border: 1px solid rgba(155, 89, 182, 0.15);
+  border-radius: 6px;
 }
 
 .taskbar-sep {
@@ -1590,22 +1595,24 @@ a, button, .desktop-icon, .dock-item, .start-button,
 
 /* Rain Toggle */
 .rain-toggle, .music-taskbar-btn, .weather-taskbar-btn, .theme-toggle {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(100, 150, 255, 0.2);
-  border: 1px solid rgba(100, 150, 255, 0.3);
-  border-radius: 6px;
+  background: rgba(155, 89, 182, 0.15);
+  border: 1px solid rgba(155, 89, 182, 0.3);
+  border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .rain-toggle:hover, .music-taskbar-btn:hover, .weather-taskbar-btn:hover, .theme-toggle:hover {
-  background: rgba(100, 150, 255, 0.4);
-  transform: scale(1.05);
+  background: rgba(155, 89, 182, 0.3);
+  border-color: rgba(155, 89, 182, 0.5);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 16px rgba(155, 89, 182, 0.2), 0 0 12px rgba(155, 89, 182, 0.1);
 }
 
 /* Music Popup */
