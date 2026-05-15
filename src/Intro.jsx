@@ -131,6 +131,7 @@ export default function Intro() {
   const [chessPawnPromoting, setChessPawnPromoting] = useState(null)
   const [chessAiPlayer, setChessAiPlayer] = useState('black')
   const [chessSound, setChessSound] = useState(true)
+  const [chessFlipAnimating, setChessFlipAnimating] = useState(false)
 
   // Initialize chess board
   const initChessBoard = useCallback(() => {
@@ -168,38 +169,67 @@ export default function Intro() {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)()
       const oscillator = audioContext.createOscillator()
       const gainNode = audioContext.createGain()
-      oscillator.connect(gainNode)
+      const filter = audioContext.createBiquadFilter()
+      filter.type = 'lowpass'
+      filter.frequency.setValueAtTime(2000, audioContext.currentTime)
+      oscillator.connect(filter)
+      filter.connect(gainNode)
       gainNode.connect(audioContext.destination)
       
       if (type === 'move') {
-        oscillator.frequency.setValueAtTime(300, audioContext.currentTime)
-        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1)
-        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1)
+        oscillator.type = 'triangle'
+        oscillator.frequency.setValueAtTime(350, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(250, audioContext.currentTime + 0.08)
+        gainNode.gain.setValueAtTime(0.12, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.12)
         oscillator.start(audioContext.currentTime)
-        oscillator.stop(audioContext.currentTime + 0.1)
+        oscillator.stop(audioContext.currentTime + 0.12)
       } else if (type === 'capture') {
-        oscillator.frequency.setValueAtTime(200, audioContext.currentTime)
-        oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.2)
-        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime)
+        oscillator.type = 'sawtooth'
+        oscillator.frequency.setValueAtTime(180, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(80, audioContext.currentTime + 0.15)
+        filter.frequency.setValueAtTime(1500, audioContext.currentTime)
+        filter.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.15)
+        gainNode.gain.setValueAtTime(0.18, audioContext.currentTime)
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2)
         oscillator.start(audioContext.currentTime)
         oscillator.stop(audioContext.currentTime + 0.2)
       } else if (type === 'check') {
+        oscillator.type = 'square'
         oscillator.frequency.setValueAtTime(400, audioContext.currentTime)
-        oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1)
-        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.2)
+        oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.08)
+        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.15)
+        oscillator.frequency.exponentialRampToValueAtTime(500, audioContext.currentTime + 0.25)
+        filter.frequency.setValueAtTime(3000, audioContext.currentTime)
         gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.35)
         oscillator.start(audioContext.currentTime)
-        oscillator.stop(audioContext.currentTime + 0.3)
+        oscillator.stop(audioContext.currentTime + 0.35)
       } else if (type === 'castle') {
-        oscillator.frequency.setValueAtTime(300, audioContext.currentTime)
-        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1)
-        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
+        oscillator.type = 'triangle'
+        oscillator.frequency.setValueAtTime(250, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(350, audioContext.currentTime + 0.05)
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.15)
+        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime)
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2)
         oscillator.start(audioContext.currentTime)
         oscillator.stop(audioContext.currentTime + 0.2)
+      } else if (type === 'promotion') {
+        oscillator.type = 'sine'
+        oscillator.frequency.setValueAtTime(400, audioContext.currentTime)
+        oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1)
+        oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.2)
+        gainNode.gain.setValueAtTime(0.12, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.25)
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + 0.25)
+      } else if (type === 'invalid') {
+        oscillator.type = 'square'
+        oscillator.frequency.setValueAtTime(100, audioContext.currentTime)
+        gainNode.gain.setValueAtTime(0.08, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1)
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + 0.1)
       }
     } catch (e) {}
   }, [chessSound])
@@ -627,7 +657,7 @@ export default function Intro() {
         makeMove(chessSelected.row, chessSelected.col, row, col)
         return
       }
-      // Select new piece
+      // Clicking on own piece - select it
       if (color === chessTurn) {
         setChessSelected({ row, col })
         const moves = getPieceMoves(chessBoard, row, col)
@@ -645,7 +675,8 @@ export default function Intro() {
         setChessValidMoves(legalMoves)
         return
       }
-      // Deselect
+      // Invalid click - play sound and deselect
+      playChessSound('invalid')
       setChessSelected(null)
       setChessValidMoves([])
     } else {
@@ -667,7 +698,7 @@ export default function Intro() {
         setChessValidMoves(legalMoves)
       }
     }
-  }, [chessBoard, chessSelected, chessValidMoves, chessTurn, chessGameOver, chessAiThinking, chessPawnPromoting, makeMove])
+  }, [chessBoard, chessSelected, chessValidMoves, chessTurn, chessGameOver, chessAiThinking, chessPawnPromoting, makeMove, playChessSound])
 
   // Undo move
   const undoChessMove = useCallback(() => {
@@ -1925,21 +1956,33 @@ export default function Intro() {
             {/* Chess Board */}
             <div className="chess-main">
               <div className="chess-board-container">
-                <div className={`chess-turn-indicator ${chessTurn === 'white' ? 'white-turn' : 'black-turn'}`}>
+                <div className={`chess-turn-indicator ${chessTurn === 'white' ? 'white-turn' : 'black-turn'} ${chessAiThinking ? 'thinking' : ''} ${isInCheck(chessBoard, chessTurn) && !chessGameOver ? 'check' : ''} ${chessGameOver ? 'gameover' : ''}`}>
                   {chessGameOver ? (
                     chessGameOver === 'checkmate' ? (
                       <span>♔ Checkmate! {chessTurn === 'white' ? 'Black' : 'White'} wins!</span>
                     ) : (
-                      <span>Stalemate! Draw!</span>
+                      <span>Stalemate - Draw!</span>
                     )
                   ) : chessAiThinking ? (
-                    <span>🤖 AI is thinking...</span>
+                    <span className="thinking-text">🤖 AI thinking<span className="thinking-dots">...</span></span>
                   ) : (
-                    <span>{chessTurn === 'white' ? '♔' : '♚'} {chessTurn === 'white' ? 'White' : 'Black'}'s turn</span>
+                    <span>{chessTurn === 'white' ? '♔' : '♚'} {chessTurn === 'white' ? 'White' : 'Black'}{isInCheck(chessBoard, chessTurn) ? ' - Check!' : ''}</span>
                   )}
                 </div>
                 <div className="chess-board-wrapper">
-                  <div className="chess-board">
+                  {/* Rank labels */}
+                  <div className="chess-rank-labels">
+                    {[8,7,6,5,4,3,2,1].map(rank => (
+                      <div key={rank} className="chess-label">{rank}</div>
+                    ))}
+                  </div>
+                  {/* File labels */}
+                  <div className="chess-file-labels">
+                    {['a','b','c','d','e','f','g','h'].map(file => (
+                      <div key={file} className="chess-label">{file}</div>
+                    ))}
+                  </div>
+                  <div className={`chess-board${chessFlipped ? ' flipping' : ''}`}>
                     {chessBoard.map((row, rowIndex) => (
                       <div key={rowIndex} className="chess-row">
                         {row.map((piece, colIndex) => {
@@ -1962,6 +2005,7 @@ export default function Intro() {
                                 {pieceEmoji(piece)}
                               </span>
                               {isValidMove && !piece && <div className="valid-move-dot" />}
+                              {isValidMove && piece && <div className="valid-move-dot capture" />}
                             </div>
                           )
                         })}
@@ -2000,8 +2044,14 @@ export default function Intro() {
               {/* Controls */}
               <div className="chess-controls">
                 <button className="chess-btn" onClick={initChessBoard}>New Game</button>
-                <button className="chess-btn" onClick={() => setChessFlipped(!chessFlipped)}>
-                  {chessFlipped ? '⬜' : '⬛'} Flip
+                <button className="chess-btn flip-btn" onClick={() => {
+                  setChessFlipAnimating(true)
+                  setTimeout(() => {
+                    setChessFlipped(!chessFlipped)
+                    setChessFlipAnimating(false)
+                  }, 300)
+                }}>
+                  🔄 Flip
                 </button>
                 <button className="chess-btn" onClick={undoChessMove} disabled={chessHistory.length === 0 || chessAiThinking}>Undo</button>
               </div>
@@ -2037,6 +2087,30 @@ export default function Intro() {
                 </div>
               )}
               
+              {/* Material Advantage */}
+              <div className="chess-material-section">
+                <div className="chess-material-label">Material</div>
+                <div className="chess-material-value">
+                  {(() => {
+                    const values = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 }
+                    let white = 0, black = 0
+                    chessBoard.forEach(row => {
+                      row.forEach(piece => {
+                        if (piece) {
+                          const v = values[piece.toLowerCase()] || 0
+                          if (piece === piece.toUpperCase()) white += v
+                          else black += v
+                        }
+                      })
+                    })
+                    const diff = white - black
+                    if (diff > 0) return <span className="material-advantage white">+{diff}</span>
+                    if (diff < 0) return <span className="material-advantage black">{diff}</span>
+                    return <span className="material-equal">=</span>
+                  })()}
+                </div>
+              </div>
+              
               {/* Sound Toggle */}
               <div className="chess-sound-section">
                 <label className="chess-checkbox-label">
@@ -2045,8 +2119,38 @@ export default function Intro() {
                     checked={chessSound} 
                     onChange={(e) => setChessSound(e.target.checked)}
                   />
-                  Sound Effects
+                  <span>🔊 Sound Effects</span>
                 </label>
+              </div>
+              
+              {/* Captured Pieces */}
+              <div className="chess-captured-section">
+                <div className="chess-captured-header">Captured</div>
+                <div className="chess-captured-pieces">
+                  {chessHistory.length > 0 && (() => {
+                    const captured = []
+                    chessHistory.forEach(h => {
+                      if (h.captured) {
+                        const pieceColor = h.captured === h.captured.toUpperCase() ? 'white' : 'black'
+                        captured.push({ piece: h.captured, color: pieceColor })
+                      }
+                    })
+                    return captured.length > 0 ? (
+                      <div className="captured-display">
+                        <div className="captured-white">
+                          {captured.filter(c => c.color === 'white').map((c, i) => (
+                            <span key={i} className="captured-piece">{pieceEmoji(c.piece)}</span>
+                          ))}
+                        </div>
+                        <div className="captured-black">
+                          {captured.filter(c => c.color === 'black').map((c, i) => (
+                            <span key={i} className="captured-piece">{pieceEmoji(c.piece)}</span>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null
+                  })()}
+                </div>
               </div>
               
               {/* Move History */}
